@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @import "nprogress/nprogress.css";
+
+#nprogress .bar {
+  background: violet !important;
+}
+
+#nprogress .spinner {
+  display: none !important;
+}
