@@ -7,3 +7,7 @@ export const getProducts = () => {
 export const fetchDataHomePage = () => {
     return axios.get(`/Home`);
 }
+
+export const getDetailProductById = (id) => {
+    return axios.get(`/Products/detail/${id}`);
+}

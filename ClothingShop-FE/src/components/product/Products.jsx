@@ -52,7 +52,7 @@ const ProductList = () => {
                                 <div className="mt-4 flex justify-between">
                                     <div>
                                         <h3 className="text-xs text-gray-700">
-                                            <a href={product.href}>
+                                            <a href={`/product/${product.id}`} className="font-medium text-gray-900 hover:text-gray-700">
                                                 <span aria-hidden="true" className="absolute inset-0" />
                                                 {product.name}
                                             </a>
@@ -84,6 +84,7 @@ const ProductList = () => {
                                     )}
                                 </div>
                             </div>
+
                         ))}
                     </div>
                 </div>

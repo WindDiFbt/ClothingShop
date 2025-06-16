@@ -132,7 +132,7 @@ const HomePage = () => {
                             From classic silhouettes to modern essentials, our collection is made to move with you.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
-                            <a href="/product" className="text-sm/6 font-semibold text-gray-900">
+                            <a href="/products" className="text-sm/6 font-semibold text-gray-900">
                                 Learn more <span aria-hidden="true">→</span>
                             </a>
                         </div>
@@ -165,7 +165,7 @@ const HomePage = () => {
                                 <div className="mt-4 flex justify-between">
                                     <div>
                                         <h3 className="text-xs text-gray-700">
-                                            <a href={product.href}>
+                                            <a href={`/product/${product.id}`} className="font-medium text-gray-900 hover:text-gray-700">
                                                 <span aria-hidden="true" className="absolute inset-0" />
                                                 {product.name}
                                             </a>
@@ -205,7 +205,7 @@ const HomePage = () => {
                                 <div className="mt-4 flex justify-between">
                                     <div>
                                         <h3 className="text-xs text-gray-700">
-                                            <a href={product.href}>
+                                            <a href={`/product/${product.id}`} className="font-medium text-gray-900 hover:text-gray-700">
                                                 <span aria-hidden="true" className="absolute inset-0" />
                                                 {product.name}
                                             </a>
