@@ -5,7 +5,7 @@ import Layout from "./Layout";
 import Products from "./components/product/Products";
 import HomePage from "./components/home/Home";
 import PageNotFound from "./components/share/PageNotFound";
-
+import ProductDetail from "./components/product/ProductDetail";
 function App() {
   return (
     <Router>
@@ -15,6 +15,7 @@ function App() {
           <Route path="/products" element={<Products />}></Route>
           <Route path="/home" element={<HomePage />}></Route>
           <Route path="*" element={<PageNotFound />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
         <ToastContainer />
       </Layout>
