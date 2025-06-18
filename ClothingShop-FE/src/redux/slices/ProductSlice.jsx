@@ -1,12 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getProducts } from "../../services/APIService";
+import { getProductsOdata } from "../../services/APIService";
 
 export const fetchProducts = createAsyncThunk(
   "product/fetchProducts",
-  async (_, thunkAPI) => {
+  async ({ query }, thunkAPI) => {
     try {
-      const response = await getProducts();
-      return response.data;
+      const response = await getProductsOdata(query);
+      return {
+        p: response.data.value,
+        ttc: response.data['@odata.count'] ?? 0
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -15,8 +18,11 @@ export const fetchProducts = createAsyncThunk(
 
 const initialState = {
   products: [],
+  countProduct: 0,
   loading: false,
   error: null,
+  currentPage: 1,
+  pageSize: 8,
 };
 
 const productSlice = createSlice({
@@ -25,6 +31,9 @@ const productSlice = createSlice({
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload;
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
     },
     addProduct: (state, action) => {
       state.products.push(action.payload);
@@ -46,7 +55,8 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.products = action.payload.p;
+        state.countProduct = action.payload.ttc;
         state.loading = false;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
@@ -56,4 +66,5 @@ const productSlice = createSlice({
   }
 });
 
+export const { setCurrentPage } = productSlice.actions;
 export default productSlice.reducer;

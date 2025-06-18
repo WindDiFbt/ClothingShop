@@ -1,6 +1,8 @@
-﻿using ClothingShop_BE.Models;
+﻿using ClothingShop_BE.Configurations;
+using ClothingShop_BE.Models;
 using ClothingShop_BE.Service.Impl;
 using ClothingShop_BE.Service;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +30,13 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;  // Ensures cookies are essential for the app
 });
 builder.Services.AddMemoryCache();
+builder.Services.AddControllers().AddOData(o =>
+{
+    o.EnableNoDollarQueryOptions = true;
+    o.EnableQueryFeatures(null).AddRouteComponents(
+        routePrefix: "api/odata",
+        model: builder.Services.GetEdmModel()).Filter().OrderBy().Count().Expand().SetMaxTop(100);
+});
 
 // Add CORS policy
 builder.Services.AddCors(options =>
