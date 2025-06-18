@@ -4,6 +4,8 @@ using ClothingShop_BE.Models;
 using Microsoft.Extensions.Caching.Memory;
 using ClothingShop_BE.ModelsDTO;
 using NuGet.Protocol.Plugins;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClothingShop_BE.Controllers.Products
 {
@@ -130,5 +132,35 @@ namespace ClothingShop_BE.Controllers.Products
                 return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
             }
         }
+        [HttpGet("token")]
+        public IActionResult GetProductsToken()
+        {
+            // Lấy thông tin user từ JWT token
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            return Ok(new
+            {
+                message = "This is a protected endpoint",
+                userId = userId,
+                email = email,
+                products = new[] { "Product 1", "Product 2", "Product 3" }
+            });
+        }
+
+        [HttpGet("admin-only")]
+        [Authorize(Roles = "Admin")] // Chỉ Admin mới access được
+        public IActionResult GetAdminData()
+        {
+            return Ok(new { message = "This is admin-only data" });
+        }
+
+        [HttpGet("public")]
+        [AllowAnonymous] // Không cần JWT token
+        public IActionResult GetPublicData()
+        {
+            return Ok(new { message = "This is public data" });
+        }
+
     }
 }
