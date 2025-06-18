@@ -21,8 +21,6 @@ public partial class Product
 
     public int? Discount { get; set; }
 
-    public int? Quantity { get; set; }
-
     public int? Status { get; set; }
 
     public DateTime? CreateAt { get; set; }
@@ -40,6 +38,8 @@ public partial class Product
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual ICollection<ProductRejectionLog> ProductRejectionLogs { get; set; } = new List<ProductRejectionLog>();
+
+    public virtual ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
 

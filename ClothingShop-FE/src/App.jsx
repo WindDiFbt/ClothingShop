@@ -1,16 +1,26 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import ListProduct from "./components/product/ListProduct";
+import Layout from "./Layout";
 
+import Products from "./components/product/Products";
+import HomePage from "./components/home/Home";
+import PageNotFound from "./components/share/PageNotFound";
+import ProductDetail from "./components/product/ProductDetail";
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/product" element={<ListProduct />}></Route>
-      </Routes>
-      <ToastContainer />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/products" element={<Products />}></Route>
+          <Route path="/home" element={<HomePage />}></Route>
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+        </Routes>
+        <ToastContainer />
+      </Layout>
     </Router>
   )
 }
 
-export default App
+export default App;

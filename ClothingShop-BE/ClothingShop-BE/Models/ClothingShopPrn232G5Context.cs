@@ -39,6 +39,8 @@ public partial class ClothingShopPrn232G5Context : DbContext
 
     public virtual DbSet<ProductStatus> ProductStatuses { get; set; }
 
+    public virtual DbSet<ProductVariant> ProductVariants { get; set; }
+
     public virtual DbSet<Report> Reports { get; set; }
 
     public virtual DbSet<ReportStatus> ReportStatuses { get; set; }
@@ -322,7 +324,6 @@ public partial class ClothingShopPrn232G5Context : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("name");
             entity.Property(e => e.Price).HasColumnName("price");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.SellerId).HasColumnName("seller_id");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.ThumbnailUrl)
@@ -384,6 +385,26 @@ public partial class ClothingShopPrn232G5Context : DbContext
                 .HasMaxLength(25)
                 .IsUnicode(false)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<ProductVariant>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__product___3213E83F64F593EE");
+
+            entity.ToTable("product_variants");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.Size)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("size");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductVariants)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__product_v__produ__29221CFB");
         });
 
         modelBuilder.Entity<Report>(entity =>
