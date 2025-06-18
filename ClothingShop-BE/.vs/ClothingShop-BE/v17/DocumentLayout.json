@@ -1,13 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Ky8 SU25\\PRN232\\ClothingShop\\ClothingShop-BE\\",
+  "WorkspaceRootPath": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\ky8 su25\\prn232\\clothingshop\\clothingshop-be\\clothingshop-be\\clothingshop-be.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\models\\clothingshopprn232g5context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\models\\clothingshopprn232g5context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\clothingshop-be.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
       "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\clothingshop-be.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\ky8 su25\\prn232\\clothingshop\\clothingshop-be\\clothingshop-be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -18,53 +22,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 22,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Ky8 SU25\\PRN232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Program.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Program.cs",
               "RelativeDocumentMoniker": "ClothingShop-BE\\Program.cs",
-              "ToolTip": "D:\\Ky8 SU25\\PRN232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Program.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Program.cs",
               "RelativeToolTip": "ClothingShop-BE\\Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-04T16:00:07.556Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ClothingShopPrn232G5Context.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Models\\ClothingShopPrn232G5Context.cs",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\Models\\ClothingShopPrn232G5Context.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Models\\ClothingShopPrn232G5Context.cs",
+              "RelativeToolTip": "ClothingShop-BE\\Models\\ClothingShopPrn232G5Context.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T05:11:40.091Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:3:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:18:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:16:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:17:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:6:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:8:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
             },
             {
               "$type": "Bookmark",
@@ -72,82 +56,28 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+              "Name": "ST:1:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:12:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:13:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:14:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:16:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:19:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:17:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:10:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:10:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+              "Name": "ST:0:0:{605322a2-17ae-43f4-b60f-766556e46c87}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ClothingShop-BE.http",
-              "DocumentMoniker": "D:\\Ky8 SU25\\PRN232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ClothingShop-BE.http",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ClothingShop-BE.http",
               "RelativeDocumentMoniker": "ClothingShop-BE\\ClothingShop-BE.http",
-              "ToolTip": "D:\\Ky8 SU25\\PRN232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ClothingShop-BE.http",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ClothingShop-BE.http",
               "RelativeToolTip": "ClothingShop-BE\\ClothingShop-BE.http",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
               "WhenOpened": "2025-06-04T16:38:44.173Z",
               "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 73,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:3:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:4:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             }
           ]
         }
