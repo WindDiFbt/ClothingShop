@@ -27,7 +27,7 @@ const ProductGallery = ({ images }) => {
             <div className="flex gap-4">
                 {visibleImages.map((img, idx) => (
                     <div key={idx} className="w-1/3 aspect-square overflow-hidden rounded-lg">
-                        <img src={img} alt={`image-${idx}`} className="w-full h-full object-cover" />
+                        <img src={img} alt={`image-${idx}`} className="w-full h-full object-cover rounded border border-gray-200" />
                     </div>
                 ))}
             </div>

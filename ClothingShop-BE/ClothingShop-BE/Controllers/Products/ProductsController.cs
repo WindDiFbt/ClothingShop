@@ -21,10 +21,27 @@ namespace ClothingShop_BE.Controllers.Products
         }
 
         // GET: api/Products
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
+        [NonAction]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts(int page = 1, int pageSize = 8)
         {
-            return await _context.Products.Select(x => new ProductDTO(x)).ToListAsync();
+            try
+            {
+                int totalProducts = await _context.Products.CountAsync();
+                List<ProductDTO> products = await _context.Products
+                    .Where(p => p.Status == 1)
+                    .OrderBy(p => p.Id)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(x => new ProductDTO(x))
+                    .ToListAsync();
+                var currentPage = page;
+                var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
+                return Ok(new { products, currentPage, totalPages });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
+            }
         }
 
         // GET: api/Products/detail/5
@@ -82,25 +99,25 @@ namespace ClothingShop_BE.Controllers.Products
         }
 
         [HttpGet("categories")]
-        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategories()
+        public async Task<List<CategoryDTO>> GetCategories()
         {
             if (!_cache.TryGetValue("categories", out List<CategoryDTO>? categories))
             {
                 categories = await _context.Categories.Select(x => new CategoryDTO(x)).ToListAsync();
                 _cache.Set("categories", categories, TimeSpan.FromMinutes(10));
             }
-            return Ok(categories!);
+            return categories!;
         }
 
         [HttpGet("status")]
-        public async Task<ActionResult<IEnumerable<ProductStatusDTO>>> GetProductStatuses()
+        public async Task<List<ProductStatusDTO>> GetProductStatuses()
         {
             if (!_cache.TryGetValue("statuses", out List<ProductStatusDTO>? statuses))
             {
                 statuses = await _context.ProductStatuses.Select(x => new ProductStatusDTO(x)).ToListAsync();
                 _cache.Set("statuses", statuses, TimeSpan.FromMinutes(10));
             }
-            return Ok(statuses!);
+            return statuses!;
         }
 
         [HttpGet("search")]
