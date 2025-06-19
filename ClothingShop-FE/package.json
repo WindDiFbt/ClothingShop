@@ -18,6 +18,7 @@
     "apexcharts": "^4.7.0",
     "axios": "^1.9.0",
     "dotenv": "^16.5.0",
+    "formik": "^2.4.6",
     "lucide-react": "^0.513.0",
     "nprogress": "^0.2.0",
     "react": "^19.1.0",
@@ -28,7 +29,8 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2",
     "react-toastify": "^11.0.5",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

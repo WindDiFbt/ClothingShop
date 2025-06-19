@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getProducts } from "../../services/APIService";
+import { getProducts, getPendingProducts } from "../../services/APIService";
 
 export const fetchProducts = createAsyncThunk(
   "product/fetchProducts",
@@ -13,10 +13,25 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+export const fetchPendingProducts = createAsyncThunk(
+  "product/fetchPendingProducts",
+  async (_, thunkAPI) => {
+    try {
+      const response = await getPendingProducts();
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 const initialState = {
   products: [],
   loading: false,
   error: null,
+  pendingProducts: [],
+  loadingPending: false,
+  errorPending: null,
 };
 
 const productSlice = createSlice({
@@ -52,6 +67,18 @@ const productSlice = createSlice({
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchPendingProducts.pending, (state) => {
+        state.loadingPending = true;
+        state.errorPending = null;
+      })
+      .addCase(fetchPendingProducts.fulfilled, (state, action) => {
+        state.pendingProducts = action.payload;
+        state.loadingPending = false;
+      })
+      .addCase(fetchPendingProducts.rejected, (state, action) => {
+        state.loadingPending = false;
+        state.errorPending = action.payload;
       });
   }
 });

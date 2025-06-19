@@ -11,3 +11,7 @@ export const fetchDataHomePage = () => {
 export const getDetailProductById = (id) => {
     return axios.get(`/Products/detail/${id}`);
 }
+
+export const getPendingProducts = () => {
+    return axios.get(`/Products/pending`);
+}

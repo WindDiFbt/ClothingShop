@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ClothingShop_BE.Models;
-using Microsoft.Extensions.Caching.Memory;
+﻿using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO;
+using ClothingShop_BE.ModelsDTO.AuthorizeProduct;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using NuGet.Protocol.Plugins;
 
 namespace ClothingShop_BE.Controllers.Products
@@ -128,6 +129,151 @@ namespace ClothingShop_BE.Controllers.Products
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+
+        // GET: api/products/pending
+        [HttpGet("pending")]
+        public async Task<ActionResult<IEnumerable<PendingProductDTO>>> GetPendingProducts()
+        {
+            try
+            {
+                var pendingProducts = await _context.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.Seller)
+                        .ThenInclude(s => s.Userinfo)
+                    .Include(p => p.Images)
+                    .Include(p => p.StatusNavigation)
+                    .Where(p => p.Status == 2)
+                    .Select(p => new PendingProductDTO
+                    {
+                        Id = p.Id, // Sẽ tự động cast từ int sang long
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        Discount = p.Discount,
+                        Status = p.Status,
+                        StatusName = p.StatusNavigation.Name,
+                        CreatedAt = p.CreateAt,
+
+                        // Category information
+                        CategoryId = p.Category.Id,
+                        CategoryName = p.Category.Name,
+
+                        // Seller information
+                        SellerId = p.Seller.Id, // Giả sử Seller.Id là Guid
+                        SellerName = p.Seller.Userinfo.FullName ,
+                        SellerEmail = p.Seller.Email,
+                        ProductVariants = p.ProductVariants.Select(v => new ProductVariantDTO
+                        {
+                            Id = v.Id,
+                            Size = v.Size,
+                            Quantity = v.Quantity
+                        }).ToList(),
+
+                        // Product images
+                        ImageUrls = p.Images.Select(i => i.Url).ToList()
+                    })
+                    .ToListAsync();
+
+                return Ok(pendingProducts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while retrieving pending products",
+                    error = ex.Message
+                });
+            }
+        }
+
+
+        // PUT: api/products/{id}/approve
+        [HttpPut("{id}/approve")]
+        public async Task<IActionResult> ApproveProduct(long id)
+        {
+            try
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+                if (product == null)
+                {
+                    return NotFound(new { message = "Product not found" });
+                }
+
+                if (product.Status != 2) // 2 = Pending
+                {
+                    return BadRequest(new { message = "Product is not in pending status" });
+                }
+
+                product.Status = 1; // 1 = Approved
+                product.UpdateAt = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Product approved successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        // PUT: api/products/{id}/reject
+        [HttpPut("{id}/reject")]
+        public async Task<IActionResult> RejectProduct(long id, RejectProductDTO rejectDto)
+        {
+            try
+            {
+                var product = await _context.Products
+                    .Include(p => p.Seller)
+                    .FirstOrDefaultAsync(p => p.Id == id);
+
+                if (product == null)
+                {
+                    return NotFound(new { message = "Product not found" });
+                }
+
+                // Verify product is in pending status (status = 2)
+                if (product.Status != 2)
+                {
+                    return BadRequest(new { message = "Product is not in pending status" });
+                }
+
+                // Validate rejection reason
+                if (string.IsNullOrWhiteSpace(rejectDto.RejectReason))
+                {
+                    return BadRequest(new { message = "Rejection reason is required" });
+                }
+
+                // Update product status to rejected (status = 3)
+                product.Status = 3; // Rejected status
+                product.UpdateAt = DateTime.Now;
+
+                // Create rejection log
+                var rejectionLog = new ProductRejectionLog
+                {
+                    ProductId = id,
+                    Reason = rejectDto.RejectReason,
+                    RejectedAt = DateTime.Now
+                };
+                _context.ProductRejectionLogs.Add(rejectionLog);
+
+                await _context.SaveChangesAsync();
+
+                
+
+                return Ok(new
+                {
+                    message = "Product rejected successfully",
+  
+                    
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
             }
         }
     }
