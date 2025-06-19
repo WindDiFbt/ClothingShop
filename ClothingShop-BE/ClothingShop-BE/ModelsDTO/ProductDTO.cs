@@ -14,6 +14,7 @@ namespace ClothingShop_BE.ModelsDTO
         public int? Price { get; set; }
         public int? Discount { get; set; }
         public int? Status { get; set; }
+        public int? CurrentPrice { get; set; }
         public DateTime? CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
 
@@ -32,6 +33,7 @@ namespace ClothingShop_BE.ModelsDTO
             Price = product.Price;
             Discount = product.Discount;
             Status = product.Status;
+            CurrentPrice = (int)(product.Price * (1 - (product.Discount ?? 0) / 100.0));
             CreateAt = product.CreateAt;
             UpdateAt = product.UpdateAt;
             Images =  product.Images?.Select(i => i.Url).ToList();
