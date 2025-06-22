@@ -6,7 +6,7 @@ namespace ClothingShop_BE.Configurations
 {
     public static class OdataConfig
     {
-        public static IEdmModel GetEdmModel(this IServiceCollection services)
+        public static IEdmModel GetEdmModel()
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<Product>("Products");
