@@ -1,5 +1,7 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/auth/authSlice";
 
 const navigation = [
   { name: "Home", href: "/home" },
@@ -9,6 +11,14 @@ const navigation = [
 ];
 
 export default function Header() {
+  const { token, user } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-white shadow-md transition-all duration-300">
       <nav
@@ -52,10 +62,24 @@ export default function Header() {
             </a>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to="/login" className="text-sm/6 font-semibold text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
+          {token ? (
+            <>
+              <span className="text-sm text-gray-700">
+                Welcome, {user?.username}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="text-sm/6 font-semibold text-gray-900 hover:text-red-500 transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link to="/login" className="text-sm/6 font-semibold text-gray-900">
+              Log in <span aria-hidden="true">&rarr;</span>
+            </Link>
+          )}
         </div>
       </nav>
     </header>

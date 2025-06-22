@@ -1,29 +1,41 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from './../../redux/auth/authSlice';
-import { Navigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./../../redux/auth/authSlice";
+import { Navigate, useNavigate  } from "react-router-dom";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
-  const { token, status, error } = useSelector(state => state.auth);
-  const [form, setForm] = useState({ username: '', password: '' });
+  const { token, status, error } = useSelector((state) => state.auth);
+  const [form, setForm] = useState({ username: "", password: "" });
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(login(form));
   };
-
+  const navigate = useNavigate();
   if (token) return <Navigate to="/home" replace />;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-purple-100 to-white px-4">
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-6 left-6 text-3xl text-gray-800 hover:text-black transition-colors"
+        aria-label="Quay lại"
+      >
+        ←
+      </button>
       <div className="max-w-md w-full bg-white shadow-lg rounded-2xl p-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Welcome back</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Welcome back
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Username
+            </label>
             <input
               name="username"
               placeholder="Enter your username"
@@ -33,7 +45,9 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
             <input
               name="password"
               type="password"
@@ -44,7 +58,9 @@ export default function LoginPage() {
             />
           </div>
 
-          {status === 'loading' && <p className="text-sm text-gray-500 text-center">Loading...</p>}
+          {status === "loading" && (
+            <p className="text-sm text-gray-500 text-center">Loading...</p>
+          )}
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
           <button
