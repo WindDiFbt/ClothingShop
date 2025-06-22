@@ -20,14 +20,14 @@ namespace ClothingShop_BE.Service.Impl
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, userId),
-        new Claim(ClaimTypes.Email, email),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(JwtRegisteredClaimNames.Iat,
-            new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
-            ClaimValueTypes.Integer64)
-    };
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                new Claim(ClaimTypes.Email, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat,
+                new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
+                ClaimValueTypes.Integer64)
+            };
 
             // Thêm roles nếu có
             if (roles != null && roles.Any())
@@ -39,8 +39,8 @@ namespace ClothingShop_BE.Service.Impl
             }
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],        
-                audience: _configuration["Jwt:Audience"],    
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:ExpireMinutes"])),
                 signingCredentials: credentials

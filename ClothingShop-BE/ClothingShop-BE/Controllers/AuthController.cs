@@ -1,8 +1,14 @@
-﻿using ClothingShop_BE.Service;
+﻿using ClothingShop_BE.Models;
+using ClothingShop_BE.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NuGet.Protocol.Plugins;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ClothingShop_BE.Controllers
 {
@@ -10,48 +16,75 @@ namespace ClothingShop_BE.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IJwtService _jwtService;
-
-        public AuthController(IJwtService jwtService)
+        private readonly IConfiguration _config;
+        private readonly ClothingShopPrn232G5Context _con;
+        public AuthController(IConfiguration config, ClothingShopPrn232G5Context con)
         {
-            _jwtService = jwtService;
+            _config = config;
+            _con = con;
         }
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            // TODO: Validate user credentials với database
-            // Đây chỉ là ví dụ demo
-            if (request.Email == "admin" && request.Password == "123")
+            var userLogin = _con.UserRoles
+                .Include(u => u.User)
+                .Include(u => u.Role)
+                .FirstOrDefault(u => u.User.UserName == request.Username && u.User.Password == request.Password);
+            
+            if (userLogin != null)
             {
-                var token = _jwtService.GenerateToken(
-                    userId: "1",
-                email: request.Email,
-                    roles: new List<string> { "Admin" }
-                );
+                var user = new
+                {
+                    Username = userLogin.User.UserName,
+                    Role = userLogin.Role.Name,
+                };
 
+                var token = GenerateJwtToken(user.Username, user.Role);
                 return Ok(new LoginResponse
                 {
                     Token = token,
-                    Email = request.Email,
-                    ExpiresIn = 3600 // seconds
+                    User = user
                 });
             }
 
-            return Unauthorized(new { message = "Invalid credentials" });
+            return Unauthorized(new { message = "Username or password is incorrect" });
+        }
+
+        private string GenerateJwtToken(string username, string role)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+            new Claim(ClaimTypes.Name, username),
+            new Claim(ClaimTypes.Role, role)
+        };
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 
     public class LoginRequest
     {
-        public string Email { get; set; }
+        public string Username { get; set; }
         public string Password { get; set; }
     }
+
 
     public class LoginResponse
     {
         public string Token { get; set; }
-        public string Email { get; set; }
-        public int ExpiresIn { get; set; }
+        public object User { get; set; }
     }
+
 }
