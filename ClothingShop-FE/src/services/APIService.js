@@ -15,3 +15,4 @@ export const getDetailProductById = (id) => {
 export const getCategories = () => {
     return axios.get(`/Products/categories`)
 }
+

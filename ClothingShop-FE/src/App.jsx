@@ -1,26 +1,32 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import Layout from "./Layout";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './Layout';
+import HomePage from './components/home/Home';
+import Products from './components/product/Products';
+import ProductDetail from './components/product/ProductDetail';
+import PageNotFound from './components/share/PageNotFound';
+import LoginPage from './components/login/LoginPage';
+import { ToastContainer } from 'react-toastify';
 
-import Products from "./components/product/Products";
-import HomePage from "./components/home/Home";
-import PageNotFound from "./components/share/PageNotFound";
-import ProductDetail from "./components/product/ProductDetail";
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/products" element={<Products />}></Route>
-          <Route path="/home" element={<HomePage />}></Route>
+      <Routes>
+        {/* ✅ Route riêng cho login */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* ✅ Layout là Route cha */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Navigate to="/home" replace />} />
+          <Route path="home" element={<HomePage />} />
+          <Route path="products" element={<Products />} />
+          <Route path="product/:id" element={<ProductDetail />} />
           <Route path="*" element={<PageNotFound />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-        </Routes>
-        <ToastContainer />
-      </Layout>
+        </Route>
+      </Routes>
+
+      <ToastContainer />
     </Router>
-  )
+  );
 }
 
 export default App;
