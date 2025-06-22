@@ -11,10 +11,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* ✅ Route riêng cho login */}
         <Route path="/login" element={<LoginPage />} />
-
-        {/* ✅ Layout là Route cha */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/home" replace />} />
           <Route path="home" element={<HomePage />} />
@@ -23,7 +20,6 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
-
       <ToastContainer />
     </Router>
   );

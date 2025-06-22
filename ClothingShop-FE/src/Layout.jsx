@@ -2,7 +2,7 @@ import { useLocation, Outlet } from 'react-router-dom';
 import Header from './components/share/Header';
 import Footer from './components/share/Footer';
 
-const excludedPaths = ['/login'];
+const excludedPaths = ['/', '/login', '/register', '/forgot-password', '/reset-password', '/home'];
 
 export default function Layout() {
   const location = useLocation();
