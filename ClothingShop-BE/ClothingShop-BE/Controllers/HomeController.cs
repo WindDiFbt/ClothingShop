@@ -1,8 +1,5 @@
-﻿using ClothingShop_BE.Models;
-using Microsoft.AspNetCore.Http;
+﻿using ClothingShop_BE.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace ClothingShop_BE.Controllers
 {
@@ -10,41 +7,18 @@ namespace ClothingShop_BE.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly ClothingShopPrn232G5Context _context;
+        private readonly IProductService _productService;
 
-        public HomeController(ILogger<HomeController> logger, ClothingShopPrn232G5Context context)
+        public HomeController(IProductService productService)
         {
-            _logger = logger;
-            _context = context;
+            _productService = productService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<homeModel>> Index()
+        public async Task<IActionResult> Index()
         {
-            int totalProducts = await _context.Products.CountAsync();
-            List<Product> hotproducts = await _context.Products
-                .Where(p => p.Discount == 0)
-                .Take(10)
-                .ToListAsync();
-            List<Product> saleProducts = await _context.Products
-                .Where(p => p.Discount > 0)
-                .OrderByDescending(p => p.Discount)
-                .Take(5)
-                .ToListAsync();
-            var homeModel = new homeModel
-            {
-                hotProducts = hotproducts,
-                saleProducts = saleProducts
-            };
-            return Ok(homeModel);
+            var (hotProducts, saleProducts) = await _productService.GetProductsHomePageAsync();
+            return Ok(new { hotProducts, saleProducts });
         }
     }
-
-    public class homeModel
-    {
-        public List<Product> hotProducts { get; set; } = new List<Product>();
-        public List<Product> saleProducts { get; set; } = new List<Product>();
-    }
-
 }

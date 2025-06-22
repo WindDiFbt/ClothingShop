@@ -1,6 +1,5 @@
 ﻿using ClothingShop_BE.Configurations;
 using ClothingShop_BE.Models;
-using ClothingShop_BE.Service.Impl;
 using ClothingShop_BE.Service;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -35,7 +32,7 @@ builder.Services.AddControllers().AddOData(o =>
     o.EnableNoDollarQueryOptions = true;
     o.EnableQueryFeatures(null).AddRouteComponents(
         routePrefix: "api/odata",
-        model: builder.Services.GetEdmModel()).Filter().OrderBy().Count().Expand().SetMaxTop(100);
+        OdataConfig.GetEdmModel()).Filter().OrderBy().Count().Expand().SetMaxTop(100);
 });
 
 // Add CORS policy
@@ -50,8 +47,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Đăng ký JWT Service
-builder.Services.AddScoped<IJwtService, JwtService>();
+// Convention-based DI
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<IProductService>()
+    .AddClasses(classes => classes.Where(t => t.Name.EndsWith("Service") || t.Name.EndsWith("Repository")))
+    .AsMatchingInterface()
+    .WithScopedLifetime());
 // Cấu hình Swagger với JWT
 builder.Services.AddSwaggerGen(c =>
 {
@@ -120,6 +121,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 });
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
