@@ -7,6 +7,7 @@ namespace ClothingShop_BE.ModelsDTO
         public long Id { get; set; }
         public Guid? SellerId { get; set; }
         public string? Name { get; set; }
+        public string? NameUnsigned { get; set; }
         public int? CategoryId { get; set; }
         public string? CategoryName { get; set; }
         public string? ThumbnailUrl { get; set; }
@@ -26,6 +27,7 @@ namespace ClothingShop_BE.ModelsDTO
             Id = product.Id;
             SellerId = product.SellerId;
             Name = product.Name;
+            NameUnsigned = product.NameUnsigned;
             CategoryId = product.CategoryId;
             CategoryName = product.Category?.Name;
             ThumbnailUrl = product.ThumbnailUrl;
@@ -47,6 +49,7 @@ namespace ClothingShop_BE.ModelsDTO
                 Id = this.Id,
                 SellerId = this.SellerId,
                 Name = this.Name,
+                NameUnsigned = this.NameUnsigned,
                 CategoryId = this.CategoryId,
                 ThumbnailUrl = this.ThumbnailUrl,
                 Description = this.Description,
