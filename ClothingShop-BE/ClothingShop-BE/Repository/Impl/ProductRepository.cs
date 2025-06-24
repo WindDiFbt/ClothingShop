@@ -12,7 +12,7 @@ namespace ClothingShop_BE.Repository.Impl
             _context = context;
         }
 
-        public async Task<List<Product>> GetAllProductsAsyncApproved(int page = 1, int pageSize = 8) =>
+        public async Task<List<Product>> GetAllProductsAsyncApprovedWithPagination(int page = 1, int pageSize = 8) =>
             await _context.Products
                 .Where(p => p.Status == 1)
                 .OrderBy(p => p.Id)
@@ -20,7 +20,7 @@ namespace ClothingShop_BE.Repository.Impl
                 .Take(pageSize)
                 .ToListAsync();
 
-        public async Task<int> CountTotalProductApproved() => 
+        public async Task<int> CountTotalProductApproved() =>
             await _context.Products.CountAsync(p => p.Status == 1);
 
         public async Task<Product?> GetDetailProductAsync(long id) =>
@@ -60,5 +60,8 @@ namespace ClothingShop_BE.Repository.Impl
                 .OrderByDescending(p => p.Discount)
                 .Take(5)
                 .ToListAsync();
+
+        public IQueryable<Product> GetAllProductsApprovedForODATA() =>
+            _context.Products.Where(p => p.Status == 1);
     }
 }

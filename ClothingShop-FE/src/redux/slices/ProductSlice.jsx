@@ -23,6 +23,14 @@ const initialState = {
   error: null,
   currentPage: 1,
   pageSize: 8,
+  categoryFilter: {
+    name: "",
+    query: ""
+  },
+  priceFilter: {
+    label: "",
+    query: ""
+  },
 };
 
 const productSlice = createSlice({
@@ -47,6 +55,12 @@ const productSlice = createSlice({
     deleteProduct: (state, action) => {
       state.products = state.products.filter(p => p.id !== action.payload);
     },
+    setCategoryFilter: (state, action) => {
+      state.categoryFilter = action.payload;
+    },
+    setPriceFilter: (state, action) => {
+      state.priceFilter = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -66,5 +80,9 @@ const productSlice = createSlice({
   }
 });
 
-export const { setCurrentPage } = productSlice.actions;
+export const {
+  setCurrentPage,
+  setCategoryFilter,
+  setPriceFilter,
+} = productSlice.actions;
 export default productSlice.reducer;

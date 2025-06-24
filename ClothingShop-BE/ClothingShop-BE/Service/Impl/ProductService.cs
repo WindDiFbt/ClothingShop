@@ -1,4 +1,5 @@
-﻿using ClothingShop_BE.ModelsDTO;
+﻿using ClothingShop_BE.Models;
+using ClothingShop_BE.ModelsDTO;
 using ClothingShop_BE.Repository;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -23,10 +24,15 @@ namespace ClothingShop_BE.Service.Impl
             _cache = cache;
         }
 
+        public IQueryable<Product> GetAllProductsODATA()
+        {
+            return _productRepository.GetAllProductsApprovedForODATA();
+        }
+
         public async Task<(IEnumerable<ProductDTO> Products, int CurrentPage, int TotalPages)> GetProductsAsync(int page, int pageSize)
         {
             int totalProducts = await _productRepository.CountTotalProductApproved();
-            List<ProductDTO> products = (await _productRepository.GetAllProductsAsyncApproved())
+            List<ProductDTO> products = (await _productRepository.GetAllProductsAsyncApprovedWithPagination())
                 .Select(x => new ProductDTO(x)).ToList();
             int totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
             return (products, page, totalPages);
