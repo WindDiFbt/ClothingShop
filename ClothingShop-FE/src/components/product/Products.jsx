@@ -1,27 +1,42 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../redux/slices/ProductSlice";
+import { fetchProducts, setCategoryFilter, setPriceFilter, setCurrentPage } from "../../redux/slices/ProductSlice";
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 import Filters from "./Filter";
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import "./Products.css"
-import { setCurrentPage } from "../../redux/slices/ProductSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProductList = () => {
     const dispatch = useDispatch();
-    const { products, countProduct, currentPage, pageSize, loading, error } = useSelector((state) => state.product);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { products, countProduct, currentPage, pageSize, categoryFilter, priceFilter, loading, error } = useSelector((state) => state.product);
     const [sortQuery, setSortQuery] = useState("");
     const [selectedSort, setSelectedSort] = useState(null);
-    const [filterQuery, setFilterQuery] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [searchKeyword, setSearchKeyword] = useState("");
 
     useEffect(() => {
         const skip = (currentPage - 1) * pageSize;
+        const searchParams = new URLSearchParams(location.search);
+        const keyword = searchParams.get("search");
+        setSearchKeyword(keyword || "")
         let query = `$top=${pageSize}&$skip=${skip}`;
-        if (sortQuery) query += `&${sortQuery}`;
-        if (filterQuery) query += `&${filterQuery}`;
+        const filters = [];
+        if (categoryFilter.query) filters.push(categoryFilter.query);
+        if (priceFilter.query) filters.push(priceFilter.query);
+        if (keyword) {
+            filters.push(`contains(tolower(Name),'${keyword.toLowerCase()}')`);
+        }
+        if (filters.length > 0) {
+            query += `&$filter=${filters.join(" and ")}`;
+        }
+        if (sortQuery) {
+            query += `&${sortQuery}`;
+        }
         dispatch(fetchProducts({ query }));
-    }, [dispatch, currentPage, sortQuery, filterQuery]);
+        console.log(query)
+    }, [dispatch, currentPage, sortQuery, location.search, categoryFilter, priceFilter]);
 
     const totalPages = Math.ceil(countProduct / pageSize);
 
@@ -38,17 +53,11 @@ const ProductList = () => {
         return classes.filter(Boolean).join(' ')
     }
 
-    const handleFilterChange = (filter) => {
-        setFilterQuery(filter.query);
-        setSelectedCategory(filter.name);
-        dispatch(setCurrentPage(1));
-    };
-
     return (
         <div>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div className="lg:col-span-2">
-                    <Filters onFilterChange={handleFilterChange} />
+                    <Filters />
                 </div>
                 <div className="lg:col-span-10">
                     <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -77,30 +86,64 @@ const ProductList = () => {
                                             <a href="/products" className="text-sm font-medium text-gray-900">
                                                 Products
                                             </a>
-                                            {selectedCategory && (
-                                                <svg
-                                                    fill="currentColor"
-                                                    width={16}
-                                                    height={20}
-                                                    viewBox="0 0 16 20"
-                                                    aria-hidden="true"
-                                                    className="h-5 w-4 text-gray-300 mx-2"
-                                                >
-                                                    <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-                                                </svg>
-                                            )}
                                         </div>
                                     </li>
-                                    {selectedCategory && (
-                                        <li className="text-sm text-gray-500">
-                                            {selectedCategory}
-                                        </li>
+                                    {searchKeyword && (
+                                        <div className="flex">
+                                            <svg
+                                                fill="currentColor"
+                                                width={16}
+                                                height={20}
+                                                viewBox="0 0 16 20"
+                                                aria-hidden="true"
+                                                className="h-5 w-4 text-gray-300 mx-2"
+                                            >
+                                                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                                            </svg>
+                                            <li className="text-sm text-gray-500">
+                                                Search for: {searchKeyword}
+                                            </li>
+                                        </div>
+                                    )}
+                                    {categoryFilter.query && (
+                                        <div className="flex">
+                                            <svg
+                                                fill="currentColor"
+                                                width={16}
+                                                height={20}
+                                                viewBox="0 0 16 20"
+                                                aria-hidden="true"
+                                                className="h-5 w-4 text-gray-300 mx-2"
+                                            >
+                                                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                                            </svg>
+                                            <li className="text-sm text-gray-500">
+                                                {categoryFilter.name}
+                                            </li>
+                                        </div>
+                                    )}
+                                    {priceFilter.query && (
+                                        <div className="flex">
+                                            <svg
+                                                fill="currentColor"
+                                                width={16}
+                                                height={20}
+                                                viewBox="0 0 16 20"
+                                                aria-hidden="true"
+                                                className="h-5 w-4 text-gray-300 mx-2"
+                                            >
+                                                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                                            </svg>
+                                            <li className="text-sm text-gray-500">
+                                                {priceFilter.label}
+                                            </li>
+                                        </div>
                                     )}
                                 </ol>
                             </nav>
                             <Menu as="div" className="relative inline-block text-left">
                                 <div>
-                                    <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                                    <MenuButton className="cursor-pointer group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                                         Sort
                                         <ChevronDownIcon
                                             aria-hidden="true"
@@ -122,7 +165,7 @@ const ProductList = () => {
                                                             setSortQuery(option.query);
                                                         }}
                                                         className={classNames(
-                                                            selectedSort === option.name ? 'font-medium text-gray-900' : 'text-gray-500',
+                                                            selectedSort === option.name ? 'cursor-pointer font-medium text-gray-900' : 'cursor-pointer text-gray-500',
                                                             'flex px-4 py-2 justify-start text-sm hover:bg-gray-100 w-full'
                                                         )}
                                                     >
@@ -135,21 +178,39 @@ const ProductList = () => {
                                 </MenuItems>
                             </Menu>
                         </div>
-                        {(filterQuery || selectedCategory || sortQuery) && (
-                            <div className="flex justify-start pt-2">
-                                <button
-                                    onClick={() => {
-                                        setFilterQuery("");
-                                        setSelectedCategory(null);
-                                        setSortQuery("");
-                                        setSelectedSort(null);
-                                        dispatch(setCurrentPage(1));
-                                    }}
-                                    className="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-red-500 hover:text-red-600 hover:shadow-md"
-                                >
-                                    Clear Filters
-                                </button>
-                            </div>
+                        <div className="flex ">
+                            {(priceFilter.query || categoryFilter.query || sortQuery) && (
+                                <div className="flex justify-start pt-2 pr-2">
+                                    <button
+                                        onClick={() => {
+                                            dispatch(setPriceFilter(""));
+                                            dispatch(setCategoryFilter(""));
+                                            setSortQuery("");
+                                            setSelectedSort(null);
+                                            dispatch(setCurrentPage(1));
+                                        }}
+                                        className="inline-flex items-center cursor-pointer gap-1 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-red-500 hover:text-red-600 hover:shadow-md"
+                                    >
+                                        Clear Filters
+                                    </button>
+                                </div>
+                            )}
+                            {(searchKeyword) && (
+                                <div className="flex justify-start pt-2">
+                                    <button
+                                        onClick={() => {
+                                            navigate("/products");
+                                        }}
+                                        className="inline-flex items-center cursor-pointer gap-1 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-red-500 hover:text-red-600 hover:shadow-md"
+                                    >
+                                        Clear Search
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {products?.length === 0 && (
+                            <p className="text-center text-gray-500">Không tìm thấy sản phẩm nào.</p>
                         )}
 
                         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 pt-6">
@@ -195,7 +256,7 @@ const ProductList = () => {
                                 </div>
                             ))}
                         </div>
-                        <div className="flex items-center justify-center px-4 py-3 sm:px-6">
+                        {products && countProduct > 8 && (<div className="flex items-center justify-center px-4 py-3 sm:px-6">
                             <div className="flex justify-center mt-10 space-x-2">
                                 <a
                                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 cursor-pointer hover:bg-gray-50"
@@ -223,7 +284,7 @@ const ProductList = () => {
                                     <ChevronRightIcon aria-hidden="true" className="size-5" />
                                 </a>
                             </div>
-                        </div>
+                        </div>)}
                     </div>
                 </div>
             </div>

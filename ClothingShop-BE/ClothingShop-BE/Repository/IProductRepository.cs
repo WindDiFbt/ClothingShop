@@ -4,7 +4,9 @@ namespace ClothingShop_BE.Repository
 {
     public interface IProductRepository
     {
-        Task<List<Product>> GetAllProductsAsyncApproved(int page = 1, int pageSize = 8);
+        IQueryable<Product> GetAllProductsApprovedForODATA();
+
+        Task<List<Product>> GetAllProductsAsyncApprovedWithPagination(int page = 1, int pageSize = 8);
 
         Task<int> CountTotalProductApproved();
 
