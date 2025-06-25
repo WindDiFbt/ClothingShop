@@ -47,7 +47,7 @@ namespace ClothingShop_BE.Service.Impl
             }
             var productDto = new ProductDTO(product);
             var relatedProducts = (await _productRepository.GetRelatedProductAsync(product)).Select(x => new ProductDTO(x)).ToList();
-            var feedbacks = (await _feedbackRepository.Get3FeedbackAsync(id)).Select(x => new FeedbackDTO(x)).ToList();
+            var feedbacks = (await _feedbackRepository.Get3FeedbackNewestAsync(id)).Select(x => new FeedbackDTO(x)).ToList();
             var seller = new
             {
                 Id = product.Seller.Id,
