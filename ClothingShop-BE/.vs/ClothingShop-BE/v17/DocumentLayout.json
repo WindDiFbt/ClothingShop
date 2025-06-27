@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\controllers\\users\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\controllers\\users\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,27 +42,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Product.cs",
-              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Models\\Product.cs",
-              "RelativeDocumentMoniker": "ClothingShop-BE\\Models\\Product.cs",
-              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Models\\Product.cs",
-              "RelativeToolTip": "ClothingShop-BE\\Models\\Product.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAxwBAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\ProductsController.cs",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\Controllers\\ProductsController.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\ProductsController.cs",
+              "RelativeToolTip": "ClothingShop-BE\\Controllers\\ProductsController.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T12:23:00.493Z"
+              "WhenOpened": "2025-06-27T07:56:13.423Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "UsersController.cs",
               "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\Users\\UsersController.cs",
               "RelativeDocumentMoniker": "ClothingShop-BE\\Controllers\\Users\\UsersController.cs",
               "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\Users\\UsersController.cs",
               "RelativeToolTip": "ClothingShop-BE\\Controllers\\Users\\UsersController.cs",
-              "ViewState": "AgIAAGEAAAAAAAAAAAAkwKEAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-19T07:16:51.066Z",
+              "WhenOpened": "2025-06-27T07:50:00.451Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\appsettings.json",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\appsettings.json",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\appsettings.json",
+              "RelativeToolTip": "ClothingShop-BE\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-06-27T07:46:29.633Z",
               "EditorCaption": ""
             }
           ]

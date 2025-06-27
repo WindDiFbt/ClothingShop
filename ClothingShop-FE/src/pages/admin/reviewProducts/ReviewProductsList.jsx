@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPendingProducts } from '../../../redux/slices/ProductSlice';
+import { fetchProducts } from '../../../redux/slices/ProductSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
@@ -46,14 +46,15 @@ const ReviewProductsList = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { pendingProducts, loadingPending, errorPending } = useSelector((state) => state.product);
+    const { products, loading, error } = useSelector((state) => state.product);
 
     useEffect(() => {
-        dispatch(fetchPendingProducts());
+        // Fetch pending products (status = 1 for pending)
+        dispatch(fetchProducts({ query: "?$filter=status eq 1" }));
     }, [dispatch]);
 
     // Lọc sản phẩm theo tên, mô tả, seller
-    const filteredProducts = pendingProducts.filter((product) =>
+    const filteredProducts = products.filter((product) =>
         product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.sellerName?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -64,17 +65,17 @@ const ReviewProductsList = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
 
-    if (loadingPending) {
+    if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
         );
     }
-    if (errorPending) {
+    if (error) {
         return (
             <div className="flex justify-center items-center h-64">
-                <div className="text-red-600">Error: {errorPending}</div>
+                <div className="text-red-600">Error: {error}</div>
             </div>
         );
     }

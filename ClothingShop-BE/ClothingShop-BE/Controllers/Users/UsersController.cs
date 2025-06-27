@@ -171,6 +171,81 @@ public class UsersController : ControllerBase
         }
     }
 
+    // PUT: api/Users/{id}/status
+    [HttpPut("{id}/status")]
+    public async Task<ActionResult<UserAccountDTO>> UpdateUserStatus(Guid id, [FromBody] UpdateUserStatusDTO statusDto)
+    {
+        var user = await _context.Users
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+            .Include(u => u.Userinfo)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.Status = statusDto.Status;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return await GetUserById(id);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await UserExists(id))
+            {
+                return NotFound();
+            }
+            throw;
+        }
+    }
+
+    // PUT: api/Users/{id}/role
+    [HttpPut("{id}/role")]
+    public async Task<ActionResult<UserAccountDTO>> UpdateUserRole(Guid id, [FromBody] UpdateUserRoleDTO roleDto)
+    {
+        var user = await _context.Users
+            .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+            .Include(u => u.Userinfo)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        // Remove existing roles
+        _context.UserRoles.RemoveRange(user.UserRoles);
+
+        // Add new role
+        user.UserRoles = new List<UserRole>
+        {
+            new UserRole
+            {
+                UserId = user.Id,
+                RoleId = roleDto.RoleId
+            }
+        };
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return await GetUserById(id);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await UserExists(id))
+            {
+                return NotFound();
+            }
+            throw;
+        }
+    }
+
     private async Task<bool> UserExists(Guid id)
     {
         return await _context.Users.AnyAsync(e => e.Id == id);

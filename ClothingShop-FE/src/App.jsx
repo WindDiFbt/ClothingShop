@@ -10,11 +10,6 @@ import ProductDetail from './components/product/ProductDetail';
 import PageNotFound from './components/share/PageNotFound';
 import LoginPage from './components/login/LoginPage';
 import { ToastContainer } from 'react-toastify';
-
-import Products from "./components/product/Products";
-import HomePage from "./components/home/Home";
-import PageNotFound from "./components/share/PageNotFound";
-import ProductDetail from "./components/product/ProductDetail";
 import SaleDashboard from "./pages/admin/SaleDashboard";
 import ReviewProductsList from "./pages/admin/reviewProducts/reviewProductsList";
 import ProductDetailAdmin from "./pages/admin/reviewProducts/ProductDetailAdmin";
