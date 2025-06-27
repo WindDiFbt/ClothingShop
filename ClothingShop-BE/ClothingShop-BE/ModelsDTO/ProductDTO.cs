@@ -7,6 +7,7 @@ namespace ClothingShop_BE.ModelsDTO
         public long Id { get; set; }
         public Guid? SellerId { get; set; }
         public string? Name { get; set; }
+        public string? NameUnsigned { get; set; }
         public int? CategoryId { get; set; }
         public string? CategoryName { get; set; }
         public string? ThumbnailUrl { get; set; }
@@ -14,6 +15,7 @@ namespace ClothingShop_BE.ModelsDTO
         public int? Price { get; set; }
         public int? Discount { get; set; }
         public int? Status { get; set; }
+        public int? CurrentPrice { get; set; }
         public DateTime? CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
 
@@ -25,6 +27,7 @@ namespace ClothingShop_BE.ModelsDTO
             Id = product.Id;
             SellerId = product.SellerId;
             Name = product.Name;
+            NameUnsigned = product.NameUnsigned;
             CategoryId = product.CategoryId;
             CategoryName = product.Category?.Name;
             ThumbnailUrl = product.ThumbnailUrl;
@@ -32,6 +35,7 @@ namespace ClothingShop_BE.ModelsDTO
             Price = product.Price;
             Discount = product.Discount;
             Status = product.Status;
+            CurrentPrice = (int)(product.Price * (1 - (product.Discount ?? 0) / 100.0));
             CreateAt = product.CreateAt;
             UpdateAt = product.UpdateAt;
             Images =  product.Images?.Select(i => i.Url).ToList();
@@ -45,6 +49,7 @@ namespace ClothingShop_BE.ModelsDTO
                 Id = this.Id,
                 SellerId = this.SellerId,
                 Name = this.Name,
+                NameUnsigned = this.NameUnsigned,
                 CategoryId = this.CategoryId,
                 ThumbnailUrl = this.ThumbnailUrl,
                 Description = this.Description,

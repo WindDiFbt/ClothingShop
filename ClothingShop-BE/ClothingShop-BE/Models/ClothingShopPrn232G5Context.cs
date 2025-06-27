@@ -323,6 +323,7 @@ public partial class ClothingShopPrn232G5Context : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
+            entity.Property(e => e.NameUnsigned).HasMaxLength(255);
             entity.Property(e => e.Price).HasColumnName("price");
             entity.Property(e => e.SellerId).HasColumnName("seller_id");
             entity.Property(e => e.Status).HasColumnName("status");

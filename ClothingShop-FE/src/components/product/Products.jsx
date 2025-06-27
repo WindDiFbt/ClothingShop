@@ -1,95 +1,294 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../redux/slices/ProductSlice";
+import { fetchProducts, setCategoryFilter, setPriceFilter, setCurrentPage } from "../../redux/slices/ProductSlice";
+import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
+import Filters from "./Filter";
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import "./Products.css"
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProductList = () => {
     const dispatch = useDispatch();
-    const { products, loading, error } = useSelector(state => state.product);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { products, countProduct, currentPage, pageSize, categoryFilter, priceFilter, loading, error } = useSelector((state) => state.product);
+    const [sortQuery, setSortQuery] = useState("");
+    const [selectedSort, setSelectedSort] = useState(null);
+    const [searchKeyword, setSearchKeyword] = useState("");
 
     useEffect(() => {
-        dispatch(fetchProducts());
-    }, [dispatch]);
+        const skip = (currentPage - 1) * pageSize;
+        const searchParams = new URLSearchParams(location.search);
+        const keyword = searchParams.get("search");
+        setSearchKeyword(keyword || "")
+        let query = `$top=${pageSize}&$skip=${skip}`;
+        const filters = [];
+        if (categoryFilter.query) filters.push(categoryFilter.query);
+        if (priceFilter.query) filters.push(priceFilter.query);
+        if (keyword) {
+            filters.push(`contains(tolower(Name),'${keyword.toLowerCase()}')`);
+        }
+        if (filters.length > 0) {
+            query += `&$filter=${filters.join(" and ")}`;
+        }
+        if (sortQuery) {
+            query += `&${sortQuery}`;
+        }
+        dispatch(fetchProducts({ query }));
+        console.log(query)
+    }, [dispatch, currentPage, sortQuery, location.search, categoryFilter, priceFilter]);
 
-    if (loading) return <p>Đang tải...</p>;
-    if (error) return <p>Lỗi: {error}</p>;
+    const totalPages = Math.ceil(countProduct / pageSize);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+
+    const sortOptions = [
+        { name: 'Newest', query: `$orderby=CreateAt desc`, current: false },
+        { name: 'Price: Low to High', query: `$orderby=price asc`, current: false },
+        { name: 'Price: High to Low', query: `$orderby=price desc`, current: false },
+    ];
+
+    function classNames(...classes) {
+        return classes.filter(Boolean).join(' ')
+    }
 
     return (
         <div>
-            <div className="bg-white relative isolate">
-                <div
-                    aria-hidden="true"
-                    className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-                >
-                    <div
-                        style={{
-                            clipPath:
-                                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                        }}
-                        className="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75"
-                    />
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-2">
+                    <Filters />
                 </div>
-                <div
-                    aria-hidden="true"
-                    className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-                >
-                    <div
-                        style={{
-                            clipPath:
-                                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                        }}
-                        className="relative left-[calc(50%+3rem)] aspect-1155/678 w-144.5 -translate-x-1/2 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-288.75"
-                    />
-                </div>
-                <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-                    <h2 className="text-3xl text-center font-light tracking-tight text-gray-900 pt-6">Our best products</h2>
-                    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-8 pt-6">
-                        {products.map((product) => (
-                            <div key={product.id} className="group relative rounded-lg border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md">
-                                <img
-                                    src={product.thumbnailUrl}
-                                    className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
-                                />
-                                <div className="mt-4 flex justify-between">
-                                    <div>
-                                        <h3 className="text-xs text-gray-700">
-                                            <a href={`/product/${product.id}`} className="font-medium text-gray-900 hover:text-gray-700">
-                                                <span aria-hidden="true" className="absolute inset-0" />
-                                                {product.name}
+                <div className="lg:col-span-10">
+                    <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:max-w-7xl lg:px-8">
+                        <div className="flex items-center justify-between pt-10">
+                            <nav aria-label="Breadcrumb">
+                                <ol role="list" className="flex space-x-2">
+                                    <li>
+                                        <div className="flex items-center">
+                                            <a href="/home" className="text-sm font-medium text-gray-900">
+                                                Home
                                             </a>
-                                        </h3>
-                                        <p className="mt-1 text-xs text-gray-500">{product.color}</p>
-                                    </div>
-                                    {product.discount > 0 ? (
-                                        <div>
-                                            <p className="text-xs line-through text-gray-400">
-                                                {(product.price).toLocaleString('vi-VN', {
-                                                    style: 'currency',
-                                                    currency: 'VND',
-                                                })}
-                                            </p>
-                                            <p className="text-xs font-medium text-gray-900">
-                                                {(product.price * (1 - product.discount / 100)).toLocaleString('vi-VN', {
-                                                    style: 'currency',
-                                                    currency: 'VND',
-                                                })}
-                                            </p>
+                                            <svg
+                                                fill="currentColor"
+                                                width={16}
+                                                height={20}
+                                                viewBox="0 0 16 20"
+                                                aria-hidden="true"
+                                                className="h-5 w-4 text-gray-300 mx-2"
+                                            >
+                                                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                                            </svg>
                                         </div>
-                                    ) : (
-                                        <p className="text-xs font-medium text-gray-900">
-                                            {(product.price).toLocaleString('vi-VN', {
-                                                style: 'currency',
-                                                currency: 'VND',
-                                            })}
-                                        </p>
+                                    </li>
+                                    <li className="text-sm">
+                                        <div className="flex items-center">
+                                            <a href="/products" className="text-sm font-medium text-gray-900">
+                                                Products
+                                            </a>
+                                        </div>
+                                    </li>
+                                    {searchKeyword && (
+                                        <div className="flex">
+                                            <svg
+                                                fill="currentColor"
+                                                width={16}
+                                                height={20}
+                                                viewBox="0 0 16 20"
+                                                aria-hidden="true"
+                                                className="h-5 w-4 text-gray-300 mx-2"
+                                            >
+                                                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                                            </svg>
+                                            <li className="text-sm text-gray-500">
+                                                Search for: {searchKeyword}
+                                            </li>
+                                        </div>
                                     )}
+                                    {categoryFilter.query && (
+                                        <div className="flex">
+                                            <svg
+                                                fill="currentColor"
+                                                width={16}
+                                                height={20}
+                                                viewBox="0 0 16 20"
+                                                aria-hidden="true"
+                                                className="h-5 w-4 text-gray-300 mx-2"
+                                            >
+                                                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                                            </svg>
+                                            <li className="text-sm text-gray-500">
+                                                {categoryFilter.name}
+                                            </li>
+                                        </div>
+                                    )}
+                                    {priceFilter.query && (
+                                        <div className="flex">
+                                            <svg
+                                                fill="currentColor"
+                                                width={16}
+                                                height={20}
+                                                viewBox="0 0 16 20"
+                                                aria-hidden="true"
+                                                className="h-5 w-4 text-gray-300 mx-2"
+                                            >
+                                                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                                            </svg>
+                                            <li className="text-sm text-gray-500">
+                                                {priceFilter.label}
+                                            </li>
+                                        </div>
+                                    )}
+                                </ol>
+                            </nav>
+                            <Menu as="div" className="relative inline-block text-left">
+                                <div>
+                                    <MenuButton className="cursor-pointer group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                                        Sort
+                                        <ChevronDownIcon
+                                            aria-hidden="true"
+                                            className="-mr-1 ml-1 size-5 shrink-0 text-gray-400 group-hover:text-gray-500"
+                                        />
+                                    </MenuButton>
                                 </div>
-                            </div>
+                                <MenuItems
+                                    transition
+                                    className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black/5 focus:outline-none"
+                                >
+                                    <div className="py-1">
+                                        {sortOptions.map((option) => (
+                                            <MenuItem key={option.name}>
+                                                {({ active }) => (
+                                                    <button
+                                                        onClick={() => {
+                                                            setSelectedSort(option.name);
+                                                            setSortQuery(option.query);
+                                                        }}
+                                                        className={classNames(
+                                                            selectedSort === option.name ? 'cursor-pointer font-medium text-gray-900' : 'cursor-pointer text-gray-500',
+                                                            'flex px-4 py-2 justify-start text-sm hover:bg-gray-100 w-full'
+                                                        )}
+                                                    >
+                                                        {option.name}
+                                                    </button>
+                                                )}
+                                            </MenuItem>
+                                        ))}
+                                    </div>
+                                </MenuItems>
+                            </Menu>
+                        </div>
+                        <div className="flex ">
+                            {(priceFilter.query || categoryFilter.query || sortQuery) && (
+                                <div className="flex justify-start pt-2 pr-2">
+                                    <button
+                                        onClick={() => {
+                                            dispatch(setPriceFilter(""));
+                                            dispatch(setCategoryFilter(""));
+                                            setSortQuery("");
+                                            setSelectedSort(null);
+                                            dispatch(setCurrentPage(1));
+                                        }}
+                                        className="inline-flex items-center cursor-pointer gap-1 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-red-500 hover:text-red-600 hover:shadow-md"
+                                    >
+                                        Clear Filters
+                                    </button>
+                                </div>
+                            )}
+                            {(searchKeyword) && (
+                                <div className="flex justify-start pt-2">
+                                    <button
+                                        onClick={() => {
+                                            navigate("/products");
+                                        }}
+                                        className="inline-flex items-center cursor-pointer gap-1 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-red-500 hover:text-red-600 hover:shadow-md"
+                                    >
+                                        Clear Search
+                                    </button>
+                                </div>
+                            )}
+                        </div>
 
-                        ))}
+                        {products?.length === 0 && (
+                            <p className="text-center text-gray-500">Không tìm thấy sản phẩm nào.</p>
+                        )}
+
+                        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 pt-6">
+                            {products.map((product) => (
+                                <div key={product.Id} className="group relative rounded-lg border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md">
+                                    <img
+                                        src={product.ThumbnailUrl}
+                                        className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+                                    />
+                                    <div className="mt-4 flex justify-between">
+                                        <div>
+                                            <h3 className="text-xs text-gray-700">
+                                                <a href={`/product/${product.Id}`} className="font-medium text-gray-900 hover:text-gray-700">
+                                                    <span aria-hidden="true" className="absolute inset-0" />
+                                                    {product.Name}
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        {product.Discount > 0 ? (
+                                            <div>
+                                                <p className="text-xs line-through text-gray-400">
+                                                    {(product.Price).toLocaleString('vi-VN', {
+                                                        style: 'currency',
+                                                        currency: 'VND',
+                                                    })}
+                                                </p>
+                                                <p className="text-xs font-medium text-gray-900">
+                                                    {(product.Price * (1 - product.Discount / 100)).toLocaleString('vi-VN', {
+                                                        style: 'currency',
+                                                        currency: 'VND',
+                                                    })}
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <p className="text-xs font-medium text-gray-900">
+                                                {(product.Price).toLocaleString('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND',
+                                                })}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        {products && countProduct > 8 && (<div className="flex items-center justify-center px-4 py-3 sm:px-6">
+                            <div className="flex justify-center mt-10 space-x-2">
+                                <a
+                                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 cursor-pointer hover:bg-gray-50"
+                                    onClick={() => { if (currentPage > 1) dispatch(setCurrentPage(currentPage - 1)) }}
+                                    disabled={currentPage <= 1}
+                                >
+                                    <span className="sr-only">Previous</span>
+                                    <ChevronLeftIcon aria-hidden="true" className="size-5" />
+                                </a>
+                                {Array.from({ length: totalPages }, (_, index) => (
+                                    <button
+                                        key={index + 1}
+                                        className={`px-3 py-1 border border-gray-300 rounded cursor-pointer ${currentPage === index + 1 ? "bg-gray-800 text-white" : "bg-white text-gray-800"}`}
+                                        onClick={() => dispatch(setCurrentPage(index + 1))}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+                                <a
+                                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 cursor-pointer hover:bg-gray-50"
+                                    onClick={() => { if (currentPage < totalPages) dispatch(setCurrentPage(currentPage + 1)) }}
+                                    disabled={currentPage >= totalPages}
+                                >
+                                    <span className="sr-only">Next</span>
+                                    <ChevronRightIcon aria-hidden="true" className="size-5" />
+                                </a>
+                            </div>
+                        </div>)}
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

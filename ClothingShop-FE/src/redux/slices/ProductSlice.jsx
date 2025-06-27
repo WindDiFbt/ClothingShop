@@ -1,24 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getProducts, getPendingProducts } from "../../services/APIService";
+import { getProductsOdata } from "../../services/APIService";
 
 export const fetchProducts = createAsyncThunk(
   "product/fetchProducts",
-  async (_, thunkAPI) => {
+  async ({ query }, thunkAPI) => {
     try {
-      const response = await getProducts();
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const fetchPendingProducts = createAsyncThunk(
-  "product/fetchPendingProducts",
-  async (_, thunkAPI) => {
-    try {
-      const response = await getPendingProducts();
-      return response.data;
+      const response = await getProductsOdata(query);
+      return {
+        p: response.data.value,
+        ttc: response.data['@odata.count'] ?? 0
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -27,11 +18,19 @@ export const fetchPendingProducts = createAsyncThunk(
 
 const initialState = {
   products: [],
+  countProduct: 0,
   loading: false,
   error: null,
-  pendingProducts: [],
-  loadingPending: false,
-  errorPending: null,
+  currentPage: 1,
+  pageSize: 8,
+  categoryFilter: {
+    name: "",
+    query: ""
+  },
+  priceFilter: {
+    label: "",
+    query: ""
+  },
 };
 
 const productSlice = createSlice({
@@ -40,6 +39,9 @@ const productSlice = createSlice({
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload;
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
     },
     addProduct: (state, action) => {
       state.products.push(action.payload);
@@ -53,6 +55,12 @@ const productSlice = createSlice({
     deleteProduct: (state, action) => {
       state.products = state.products.filter(p => p.id !== action.payload);
     },
+    setCategoryFilter: (state, action) => {
+      state.categoryFilter = action.payload;
+    },
+    setPriceFilter: (state, action) => {
+      state.priceFilter = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -61,26 +69,20 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.products = action.payload.p;
+        state.countProduct = action.payload.ttc;
         state.loading = false;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-      .addCase(fetchPendingProducts.pending, (state) => {
-        state.loadingPending = true;
-        state.errorPending = null;
-      })
-      .addCase(fetchPendingProducts.fulfilled, (state, action) => {
-        state.pendingProducts = action.payload;
-        state.loadingPending = false;
-      })
-      .addCase(fetchPendingProducts.rejected, (state, action) => {
-        state.loadingPending = false;
-        state.errorPending = action.payload;
       });
   }
 });
 
+export const {
+  setCurrentPage,
+  setCategoryFilter,
+  setPriceFilter,
+} = productSlice.actions;
 export default productSlice.reducer;

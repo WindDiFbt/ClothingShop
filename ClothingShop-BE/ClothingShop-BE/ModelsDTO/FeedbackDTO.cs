@@ -11,8 +11,6 @@ namespace ClothingShop_BE.ModelsDTO
         public byte? Rating { get; set; }
         public string? Comment { get; set; }
         public DateTime? CreateAt { get; set; }
-
-        // Thông tin người dùng (nếu cần hiển thị)
         public string? UserName { get; set; }
         public string? Avatar { get; set; }
 
@@ -27,9 +25,22 @@ namespace ClothingShop_BE.ModelsDTO
             Rating = feedback.Rating;
             Comment = feedback.Comment;
             CreateAt = feedback.CreateAt;
-
             UserName = feedback.User?.Userinfo?.FullName;
             Avatar = feedback.User?.Userinfo?.AvatarUrl;
+        }
+
+        public Feedback ToFeedback()
+        {
+            return new Feedback
+            {
+                Id = this.Id,
+                UserId = this.UserId,
+                ProductId = this.ProductId,
+                OrderId = this.OrderId,
+                Rating = this.Rating,
+                Comment = this.Comment,
+                CreateAt = this.CreateAt
+            };
         }
     }
 }

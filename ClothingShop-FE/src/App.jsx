@@ -1,10 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import Layout from "./Layout";
 import AdminLayout from "./layouts/AdminLayout";
 import AccountList from "./pages/admin/accounts/AccountList";
 import EditAccount from "./pages/admin/accounts/edit";
 import InviteUser from "./pages/admin/accounts/invite";
+import HomePage from './components/home/Home';
+import Products from './components/product/Products';
+import ProductDetail from './components/product/ProductDetail';
+import PageNotFound from './components/share/PageNotFound';
+import LoginPage from './components/login/LoginPage';
+import { ToastContainer } from 'react-toastify';
 
 import Products from "./components/product/Products";
 import HomePage from "./components/home/Home";
@@ -18,12 +23,14 @@ function App() {
   return (
     <Router>
       <Routes>
+       <Route path="/login" element={<LoginPage />} />
         {/* Public Routes */}
         <Route element={<Layout />}>
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
+         <Route index element={<Navigate to="/home" replace />} />
+          <Route path="home" element={<HomePage />} />
+          <Route path="products" element={<Products />} />
+          <Route path="product/:id" element={<ProductDetail />} />
+          <Route path="*" element={<PageNotFound />} />
         </Route>
 
         {/* Admin Routes */}
@@ -41,7 +48,7 @@ function App() {
       </Routes>
       <ToastContainer />
     </Router>
-  )
+  );
 }
 
 export default App;
