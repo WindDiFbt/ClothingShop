@@ -12,6 +12,7 @@ import PageNotFound from "./components/share/PageNotFound";
 import ProductDetail from "./components/product/ProductDetail";
 import SaleDashboard from "./pages/admin/SaleDashboard";
 import ReviewProductsList from "./pages/admin/reviewProducts/reviewProductsList";
+import ProductDetailAdmin from "./pages/admin/reviewProducts/ProductDetailAdmin";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/admin/accounts/edit/:id" element={<EditAccount />} />
             <Route path="/admin/accounts/invite" element={<InviteUser />} />
             <Route path="/admin/review-products" element={<ReviewProductsList />} />
+            <Route path="/admin/review-products/detail/:id" element={<ProductDetailAdmin />} />
         </Route>
 
         {/* 404 Route */}

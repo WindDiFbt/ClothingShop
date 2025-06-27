@@ -1,11 +1,35 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getDetailProductById } from "../../services/APIService";
+import { getDetailProductById, approveProduct, rejectProduct } from "../../services/APIService";
 
 export const fetchProductDetail = createAsyncThunk(
     "productDetail/fetchProductDetail",
     async (id, thunkAPI) => {
         try {
             const response = await getDetailProductById(id);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
+
+export const approveProductById = createAsyncThunk(
+    "productDetail/approveProductById",
+    async (id, thunkAPI) => {
+        try {
+            const response = await approveProduct(id);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
+
+export const rejectProductById = createAsyncThunk(
+    "productDetail/rejectProductById",
+    async ({ id, rejectReason }, thunkAPI) => {
+        try {
+            const response = await rejectProduct(id, rejectReason);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
@@ -21,6 +45,12 @@ const initialState = {
     feedbacks: [],
     loading: false,
     error: null,
+    approving: false,
+    approveError: null,
+    approveSuccess: null,
+    rejecting: false,
+    rejectError: null,
+    rejectSuccess: null,
 };
 
 const productDetailSlice = createSlice({
@@ -52,6 +82,32 @@ const productDetailSlice = createSlice({
       .addCase(fetchProductDetail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(approveProductById.pending, (state) => {
+        state.approving = true;
+        state.approveError = null;
+        state.approveSuccess = null;
+      })
+      .addCase(approveProductById.fulfilled, (state, action) => {
+        state.approving = false;
+        state.approveSuccess = action.payload?.message || 'Duyệt sản phẩm thành công';
+      })
+      .addCase(approveProductById.rejected, (state, action) => {
+        state.approving = false;
+        state.approveError = action.payload;
+      })
+      .addCase(rejectProductById.pending, (state) => {
+        state.rejecting = true;
+        state.rejectError = null;
+        state.rejectSuccess = null;
+      })
+      .addCase(rejectProductById.fulfilled, (state, action) => {
+        state.rejecting = false;
+        state.rejectSuccess = action.payload?.message || 'Từ chối sản phẩm thành công';
+      })
+      .addCase(rejectProductById.rejected, (state, action) => {
+        state.rejecting = false;
+        state.rejectError = action.payload;
       });
   },
 });
