@@ -6,7 +6,7 @@ import ProductDetail from './components/product/ProductDetail';
 import PageNotFound from './components/share/PageNotFound';
 import LoginPage from './components/login/LoginPage';
 import { ToastContainer } from 'react-toastify';
-
+import RegisterPage from './components/login/RegisterPage';
 function App() {
   return (
     <Router>
@@ -18,6 +18,7 @@ function App() {
           <Route path="products" element={<Products />} />
           <Route path="product/:id" element={<ProductDetail />} />
           <Route path="*" element={<PageNotFound />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Route>
       </Routes>
       <ToastContainer />

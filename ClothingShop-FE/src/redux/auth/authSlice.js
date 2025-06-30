@@ -10,13 +10,16 @@ const initialState = {
 export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
     const data = await loginApi(credentials); // { token, user }
-     console.log('✅ Login success:', data);
+    console.log('✅ Login success:', data);
     return data;
   } catch (err) {
-    console.error('❌ Login error:', err.response?.data || err.message);
-    return thunkAPI.rejectWithValue(err.response?.data?.message || 'Login failed');
+    console.error('❌ Login error full:', err);
+    console.error('❌ Login error response:', err?.response);
+    console.error('❌ Login error message:', err?.message);
+    return thunkAPI.rejectWithValue(err?.response?.data?.message || err?.message || 'Login failed');
   }
 });
+
 
 const authSlice = createSlice({
   name: 'auth',

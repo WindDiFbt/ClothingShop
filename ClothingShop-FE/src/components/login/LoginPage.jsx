@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./../../redux/auth/authSlice";
-import { Navigate, useNavigate  } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -70,6 +70,12 @@ export default function LoginPage() {
             Log In
           </button>
         </form>
+        <p className="text-sm text-center mt-4">
+          Don’t have an account?{" "}
+          <a href="/register" className="text-purple-600 hover:underline">
+            Register here
+          </a>
+        </p>
       </div>
     </div>
   );
