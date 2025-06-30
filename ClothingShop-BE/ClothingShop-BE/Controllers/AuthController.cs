@@ -1,4 +1,5 @@
 ﻿using ClothingShop_BE.Models;
+using ClothingShop_BE.Repository;
 using ClothingShop_BE.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
@@ -9,7 +10,9 @@ using NuGet.Protocol.Plugins;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
+using ClothingShop_BE.AuthModels;
+using ClothingShop_BE.RequestModels;
+using ClothingShop_BE.Service.Impl;
 namespace ClothingShop_BE.Controllers
 {
     [Route("api/[controller]")]
@@ -17,74 +20,37 @@ namespace ClothingShop_BE.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly ClothingShopPrn232G5Context _con;
-        public AuthController(IConfiguration config, ClothingShopPrn232G5Context con)
+        private readonly IUserRepository _user;
+        private readonly IAuthService _authService;
+        public AuthController(IConfiguration config, IUserRepository user, IAuthService authService)
         {
             _config = config;
-            _con = con;
+            _user = user;
+            _authService = authService;
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequestForm request)
         {
-            var userLogin = _con.UserRoles
-                .Include(u => u.User)
-                .Include(u => u.Role)
-                .FirstOrDefault(u => u.User.UserName == request.Username && u.User.Password == request.Password);
-            
-            if (userLogin != null)
-            {
-                var user = new
-                {
-                    Username = userLogin.User.UserName,
-                    Role = userLogin.Role.Name,
-                };
+            var result = await _authService.LoginAsync(request);
 
-                var token = GenerateJwtToken(user.Username, user.Role);
-                return Ok(new LoginResponse
-                {
-                    Token = token,
-                    User = user
-                });
-            }
+            if (result == null)
+                return Unauthorized(new { message = "Username or password is incorrect" });
 
-            return Unauthorized(new { message = "Username or password is incorrect" });
+            return Ok(result);
         }
 
-        private string GenerateJwtToken(string username, string role)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestForm request)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var result = await _authService.RegisterAsync(request);
 
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, role)
-        };
+            if (result.Contains("exists"))
+                return BadRequest(new { message = result });
 
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(new { message = result });
         }
     }
 
-    public class LoginRequest
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
-
-
-    public class LoginResponse
-    {
-        public string Token { get; set; }
-        public object User { get; set; }
-    }
 
 }
