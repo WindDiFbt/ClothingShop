@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClothingShop_BE.Models;
-using ClothingShop_BE.ModelsDTO;
+using ClothingShop_BE.ModelsDTO.Admin;
 
 [ApiController]
 [Route("api/[controller]")]

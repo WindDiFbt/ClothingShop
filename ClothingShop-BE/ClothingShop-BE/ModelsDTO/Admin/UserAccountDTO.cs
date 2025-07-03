@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ClothingShop_BE.ModelsDTO;
+namespace ClothingShop_BE.ModelsDTO.Admin;
 
 public class UserAccountDTO
 {

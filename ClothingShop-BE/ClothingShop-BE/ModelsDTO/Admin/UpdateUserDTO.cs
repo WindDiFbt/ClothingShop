@@ -1,4 +1,4 @@
-﻿namespace ClothingShop_BE.ModelsDTO;
+﻿namespace ClothingShop_BE.ModelsDTO.Admin;
 
 public class UpdateUserDTO
 {

@@ -1,4 +1,4 @@
-﻿namespace ClothingShop_BE.ModelsDTO.Analytics
+﻿namespace ClothingShop_BE.ModelsDTO.Admin.Analytics
 {
     public class CustomerSummaryDTO
     {

@@ -26,11 +26,11 @@ const HeaderAdmin = () => {
                     {/* Logo */}
                     <div className="flex items-center">
                         <Link to="/" className="flex items-center">
-                            <img 
+                            {/* <img 
                                 className="h-8 w-8" 
                                 src="/assets/images/logo.svg" 
                                 alt="Logo" 
-                            />
+                            /> */}
                             <span className="ml-2 text-xl font-semibold text-gray-900">
                                 Clothing Shop
                             </span>

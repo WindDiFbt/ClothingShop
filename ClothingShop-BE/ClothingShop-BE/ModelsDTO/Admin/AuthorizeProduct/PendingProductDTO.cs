@@ -1,4 +1,4 @@
-﻿namespace ClothingShop_BE.ModelsDTO.AuthorizeProduct
+﻿namespace ClothingShop_BE.ModelsDTO.Admin.AuthorizeProduct
 {
     public class PendingProductDTO
     {

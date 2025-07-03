@@ -1,9 +1,9 @@
 ﻿using ClothingShop_BE.Models;
-using ClothingShop_BE.ModelsDTO.Analytics;
+using ClothingShop_BE.ModelsDTO.Admin.Analytics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClothingShop_BE.Controllers
+namespace ClothingShop_BE.Controllers.Admin
 {
     public class AnalyticsController : Controller
     {
@@ -48,7 +48,7 @@ namespace ClothingShop_BE.Controllers
                     // Dates
                     LastPurchaseDate = c.Orders
                         .Where(o => o.Status == 4)
-                        .Max(o => (DateTime?)o.OrderDate),
+                        .Max(o => o.OrderDate),
                     RegistrationDate = c.CreatedAt,
 
                     // Activity metrics

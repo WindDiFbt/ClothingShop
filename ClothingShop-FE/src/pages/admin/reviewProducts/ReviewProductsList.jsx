@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../../../redux/slices/ProductSlice';
+import { fetchAllProducts } from '../../../redux/slices/admin/ProductSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
@@ -46,12 +46,11 @@ const ReviewProductsList = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { products, loading, error } = useSelector((state) => state.product);
+    const { products = [], loading = false, error = null } = useSelector((state) => state.adminProduct || {});
 
     useEffect(() => {
-        // Fetch pending products (status = 1 for pending)
-        dispatch(fetchProducts({ query: "?$filter=status eq 1" }));
-    }, [dispatch]);
+        dispatch(fetchAllProducts());
+      }, [dispatch]);
 
     // Lọc sản phẩm theo tên, mô tả, seller
     const filteredProducts = products.filter((product) =>
@@ -125,6 +124,7 @@ const ReviewProductsList = () => {
                             <th className="text-center py-3 px-4 border-b border-gray-200 font-semibold text-gray-600">Giảm giá</th>
                             <th className="text-center py-3 px-4 border-b border-gray-200 font-semibold text-gray-600">Người bán</th>
                             <th className="text-center py-3 px-4 border-b border-gray-200 font-semibold text-gray-600">Ngày tạo</th>
+                            <th className="text-center py-3 px-4 border-b border-gray-200 font-semibold text-gray-600">Trạng thái</th>
                             <th className="text-center py-3 px-4 border-b border-gray-200 font-semibold text-gray-600">Hành động</th>
                         </tr>
                     </thead>
@@ -143,6 +143,7 @@ const ReviewProductsList = () => {
                                         return (date && !isNaN(date.getTime())) ? date.toLocaleDateString() : '-';
                                     })()
                                 }</td>
+                                <td className="text-center py-3 px-4 border-b border-gray-200">{product.statusName || '-'}</td>
                                 <td className="text-center py-3 px-4 border-b border-gray-200">
                                     <button
                                         className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"

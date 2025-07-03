@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Analytics\" />
-    <Folder Include="Services\Dashboard\" />
+    <Folder Include="Services\Admin\Analytics\" />
+    <Folder Include="Services\Admin\Dashboard\" />
   </ItemGroup>
 
 </Project>

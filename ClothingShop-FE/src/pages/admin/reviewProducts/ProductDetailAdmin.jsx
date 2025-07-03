@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchProductDetail, approveProductById, rejectProductById } from '../../../redux/slices/ProductDetailSlice'
+import { fetchProductDetail, approveProductById, rejectProductById, resetProductDetailStatus } from '../../../redux/slices/admin/ProductDetailSlice'
 import { StarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 
@@ -64,10 +64,10 @@ const ProductDetailAdmin = () => {
         approving,
         approveSuccess,
         rejectSuccess,
-        approvingError,
+        approveError,
         rejectError,
         rejecting
-    } = useSelector((state) => state.detail)
+    } = useSelector((state) => state.adminProductDetail);
     const [showReject, setShowReject] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
     const navigate = useNavigate();
@@ -79,6 +79,7 @@ const ProductDetailAdmin = () => {
     }, [productVariants]);
 
     useEffect(() => {
+        dispatch(resetProductDetailStatus());
         dispatch(fetchProductDetail(id));
     }, [dispatch, id]);
 
@@ -211,7 +212,7 @@ const ProductDetailAdmin = () => {
                                     {rejectError && <div className="text-red-500 mt-1">{rejectError}</div>}
                                 </div>
                             )}
-                            {approvingError && <div className="text-red-500 mt-2">{approvingError}</div>}
+                            {approveError && <div className="text-red-500 mt-2">{approveError}</div>}
                             {approveSuccess && <div className="text-green-600 mt-2">{approveSuccess}</div>}
                             {rejectSuccess && <div className="text-green-600 mt-2">{rejectSuccess}</div>}
                         </div>

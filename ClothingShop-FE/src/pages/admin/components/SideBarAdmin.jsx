@@ -20,16 +20,15 @@ const SidebarAdmin = ({ isOpen, onToggle }) => {
             ]
         },
         {
-            id: 'orders',
-            title: 'Orders',
+            id: 'accounts',
+            title: 'Accounts',
             icon: (
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
             ),
             subItems: [
-                { title: 'Sales Orders', path: '/admin/orders/sales' },
-                { title: 'Purchase Orders', path: '/admin/orders/purchases' }
+                { title: 'List Accounts', path: '/admin/accounts' }
             ]
         },
         {
@@ -42,7 +41,7 @@ const SidebarAdmin = ({ isOpen, onToggle }) => {
             ),
             subItems: [
                 { title: 'Product List', path: '/admin/products/list' },
-                { title: 'Categories', path: '/admin/products/categories' }
+                { title: 'Review Product', path: '/admin/review-products' }
             ]
         }
     ];
