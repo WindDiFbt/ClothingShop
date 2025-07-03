@@ -11,8 +11,9 @@ import PageNotFound from './components/share/PageNotFound';
 import LoginPage from './components/login/LoginPage';
 import { ToastContainer } from 'react-toastify';
 import SaleDashboard from "./pages/admin/SaleDashboard";
-import ReviewProductsList from "./pages/admin/reviewProducts/reviewProductsList";
+import ReviewProductsList from "./pages/admin/reviewProducts/ReviewProductsList";
 import ProductDetailAdmin from "./pages/admin/reviewProducts/ProductDetailAdmin";
+import { ReportList, ReportDetail } from './pages/admin/report';
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
             <Route path="/admin/accounts/invite" element={<InviteUser />} />
             <Route path="/admin/review-products" element={<ReviewProductsList />} />
             <Route path="/admin/review-products/detail/:id" element={<ProductDetailAdmin />} />
+            <Route path="/admin/report" element={<ReportList />} />
+            <Route path="/admin/report/:id" element={<ReportDetail />} />
         </Route>
 
         {/* 404 Route */}

@@ -6,6 +6,7 @@ import productDetailAdminSlice from "./slices/admin/ProductDetailSlice";
 import authReducer from './auth/authSlice';
 import userSlice from './slices/UserSlice';
 import adminProductSlice from './slices/admin/ProductSlice';
+import adminReport from './slices/admin/ReportSlice';
 
 const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
         user: userSlice,
         adminProduct: adminProductSlice,
         adminProductDetail: productDetailAdminSlice,
+        adminReport: adminReport,
     },
 });
 

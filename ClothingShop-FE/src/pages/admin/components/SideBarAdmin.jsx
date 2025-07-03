@@ -43,6 +43,18 @@ const SidebarAdmin = ({ isOpen, onToggle }) => {
                 { title: 'Product List', path: '/admin/products/list' },
                 { title: 'Review Product', path: '/admin/review-products' }
             ]
+        },
+        {
+            id: 'reports',
+            title: 'Reports',
+            icon: (
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2a4 4 0 014-4h3m4 0V7a2 2 0 00-2-2h-7a2 2 0 00-2 2v4m0 4v2a2 2 0 002 2h4a2 2 0 002-2v-2" />
+                </svg>
+            ),
+            subItems: [
+                { title: 'Report List', path: '/admin/report' }
+            ]
         }
     ];
 

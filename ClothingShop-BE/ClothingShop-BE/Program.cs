@@ -3,6 +3,7 @@ using ClothingShop_BE.Models;
 using ClothingShop_BE.Service;
 using ClothingShop_BE.Services.Admin.Email;
 using ClothingShop_BE.Services.Admin.Products;
+using ClothingShop_BE.Services.Admin.Reports;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddScoped<IReportAdminService, ReportAdminService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IProductAdminService, ProductAdminService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
