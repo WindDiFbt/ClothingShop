@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getDetailProductById, approveProduct, rejectProduct } from "../../../services/APIService";
+import ProductService from '../../../services/admin/ProductService';
 
 export const fetchProductDetail = createAsyncThunk(
-    "productDetail/fetchProductDetail",
+    "adminProductDetail/fetchProductDetail",
     async (id, thunkAPI) => {
         try {
-            const response = await getDetailProductById(id);
+            const response = await ProductService.getAdminDetailProductById(id);
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
@@ -80,11 +81,8 @@ const productDetailSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchProductDetail.fulfilled, (state, action) => {
-        state.product = action.payload.productDto;
-        state.seller = action.payload.seller;
-        state.relatedProducts = action.payload.relatedProducts;
-        state.productVariants = action.payload.productDto.productVariants;
-        state.feedbacks = action.payload.feedbacks;
+        state.product = action.payload;
+        state.productVariants = action.payload.productVariants;
         state.loading = false;
       })
       .addCase(fetchProductDetail.rejected, (state, action) => {

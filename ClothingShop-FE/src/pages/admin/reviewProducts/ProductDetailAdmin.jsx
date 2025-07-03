@@ -87,6 +87,9 @@ const ProductDetailAdmin = () => {
     if (error) return <p>Error: {error}</p>
     if (!product) return <p>No products found</p>
 
+    const isApproved = product.status === 1;
+    const isRejected = product.status === 3;
+
     const images = product.images || []
 
     return (
@@ -169,7 +172,7 @@ const ProductDetailAdmin = () => {
                                 type="button"
                                 className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold disabled:opacity-60 transition-all duration-150"
                                 onClick={() => dispatch(approveProductById(product.id))}
-                                disabled={approving || approveSuccess || rejectSuccess}
+                                disabled={approving || approveSuccess || rejectSuccess || isApproved}
                             >
                                 {approving ? 'Đang duyệt...' : 'Duyệt sản phẩm'}
                             </button>
@@ -177,10 +180,19 @@ const ProductDetailAdmin = () => {
                                 type="button"
                                 className="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold disabled:opacity-60 transition-all duration-150"
                                 onClick={() => setShowReject(true)}
-                                disabled={rejecting || approveSuccess || rejectSuccess}
+                                disabled={rejecting || approveSuccess || rejectSuccess || isRejected}
                             >
                                 Từ chối sản phẩm
                             </button>
+                            {isRejected && product.rejectionReason && (
+                                <div className="mt-2 p-3 border rounded bg-white animate-fade-in">
+                                    <div className="text-red-700 font-semibold mb-1">Lý do từ chối:</div>
+                                    <div className="text-gray-800">{product.rejectionReason}</div>
+                                    {product.rejectedAt && (
+                                        <div className="text-xs text-gray-500 mt-1">Thời gian: {new Date(product.rejectedAt).toLocaleString()}</div>
+                                    )}
+                                </div>
+                            )}
                             {showReject && (
                                 <div className="mt-2 p-3 border rounded bg-white animate-fade-in">
                                     <textarea

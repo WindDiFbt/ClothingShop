@@ -16,6 +16,9 @@ const ProductService = {
     },
     getAllProducts: () => {
         return axios.get(`/Products/all`);
+    },
+    getAdminDetailProductById: (id) => {
+        return axios.get(`/Products/admin-detail/${id}`);
     }
 };
 

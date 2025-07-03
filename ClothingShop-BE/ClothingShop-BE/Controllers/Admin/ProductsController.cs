@@ -103,5 +103,15 @@ namespace ClothingShop_BE.Controllers.Admin
                 });
             }
         }
+
+        // GET: api/products/detail/{id}
+        [HttpGet("admin-detail/{id}")]
+        public async Task<ActionResult<AdminProductDetailDTO>> GetAdminProductDetail(long id)
+        {
+            var detail = await _productService.GetAdminProductDetailAsync(id);
+            if (detail == null)
+                return NotFound(new { message = "Product not found" });
+            return Ok(detail);
+        }
     }
 }

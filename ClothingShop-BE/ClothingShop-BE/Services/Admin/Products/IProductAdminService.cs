@@ -8,5 +8,6 @@ namespace ClothingShop_BE.Services.Admin.Products
         Task<bool> ApproveProductAsync(long id);
         Task<bool> RejectProductAsync(long id, string rejectReason);
         Task<List<PendingProductDTO>> GetAllProductsAsync();
+        Task<AdminProductDetailDTO?> GetAdminProductDetailAsync(long id);
     }
 }

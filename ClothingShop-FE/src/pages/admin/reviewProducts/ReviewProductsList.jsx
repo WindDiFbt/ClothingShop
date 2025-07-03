@@ -44,6 +44,7 @@ const ReviewProductsList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [statusFilter, setStatusFilter] = useState('pending');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { products = [], loading = false, error = null } = useSelector((state) => state.adminProduct || {});
@@ -52,8 +53,19 @@ const ReviewProductsList = () => {
         dispatch(fetchAllProducts());
       }, [dispatch]);
 
+    // Lọc sản phẩm theo trạng thái
+    const statusMap = {
+        all: null,
+        pending: 2,   // Chờ duyệt
+        approved: 1,  // Đã duyệt
+        rejected: 3   // Đã từ chối
+    };
+    const filteredByStatus = statusFilter === 'all'
+        ? products
+        : products.filter(product => product.status === statusMap[statusFilter]);
+
     // Lọc sản phẩm theo tên, mô tả, seller
-    const filteredProducts = products.filter((product) =>
+    const filteredProducts = filteredByStatus.filter((product) =>
         product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.sellerName?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -83,7 +95,20 @@ const ReviewProductsList = () => {
         <div className="p-6 bg-white rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Danh sách sản phẩm chờ duyệt</h2>
             <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div className="relative w-full md:w-1/3">
+                <div className="flex gap-2 w-full md:w-2/3">
+                    <select
+                        className="select select-bordered border-gray-300 pl-4 pr-4 py-2 rounded-lg shadow-sm"
+                        value={statusFilter}
+                        onChange={e => {
+                            setStatusFilter(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    >
+                        <option value="pending">Chờ duyệt</option>
+                        <option value="approved">Đã duyệt</option>
+                        <option value="rejected">Đã từ chối</option>
+                        <option value="all">Tất cả</option>
+                    </select>
                     <input
                         type="text"
                         placeholder="Tìm theo tên, mô tả, seller..."

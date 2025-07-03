@@ -120,5 +120,50 @@ namespace ClothingShop_BE.Services.Admin.Products
                 })
                 .ToListAsync();
         }
+
+        public async Task<AdminProductDetailDTO?> GetAdminProductDetailAsync(long id)
+        {
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Seller)
+                    .ThenInclude(s => s.Userinfo)
+                .Include(p => p.Images)
+                .Include(p => p.StatusNavigation)
+                .Include(p => p.ProductVariants)
+                .Include(p => p.ProductRejectionLogs)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+                return null;
+
+            var latestRejection = product.ProductRejectionLogs
+                .OrderByDescending(r => r.RejectedAt)
+                .FirstOrDefault();
+
+            return new AdminProductDetailDTO
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Discount = product.Discount,
+                Status = product.Status,
+                StatusName = product.StatusNavigation?.Name,
+                CreatedAt = product.CreateAt,
+                CategoryName = product.Category?.Name,
+                SellerName = product.Seller?.Userinfo?.FullName,
+                SellerEmail = product.Seller?.Email,
+                ImageUrls = product.Images.Select(i => i.Url).ToList(),
+                ProductVariants = product.ProductVariants.Select(v => new ProductVariantDTO
+                {
+                    Id = v.Id,
+                    ProductId = v.ProductId,
+                    Size = v.Size,
+                    Quantity = v.Quantity
+                }).ToList(),
+                RejectionReason = latestRejection?.Reason,
+                RejectedAt = latestRejection?.RejectedAt
+            };
+        }
     }
 }
