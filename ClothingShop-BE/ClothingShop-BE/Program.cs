@@ -1,7 +1,9 @@
 ﻿using ClothingShop_BE.Configurations;
 using ClothingShop_BE.Models;
 using ClothingShop_BE.Service;
+using ClothingShop_BE.Services.Admin;
 using ClothingShop_BE.Services.Admin.Email;
+using ClothingShop_BE.Services.Admin.Hubs;
 using ClothingShop_BE.Services.Admin.Products;
 using ClothingShop_BE.Services.Admin.Reports;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,6 +15,12 @@ using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Thêm SignalR
+builder.Services.AddSignalR();
+// Đăng ký NotificationService
+builder.Services.AddScoped<INotificationService, NotificationService>();
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -143,6 +151,8 @@ if (app.Environment.IsDevelopment())
         c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
     });
 }
+
+app.MapHub<NotificationHub>("/notificationHub");
 app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI();
