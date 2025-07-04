@@ -40,7 +40,6 @@ const SidebarAdmin = ({ isOpen, onToggle }) => {
                 </svg>
             ),
             subItems: [
-                { title: 'Product List', path: '/admin/products/list' },
                 { title: 'Review Product', path: '/admin/review-products' }
             ]
         },
