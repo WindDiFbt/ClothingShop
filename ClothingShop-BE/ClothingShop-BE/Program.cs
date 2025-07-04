@@ -19,6 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IReportAdminService, ReportAdminService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IProductAdminService, ProductAdminService>();
+builder.Services.AddScoped<ClothingShop_BE.Services.Admin.Invite.IInviteUserService, ClothingShop_BE.Services.Admin.Invite.InviteUserService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

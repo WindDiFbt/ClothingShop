@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import InviteService from '../../../services/admin/InviteService';
 
 const InviteUser = () => {
     const navigate = useNavigate();
@@ -57,15 +58,14 @@ const InviteUser = () => {
         }
 
         try {
-            // TODO: Thêm action inviteUser vào UserSlice
-            // await dispatch(inviteUser({ 
-            //     email: formData.email,
-            //     role: parseInt(formData.role)
-            // })).unwrap();
+            await InviteService.inviteUser({
+                email: formData.email,
+                role: parseInt(formData.role)
+            });
             toast.success('Gửi lời mời thành công');
             navigate('/admin/accounts');
         } catch (error) {
-            toast.error('Không thể gửi lời mời: ' + error);
+            toast.error('Không thể gửi lời mời: ' + (error?.response?.data?.message || error.message));
         }
     };
 
