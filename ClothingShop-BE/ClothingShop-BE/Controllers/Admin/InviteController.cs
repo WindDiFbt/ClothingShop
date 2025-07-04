@@ -30,5 +30,21 @@ namespace ClothingShop_BE.Controllers.Admin
                 return StatusCode(500, new { message = "Không thể gửi lời mời", error = ex.Message });
             }
         }
+
+        [HttpPost("create-user")]
+        public async Task<IActionResult> CreateUserFromInvite([FromBody] CreateUserInviteDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            try
+            {
+                await _inviteUserService.CreateUserFromInviteAsync(dto);
+                return Ok(new { message = "Tạo user thành công" });
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new { message = "Không thể tạo user", error = ex.Message });
+            }
+        }
     }
 } 

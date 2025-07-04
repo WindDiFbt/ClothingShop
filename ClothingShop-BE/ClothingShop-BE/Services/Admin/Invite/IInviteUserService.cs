@@ -6,5 +6,6 @@ namespace ClothingShop_BE.Services.Admin.Invite
     public interface IInviteUserService
     {
         Task InviteUserAsync(InviteUserDTO inviteUserDto);
+        Task CreateUserFromInviteAsync(CreateUserInviteDTO dto);
     }
 } 

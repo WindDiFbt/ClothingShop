@@ -1,4 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import "tailwindcss";
+
 @import "nprogress/nprogress.css";
 
 #nprogress .bar {
