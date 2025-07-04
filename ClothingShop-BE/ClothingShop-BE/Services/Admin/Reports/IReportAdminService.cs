@@ -9,5 +9,6 @@ namespace ClothingShop_BE.Services.Admin.Reports
         Task<List<ReportAdminDTO>> GetAllReportsAsync();
         Task<ReportAdminDTO?> GetReportDetailAsync(long id);
         Task<bool> UpdateReportStatusAsync(long id, int status);
+        Task SendReportFeedbackAsync(ReportFeedbackDTO dto);
     }
 } 

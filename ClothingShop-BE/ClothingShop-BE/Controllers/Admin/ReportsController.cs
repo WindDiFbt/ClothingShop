@@ -39,5 +39,19 @@ namespace ClothingShop_BE.Controllers.Admin
             if (!result) return NotFound();
             return Ok();
         }
+
+        [HttpPost("feedback")]
+        public async Task<IActionResult> SendReportFeedback([FromBody] ReportFeedbackDTO dto)
+        {
+            try
+            {
+                await _reportService.SendReportFeedbackAsync(dto);
+                return Ok(new { message = "Đã gửi phản hồi qua email" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Không thể gửi phản hồi", error = ex.Message });
+            }
+        }
     }
 } 
