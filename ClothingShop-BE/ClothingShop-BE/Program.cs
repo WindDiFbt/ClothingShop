@@ -53,6 +53,9 @@ builder.Services.Scan(scan => scan
     .AddClasses(classes => classes.Where(t => t.Name.EndsWith("Service") || t.Name.EndsWith("Repository")))
     .AsMatchingInterface()
     .WithScopedLifetime());
+
+// Add HttpClient for PayOS
+builder.Services.AddHttpClient<ClothingShop_BE.Service.IPayOSService, ClothingShop_BE.Service.Impl.PayOSService>();
 // Cấu hình Swagger với JWT
 builder.Services.AddSwaggerGen(c =>
 {
