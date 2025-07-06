@@ -15,11 +15,13 @@ namespace ClothingShop_BE.Service.Impl
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _config;
+        private readonly IJwtService _jwtService;
 
-        public AuthService(IUserRepository userRepository, IConfiguration config)
+        public AuthService(IUserRepository userRepository, IConfiguration config, IJwtService jwtService)
         {
             _userRepository = userRepository;
             _config = config;
+            _jwtService = jwtService;
         }
 
         public async Task<string> RegisterAsync(RegisterRequestForm request)
@@ -40,7 +42,7 @@ namespace ClothingShop_BE.Service.Impl
             };
 
             await _userRepository.AddUserAsync(user);
-            return "Registration successful";
+            return "User registered successfully";
         }
         public async Task<LoginResponseForm?> LoginAsync(LoginRequestForm request)
         {
@@ -49,42 +51,23 @@ namespace ClothingShop_BE.Service.Impl
             if (userLogin == null)
                 return null;
 
-            var token = GenerateJwtToken(userLogin.Value.User.UserName, userLogin.Value.Role);
+            var roles = new List<string> { userLogin.Value.Role };
+            var token = _jwtService.GenerateToken(
+                userLogin.Value.User.Id.ToString(),
+                userLogin.Value.User.Email,
+                roles
+            );
 
             return new LoginResponseForm
             {
                 Token = token,
                 User = new
                 {
+                    Id = userLogin.Value.User.Id,
                     Username = userLogin.Value.User.UserName,
                     Role = userLogin.Value.Role
                 }
             };
         }
-
-        private string GenerateJwtToken(string username, string role)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-        new Claim(ClaimTypes.Name, username),
-        new Claim(ClaimTypes.Role, role)
-    };
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-
     }
-
-}
+};

@@ -32,6 +32,13 @@ namespace ClothingShop_BE.Repository.Impl
         public async Task<bool> HasFeedbackExistAsync(long productId, Guid orderId) =>
             await _context.Feedbacks.AnyAsync(f => f.OrderId == orderId && f.ProductId == productId);
 
+        public async Task<Feedback?> GetFeedbackByOrderAndProductAsync(Guid orderId, long productId) =>
+            await _context.Feedbacks
+                .Include(f => f.User)
+                .ThenInclude(u => u.Userinfo)
+                .Include(f => f.Product)
+                .FirstOrDefaultAsync(f => f.OrderId == orderId && f.ProductId == productId);
+
         public async Task<Feedback> SaveFeedback(Feedback feedback)
         {
             await _context.Feedbacks.AddAsync(feedback);
