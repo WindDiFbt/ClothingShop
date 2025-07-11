@@ -1,5 +1,10 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { ShoppingBagIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, UserCircleIcon } from "@heroicons/react/20/solid";
+import {
+  ShoppingBagIcon,
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { Menu } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/authSlice";
@@ -18,15 +23,17 @@ export default function Header() {
   const [keyword, setKeyword] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { token, user } = useSelector(state => state.auth);
-  const cartDetails = useSelector(state => state.cart.cart?.cartDetails ?? []);
+  const { token, user } = useSelector((state) => state.auth);
+  const cartDetails = useSelector(
+    (state) => state.cart.cart?.cartDetails ?? []
+  );
   const cartCount = cartDetails.length;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/home');
+    navigate("/home");
   };
 
   const fetchSuggestions = async (kw) => {
@@ -57,8 +64,9 @@ export default function Header() {
   const handleSearch = () => {
     if (keyword.trim()) {
       setSuggestions([]);
+      const search = keyword;
       setKeyword("");
-      navigate(`/products?search=${encodeURIComponent(keyword)}`);
+      navigate(`/products?search=${encodeURIComponent(search)}`);
     }
   };
 
@@ -69,7 +77,10 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/home" className="flex-shrink-0">
-              <h1 className="text-2xl font-bold text-black tracking-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h1
+                className="text-2xl font-bold text-black tracking-tight"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
                 Noiré
               </h1>
             </Link>
@@ -100,13 +111,9 @@ export default function Header() {
                 type="text"
                 value={keyword}
                 onChange={handleChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleSearch();
-                  }
-                }}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 placeholder="Search for products..."
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-black focus:border-black sm:text-sm transition duration-200 ease-in-out"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-black focus:border-black sm:text-sm transition duration-200 ease-in-out"
               />
               {suggestions.length > 0 && (
                 <div className="absolute z-50 top-full mt-1 w-full bg-white border border-gray-200 shadow-lg rounded-lg max-h-60 overflow-y-auto">
@@ -126,42 +133,104 @@ export default function Header() {
 
           {/* Desktop Right Menu */}
           <div className="hidden md:flex items-center space-x-6">
-            {token ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">
-                  Hello, <span className="font-medium">{user?.username}</span>
-                </span>
-                <Link
-                  to="/orders"
-                  className="text-sm font-medium text-gray-700 hover:text-black transition duration-200 ease-in-out"
-                >
-                  My Orders
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="text-sm font-medium text-gray-700 hover:text-black transition duration-200 ease-in-out"
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                className="text-sm font-medium text-gray-700 hover:text-black transition duration-200 ease-in-out"
-              >
-                Sign In
-              </Link>
-            )}
-
             {/* Cart Icon */}
-            <Link to="/cart" className="relative p-2 text-gray-700 hover:text-black transition duration-200 ease-in-out">
+            <Link
+              to="/cart"
+              className="relative p-2 text-gray-700 hover:text-black transition duration-200 ease-in-out"
+            >
               <ShoppingBagIcon className="h-6 w-6" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-black rounded-full min-w-[18px] h-[18px]">
+                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-black rounded-full min-w-[18px] h-[18px]">
                   {cartCount}
                 </span>
               )}
             </Link>
+            {user?.role === "SELLER" && (
+              <Link
+                to="/seller"
+                className="inline-flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-purple-600 transition"
+              >
+                <span className="text-lg">🛍</span> Seller Panel
+              </Link>
+            )}
+
+            {/* User Dropdown */}
+            <Menu as="div" className="relative">
+              <Menu.Button className="flex items-center space-x-1 text-sm text-gray-700 hover:text-black transition">
+                <UserCircleIcon className="h-6 w-6" />
+                {token && <span>{user?.username}</span>}
+              </Menu.Button>
+
+              <Menu.Items className="absolute right-0 mt-2 w-40 origin-top-right bg-white border border-gray-200 rounded-md shadow-lg focus:outline-none z-50">
+                {token ? (
+                  <>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/orders"
+                          className={`block px-4 py-2 text-sm ${
+                            active ? "bg-gray-100" : ""
+                          }`}
+                        >
+                          My Orders
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/profile"
+                          className={`block px-4 py-2 text-sm ${
+                            active ? "bg-gray-100" : ""
+                          }`}
+                        >
+                          Profile
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={handleLogout}
+                          className={`w-full text-left px-4 py-2 text-sm ${
+                            active ? "bg-gray-100" : ""
+                          }`}
+                        >
+                          Sign Out
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </>
+                ) : (
+                  <>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/login"
+                          className={`block px-4 py-2 text-sm ${
+                            active ? "bg-gray-100" : ""
+                          }`}
+                        >
+                          Login
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/register"
+                          className={`block px-4 py-2 text-sm ${
+                            active ? "bg-gray-100" : ""
+                          }`}
+                        >
+                          Register
+                        </Link>
+                      )}
+                    </Menu.Item>
+                  </>
+                )}
+              </Menu.Items>
+            </Menu>
           </div>
 
           {/* Mobile menu button */}
@@ -251,13 +320,22 @@ export default function Header() {
                   </button>
                 </div>
               ) : (
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50 rounded-md transition duration-150 ease-in-out"
-                >
-                  Sign In
-                </Link>
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50 rounded-md transition duration-150 ease-in-out"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50 rounded-md transition duration-150 ease-in-out"
+                  >
+                    Register
+                  </Link>
+                </>
               )}
             </div>
           </div>

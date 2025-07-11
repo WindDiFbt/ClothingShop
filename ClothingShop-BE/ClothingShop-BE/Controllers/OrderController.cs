@@ -1,7 +1,9 @@
+﻿using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO;
 using ClothingShop_BE.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using System.Security.Claims;
 
 namespace ClothingShop_BE.Controllers
@@ -175,6 +177,29 @@ namespace ClothingShop_BE.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpGet("pagination")]
+        public async Task<IActionResult> GetOrdersPagination(int page = 1, int pageSize = 8)
+        {
+            var (orders, currentPage, totalPages) = await _orderService.GetOrdersAsync(page, pageSize);
+            return Ok(new { orders, currentPage, totalPages });
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderDetail(Guid id)
+        {
+            var order = await _orderService.GetOrderDetailByIdAsync(id);
+            if (order == null) return NotFound();
+            return Ok(order);
+        }
+
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] int newStatus)
+        {
+            var updated = await _orderService.UpdateOrderStatusSellerAsync(id, newStatus);
+            if (!updated) return NotFound();
+            return NoContent();
+        }
+
+
     }
 
     public class UpdateOrderStatusDTO

@@ -17,5 +17,8 @@ namespace ClothingShop_BE.Repository
         Task<List<Product>> Get10HotProducts();
 
         Task<List<Product>> Get5SaleProducts();
+        Task CreateProductAsync(Product product);
+        Task UpdateProductAsync(Product product);
+
     }
 }

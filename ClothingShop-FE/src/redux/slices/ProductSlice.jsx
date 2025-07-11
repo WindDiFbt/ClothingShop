@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getProductsOdata } from "../../services/APIService";
-
+import { createProductApi, updateProductApi, getProductByIdApi } from "../../services/APIService";
 export const fetchProducts = createAsyncThunk(
   "product/fetchProducts",
   async ({ query }, thunkAPI) => {
@@ -61,6 +61,18 @@ const productSlice = createSlice({
     setPriceFilter: (state, action) => {
       state.priceFilter = action.payload;
     },
+    setCategoryFilter: (state, action) => {
+      const category = action.payload;
+      if (category) {
+        state.categoryFilter = {
+          name: category.name,
+          query: `CategoryId eq ${category.id}`
+        };
+      } else {
+        // Reset khi chọn All
+        state.categoryFilter = { name: "", query: "" };
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -85,4 +97,21 @@ export const {
   setCategoryFilter,
   setPriceFilter,
 } = productSlice.actions;
+export const createProduct = createAsyncThunk("product/createProduct", async (data) => {
+  const response = await createProductApi(data);
+  return response.data;
+});
+
+export const updateProduct = createAsyncThunk("product/updateProduct", async ({ id, data }) => {
+  const response = await updateProductApi(id, data);
+  return response.data;
+});
+
+export const fetchProductById = createAsyncThunk("product/fetchProductById", async (id) => {
+  const response = await getProductByIdApi(id);
+  return response.data;
+});
+
+
+
 export default productSlice.reducer;

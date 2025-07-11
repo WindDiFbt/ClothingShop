@@ -56,7 +56,9 @@ namespace ClothingShop_BE.ModelsDTO
                 Price = this.Price,
                 Discount = this.Discount,
                 Status = this.Status,
-                CreateAt = this.CreateAt
+                CreateAt = this.CreateAt,
+                ProductVariants = this.ProductVariants?.Select(v => v.ToProductVariant()).ToList(),
+                Images = this.Images?.Select(i => new Image { Url = i }).ToList()
             };
         }
     }

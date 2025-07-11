@@ -52,6 +52,34 @@ namespace ClothingShop_BE.Repository.Impl
             var usernameresponse = user.UserName;
             return (User: user, Role: role);
         }
+        public async Task<User?> GetUserByIdAsync(Guid userId)
+        {
+            return await _context.Users
+                .Include(u => u.Userinfo)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+        }
+        public async Task<object?> GetUserProfileAsync(Guid userId)
+        {
+            var user = await _context.Users
+                .Include(u => u.Userinfo)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null) return null;
+
+            return new
+            {
+                user.UserName,
+                user.Email,
+                user.Status,
+                user.CreatedAt,
+                UserInfo = user.Userinfo == null ? null : new
+                {
+                    user.Userinfo.FullName,
+                    user.Userinfo.PhoneNumber,
+                    user.Userinfo.Address
+                }
+            };
+        }
 
     }
 }

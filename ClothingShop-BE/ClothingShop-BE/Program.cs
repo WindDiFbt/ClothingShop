@@ -8,12 +8,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllers()
-    .AddXmlSerializerFormatters();
+builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -28,14 +26,17 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;  // Ensures cookies are essential for the app
 });
 builder.Services.AddMemoryCache();
-builder.Services.AddControllers().AddOData(o =>
+builder.Services.AddControllers(options =>
+{
+    options.OutputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.XmlSerializerOutputFormatter>();
+})
+.AddOData(o =>
 {
     o.EnableNoDollarQueryOptions = true;
     o.EnableQueryFeatures(null).AddRouteComponents(
         routePrefix: "api/odata",
         OdataConfig.GetEdmModel()).Filter().OrderBy().Count().Expand().SetMaxTop(100);
 });
-
 // Add CORS policy
 builder.Services.AddCors(options =>
 {
