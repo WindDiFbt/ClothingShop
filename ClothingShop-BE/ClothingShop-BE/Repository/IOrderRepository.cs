@@ -20,5 +20,10 @@ namespace ClothingShop_BE.Repository
         Task<bool> CheckStockAvailabilityAsync(long productId, int quantity);
         Task<bool> ReduceProductStockAsync(long productId, int quantity);
         Task<bool> RestoreProductStockAsync(long productId, int quantity);
+        IQueryable<Order> GetAllOrdersForODATA();
+        Task<(int totalItems, List<Order>)> GetOrdersPagedAsync(int page, int pageSize);
+        Task<Order?> GetOrderDetailWithIncludesAsync(Guid orderId);
+        Task UpdateAsync(Order order);
+        IQueryable<Order> GetAllOrders();
     }
 }

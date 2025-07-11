@@ -2,6 +2,7 @@
 using ClothingShop_BE.ModelsDTO;
 using ClothingShop_BE.Repository;
 using Microsoft.Extensions.Caching.Memory;
+using System.Security.Claims;
 
 namespace ClothingShop_BE.Service.Impl
 {
@@ -12,16 +13,17 @@ namespace ClothingShop_BE.Service.Impl
         private readonly ICategoryRepository _categoryRepository;
         private readonly IProductStatusRepository _productStatusRepository;
         private readonly IMemoryCache _cache;
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public ProductService(IProductRepository productRepository, IFeedbackRepository feedbackRepository,
             ICategoryRepository categoryRepository, IProductStatusRepository productStatusRepository,
-            IMemoryCache cache)
+            IMemoryCache cache, IHttpContextAccessor httpContextAccessor)
         {
             _productRepository = productRepository;
             _feedbackRepository = feedbackRepository;
             _categoryRepository = categoryRepository;
             _productStatusRepository = productStatusRepository;
             _cache = cache;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IQueryable<Product> GetAllProductsODATA()
@@ -84,5 +86,53 @@ namespace ClothingShop_BE.Service.Impl
             List<ProductDTO> saleProducts = (await _productRepository.Get5SaleProducts()).Select(x => new ProductDTO(x)).ToList();
             return (hotproducts, saleProducts);
         }
+        public async Task<ProductDTO> CreateProductAsync(ProductDTO dto)
+        {
+            var product = dto.ToProduct();
+            var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdStr) || !Guid.TryParse(userIdStr, out Guid userId))
+            {
+                throw new UnauthorizedAccessException("Invalid or missing user ID in token.");
+            }
+
+            product.SellerId = userId;
+            product.Status = 1;
+            await _productRepository.CreateProductAsync(product);
+            return new ProductDTO(product);
+        }
+        public async Task<ProductDTO> UpdateProductAsync(long id, ProductDTO dto)
+        {
+            var existingProduct = await _productRepository.GetDetailProductAsync(id);
+            if (existingProduct == null)
+            {
+                throw new KeyNotFoundException($"Product does not exist ID: {id}");
+            }
+
+            existingProduct.Name = dto.Name;
+            existingProduct.Description = dto.Description;
+            existingProduct.Price = dto.Price;
+            existingProduct.Discount = dto.Discount;
+            existingProduct.Status = dto.Status ?? 1;
+            existingProduct.CategoryId = dto.CategoryId;
+            existingProduct.ThumbnailUrl = dto.ThumbnailUrl;
+
+            existingProduct.Images = dto.Images.Select(url => new Image
+            {
+                Url = url
+            }).ToList();
+
+            existingProduct.ProductVariants = dto.ProductVariants.Select(v => new ProductVariant
+            {
+                Size = v.Size,
+                Quantity = v.Quantity
+            }).ToList();
+
+            await _productRepository.UpdateProductAsync(existingProduct);
+
+            return new ProductDTO(existingProduct);
+        }
+
+
     }
 }

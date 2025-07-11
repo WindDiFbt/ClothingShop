@@ -2,6 +2,7 @@ using ClothingShop_BE.ModelsDTO;
 using ClothingShop_BE.Models;
 using ClothingShop_BE.Repository;
 using ClothingShop_BE.Repository.Impl;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClothingShop_BE.Service.Impl
 {
@@ -207,6 +208,42 @@ namespace ClothingShop_BE.Service.Impl
             // For now, we'll return true for basic validation
             // Additional business logic can be added here
             return Task.FromResult(true);
+        }
+        public IQueryable<Order> GetAllOrdersODATA()
+        {
+            return _orderRepository.GetAllOrdersForODATA();
+        }
+        public async Task<(List<OrderDTO> orders, int currentPage, int totalPages)> GetOrdersAsync(int page, int pageSize)
+        {
+            var (totalItems, orders) = await _orderRepository.GetOrdersPagedAsync(page, pageSize);
+
+            var orderDTOs = orders.Select(o => new OrderDTO(o)).ToList();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            return (orderDTOs, page, totalPages);
+        }
+        public async Task<OrderDTO?> GetOrderDetailByIdAsync(Guid orderId)
+        {
+            var order = await _orderRepository.GetOrderDetailWithIncludesAsync(orderId);
+            if (order == null) return null;
+            return new OrderDTO(order);
+        }
+
+        public async Task<bool> UpdateOrderStatusSellerAsync(Guid orderId, int newStatus)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
+            if (order == null) return false;
+
+            order.Status = newStatus;
+            order.UpdateAt = DateTime.UtcNow;
+
+            await _orderRepository.UpdateAsync(order);
+            return true;
+        }
+
+        public IQueryable<Order> GetAllOrdersOData()
+        {
+            return _orderRepository.GetAllOrders();
         }
     }
 }

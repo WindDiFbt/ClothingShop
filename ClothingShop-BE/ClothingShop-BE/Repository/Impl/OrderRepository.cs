@@ -167,5 +167,59 @@ namespace ClothingShop_BE.Repository.Impl
             }
             return false;
         }
+        public IQueryable<Order> GetAllOrdersForODATA()
+        {
+            return _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product);
+        }
+        public async Task<(int totalItems, List<Order>)> GetOrdersPagedAsync(int page, int pageSize)
+        {
+            var query = _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderDetails)
+                        .ThenInclude(pv => pv.Product)
+                .Include(o => o.StatusNavigation)
+                .Include(o => o.Voucher)
+                .AsQueryable();
+
+            var totalItems = await query.CountAsync();
+            var orders = await query
+                .OrderByDescending(o => o.CreateAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (totalItems, orders);
+        }
+
+        public async Task<Order?> GetOrderDetailWithIncludesAsync(Guid orderId)
+        {
+            var order = await _context.Orders
+                .Where(o => o.Id == orderId)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .Include(o => o.Customer)
+                .FirstOrDefaultAsync();
+
+            // Nếu không có OrderDetails → gán rỗng để tránh null reference
+            if (order != null && order.OrderDetails == null)
+                order.OrderDetails = new List<OrderDetail>();
+
+            return order;
+        }
+
+
+
+        public async Task UpdateAsync(Order order)
+        {
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+        }
+        public IQueryable<Order> GetAllOrders()
+    {
+        return _context.Orders.Include(o => o.OrderDetails);
+    }
     }
 }

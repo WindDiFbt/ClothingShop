@@ -54,19 +54,26 @@ namespace ClothingShop_BE.Controllers
             return Ok(statuses);
         }
 
-        [HttpGet("admin-only")]
-        [Authorize(Roles = "Admin")] // Chỉ Admin mới access được
-        public IActionResult GetAdminData()
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDTO dto)
         {
-            return Ok(new { message = "This is admin-only data" });
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var product = await _productService.CreateProductAsync(dto);
+            return Ok(product);
         }
 
-        [HttpGet("public")]
-        [AllowAnonymous] // Không cần JWT token
-        public IActionResult GetPublicData()
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductDTO dto)
         {
-            return Ok(new { message = "This is public data" });
+            var updated = await _productService.UpdateProductAsync(id, dto);
+            return Ok(updated);
         }
+
 
     }
 }

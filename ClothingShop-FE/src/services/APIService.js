@@ -21,4 +21,18 @@ export const getDetailProductById = (id) => {
 export const getCategories = () => {
     return axios.get(`/Products/categories`)
 }
+export const createProductApi = (data) => {
+  return axios.post("/Products", data);
+};
+
+export const updateProductApi = (id, data) => {
+  return axios.put(`/Products/update/${id}`, data);
+};
+
+
+export const getProductByIdApi = (id) => {
+  return axios.get(`/Products/detail/${id}`);
+};
+
+
 

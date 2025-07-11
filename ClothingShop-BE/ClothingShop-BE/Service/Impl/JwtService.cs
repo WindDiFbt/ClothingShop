@@ -26,7 +26,8 @@ namespace ClothingShop_BE.Service.Impl
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat,
                 new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
-                ClaimValueTypes.Integer64)
+                ClaimValueTypes.Integer64),
+                new Claim("userid",userId)
             };
 
             // Thêm roles nếu có
