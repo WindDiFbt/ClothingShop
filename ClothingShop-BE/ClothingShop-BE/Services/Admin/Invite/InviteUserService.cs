@@ -21,7 +21,7 @@ namespace ClothingShop_BE.Services.Admin.Invite
 
         public async Task InviteUserAsync(InviteUserDTO inviteUserDto)
         {
-            // Tùy chỉnh nội dung email mời
+
             var inviteLink = $"http://localhost:5173/admin/accounts/create-invite?email={Uri.EscapeDataString(inviteUserDto.Email)}&role={inviteUserDto.Role}";
             var subject = "Lời mời tham gia hệ thống ClothingShop";
             var body = $@"<p>Bạn đã được mời tham gia hệ thống với vai trò: {inviteUserDto.Role}</p><p>Email đăng nhập: {inviteUserDto.Email}</p><p><a href='{inviteLink}' style='display:inline-block;padding:10px 20px;background:#4361ee;color:#fff;border-radius:6px;text-decoration:none;font-weight:bold;'>Tạo tài khoản ngay</a></p>";
@@ -30,14 +30,27 @@ namespace ClothingShop_BE.Services.Admin.Invite
 
         public async Task CreateUserFromInviteAsync(CreateUserInviteDTO dto)
         {
-            // Giả sử đã inject ClothingShopPrn232G5Context vào service
+            // Validate email trùng lặp
+            var existingEmail = await _db.Users.AnyAsync(u => u.Email == dto.Email);
+            if (existingEmail)
+            {
+                throw new InvalidOperationException($"Email '{dto.Email}' đã được sử dụng");
+            }
+
+            // Validate username trùng lặp
+            var existingUsername = await _db.Users.AnyAsync(u => u.UserName == dto.UserName);
+            if (existingUsername)
+            {
+                throw new InvalidOperationException($"Tên đăng nhập '{dto.UserName}' đã được sử dụng");
+            }
+
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 UserName = dto.UserName,
                 Email = dto.Email,
-                Password = dto.Password, // Nên hash password ở đây nếu có
-                Status = 1, // Active hoặc Pending tuỳ logic
+                Password = dto.Password, 
+                Status = 1, 
                 CreatedAt = DateTime.UtcNow
             };
             var userinfo = new Userinfo

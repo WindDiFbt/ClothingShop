@@ -41,6 +41,11 @@ namespace ClothingShop_BE.Controllers.Admin
                 await _inviteUserService.CreateUserFromInviteAsync(dto);
                 return Ok(new { message = "Tạo user thành công" });
             }
+            catch (InvalidOperationException ex)
+            {
+                // Trả về lỗi validation với status code 400
+                return BadRequest(new { message = ex.Message });
+            }
             catch (System.Exception ex)
             {
                 return StatusCode(500, new { message = "Không thể tạo user", error = ex.Message });

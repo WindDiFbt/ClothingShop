@@ -198,9 +198,9 @@ const SaleDashboard = () => {
             )}
 
             {/* Test Notification Panel */}
-            <div className="mt-6">
+            {/* <div className="mt-6">
                 <TestNotificationPanel />
-            </div>
+            </div> */}
         </div>
     );
 };
