@@ -36,3 +36,14 @@ export const getProductByIdApi = (id) => {
 
 
 
+export const getPendingProducts = () => {
+    return axios.get(`/Products/pending`);
+}
+
+export const approveProduct = (id) => {
+    return axios.put(`/Products/${id}/approve`);
+}
+
+export const rejectProduct = (id, rejectReason) => {
+    return axios.put(`/Products/${id}/reject`, { rejectReason });
+}

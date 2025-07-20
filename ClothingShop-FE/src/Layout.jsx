@@ -5,6 +5,7 @@ import Footer from './components/share/Footer';
 const excludedPaths = ['/', '/login', '/register', '/forgot-password', '/reset-password', '/home'];
 
 export default function Layout() {
+
   const location = useLocation();
   const isExcluded = excludedPaths.includes(location.pathname);
 

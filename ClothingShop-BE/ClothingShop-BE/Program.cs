@@ -1,17 +1,23 @@
 ﻿using ClothingShop_BE.Configurations;
 using ClothingShop_BE.Models;
 using ClothingShop_BE.Service;
+using ClothingShop_BE.Services.Admin;
+using ClothingShop_BE.Services.Admin.Email;
+using ClothingShop_BE.Services.Admin.Hubs;
+using ClothingShop_BE.Services.Admin.Products;
+using ClothingShop_BE.Services.Admin.Reports;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -142,6 +148,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.MapHub<NotificationHub>("/notificationHub");
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI();
 // Use the CORS policy
 app.UseCors("AllowFrontend");
 
