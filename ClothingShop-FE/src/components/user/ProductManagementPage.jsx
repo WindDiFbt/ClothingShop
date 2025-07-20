@@ -5,7 +5,7 @@ import axios from "axios";
 import {
   fetchProducts,
   setCurrentPage,
-  setCategoryFilter
+  setCategoryFilterSeller
 } from "../../redux/slices/ProductSlice";
 import {
   ChevronLeftIcon,
@@ -70,7 +70,7 @@ export default function ProductManagementPage() {
           value={categoryFilter.name}
           onChange={(e) => {
             const sel = categories.find(c => c.name === e.target.value);
-            dispatch(setCategoryFilter(sel || null));
+            dispatch(setCategoryFilterSeller(sel || null));
             dispatch(setCurrentPage(1));
           }}
           className="border border-gray-300 rounded-md px-3 py-1 text-sm"
