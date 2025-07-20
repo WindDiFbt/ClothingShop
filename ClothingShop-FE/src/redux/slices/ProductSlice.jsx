@@ -61,7 +61,7 @@ const productSlice = createSlice({
     setPriceFilter: (state, action) => {
       state.priceFilter = action.payload;
     },
-    setCategoryFilter: (state, action) => {
+    setCategoryFilterSeller: (state, action) => {
       const category = action.payload;
       if (category) {
         state.categoryFilter = {
@@ -96,6 +96,7 @@ export const {
   setCurrentPage,
   setCategoryFilter,
   setPriceFilter,
+  setCategoryFilterSeller,
 } = productSlice.actions;
 export const createProduct = createAsyncThunk("product/createProduct", async (data) => {
   const response = await createProductApi(data);
