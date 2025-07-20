@@ -96,14 +96,14 @@ namespace ClothingShop_BE.Services.Admin.Analytics
 
             // Product Metrics
             result.TotalProducts = await _context.Products.CountAsync();
-            result.PendingProducts = await _context.Products.Where(p => p.Status == 1).CountAsync();
-            result.ApprovedProducts = await _context.Products.Where(p => p.Status == 2).CountAsync();
+            result.PendingProducts = await _context.Products.Where(p => p.Status == 2).CountAsync();
+            result.ApprovedProducts = await _context.Products.Where(p => p.Status == 1).CountAsync();
             result.RejectedProducts = await _context.Products.Where(p => p.Status == 3).CountAsync();
 
             // Report Metrics
             result.TotalReports = await _context.Reports.CountAsync();
             result.PendingReports = await _context.Reports.Where(r => r.Status == 1).CountAsync();
-            result.ResolvedReports = await _context.Reports.Where(r => r.Status == 2).CountAsync();
+            result.ResolvedReports = await _context.Reports.Where(r => r.Status == 3).CountAsync();
 
             // Recent Orders
             result.RecentOrders = await _context.Orders
@@ -145,7 +145,7 @@ namespace ClothingShop_BE.Services.Admin.Analytics
 
             // Pending Items
             var pendingProducts = await _context.Products
-                .Where(p => p.Status == 1)
+                .Where(p => p.Status == 2)
                 .OrderByDescending(p => p.CreateAt)
                 .Take(5)
                 .Select(p => new PendingItemDTO
@@ -181,29 +181,53 @@ namespace ClothingShop_BE.Services.Admin.Analytics
             return result;
         }
 
-        public async Task<RevenueAnalyticsDTO> GetRevenueAnalyticsAsync(DateTime? startDate, DateTime? endDate)
+        public async Task<CategorySalesResponseDTO> GetCategorySalesAsync(DateTime? startDate, DateTime? endDate)
         {
-            // Implementation for revenue analytics
-            throw new NotImplementedException();
-        }
+            // Set default date range if not provided
+            if (!startDate.HasValue)
+                startDate = DateTime.Now.AddDays(-30);
+            if (!endDate.HasValue)
+                endDate = DateTime.Now;
 
-        public async Task<OrderAnalyticsDTO> GetOrderAnalyticsAsync(DateTime? startDate, DateTime? endDate)
-        {
-            // Implementation for order analytics
-            throw new NotImplementedException();
-        }
+            var result = new CategorySalesResponseDTO
+            {
+                StartDate = startDate,
+                EndDate = endDate
+            };
 
-        public async Task<CustomerAnalyticsDTO> GetCustomerAnalyticsAsync(DateTime? startDate, DateTime? endDate)
-        {
-            // Implementation for customer analytics
-            throw new NotImplementedException();
-        }
+            // Get category sales data
+            var categorySales = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .ThenInclude(p => p.Category)
+                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.Status == 4) // Completed orders only
+                .SelectMany(o => o.OrderDetails)
+                .GroupBy(od => new { od.Product.Category.Id, od.Product.Category.Name })
+                .Select(g => new CategorySalesDTO
+                {
+                    CategoryId = g.Key.Id,
+                    CategoryName = g.Key.Name,
+                    Revenue = g.Sum(od => od.TotalPrice ?? 0),
+                    OrderCount = g.Select(od => od.OrderId).Distinct().Count(),
+                    ProductCount = g.Select(od => od.ProductId).Distinct().Count()
+                })
+                .OrderByDescending(c => c.Revenue)
+                .ToListAsync();
 
-        public async Task<ProductAnalyticsDTO> GetProductAnalyticsAsync(DateTime? startDate, DateTime? endDate)
-        {
-            // Implementation for product analytics
-            throw new NotImplementedException();
-        }
+            // Calculate total revenue and percentages
+            var totalRevenue = categorySales.Sum(c => c.Revenue);
+            result.TotalRevenue = totalRevenue;
+            result.TotalOrders = categorySales.Sum(c => c.OrderCount);
 
+            // Calculate percentage for each category
+            foreach (var category in categorySales)
+            {
+                category.Percentage = totalRevenue > 0 ? (double)((category.Revenue / totalRevenue) * 100) : 0;
+            }
+
+            result.CategoryData = categorySales;
+
+            return result;
+        }
     }
 } 

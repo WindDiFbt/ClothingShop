@@ -49,6 +49,14 @@ export const fetchReportAnalytics = createAsyncThunk(
     }
 );
 
+export const fetchCategorySales = createAsyncThunk(
+    'analytics/fetchCategorySales',
+    async ({ startDate, endDate }) => {
+        const response = await AnalyticsService.getCategorySales(startDate, endDate);
+        return response.data;
+    }
+);
+
 const analyticsSlice = createSlice({
     name: 'analytics',
     initialState: {
@@ -58,6 +66,7 @@ const analyticsSlice = createSlice({
         customers: null,
         products: null,
         reports: null,
+        categorySales: null,
         loading: false,
         error: null,
         dateRange: {
@@ -73,6 +82,7 @@ const analyticsSlice = createSlice({
             state.customers = null;
             state.products = null;
             state.reports = null;
+            state.categorySales = null;
         },
         setDateRange: (state, action) => {
             state.dateRange = action.payload;
@@ -158,6 +168,19 @@ const analyticsSlice = createSlice({
                 state.reports = action.payload;
             })
             .addCase(fetchReportAnalytics.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+            // Category Sales
+            .addCase(fetchCategorySales.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchCategorySales.fulfilled, (state, action) => {
+                state.loading = false;
+                state.categorySales = action.payload;
+            })
+            .addCase(fetchCategorySales.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             });

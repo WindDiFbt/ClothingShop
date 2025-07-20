@@ -35,6 +35,22 @@ namespace ClothingShop_BE.Controllers.Admin
             }
         }
 
+        [HttpGet("category-sales")]
+        public async Task<ActionResult<CategorySalesResponseDTO>> GetCategorySales(
+            [FromQuery] DateTime? startDate, 
+            [FromQuery] DateTime? endDate)
+        {
+            try
+            {
+                var result = await _analyticsService.GetCategorySalesAsync(startDate, endDate);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy dữ liệu doanh số theo danh mục", error = ex.Message });
+            }
+        }
+
         [HttpGet("customers/summary")]
         public async Task<IActionResult> GetCustomerSummary()
         {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchDashboardOverview } from '../../../redux/slices/admin/AnalyticsSlice';
+import { fetchDashboardOverview, fetchCategorySales } from '../../../redux/slices/admin/AnalyticsSlice';
 
 const DateRangeFilter = () => {
     const dispatch = useDispatch();
@@ -40,6 +40,11 @@ const DateRangeFilter = () => {
         }
 
         dispatch(fetchDashboardOverview({ 
+            startDate: startDate.toISOString(), 
+            endDate: endDate.toISOString() 
+        }));
+        
+        dispatch(fetchCategorySales({ 
             startDate: startDate.toISOString(), 
             endDate: endDate.toISOString() 
         }));

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactApexChart from 'react-apexcharts';
-import { fetchDashboardOverview } from '../../redux/slices/admin/AnalyticsSlice';
+import { fetchDashboardOverview, fetchCategorySales } from '../../redux/slices/admin/AnalyticsSlice';
 import OverviewCards from '../../components/admin/dashboard/OverviewCards';
 import DateRangeFilter from '../../components/admin/dashboard/DateRangeFilter';
 import RecentOrdersTable from '../../components/admin/dashboard/RecentOrdersTable';
@@ -10,7 +10,7 @@ import PendingItemsTable from '../../components/admin/dashboard/PendingItemsTabl
 
 const SaleDashboard = () => {
     const dispatch = useDispatch();
-    const { loading, error, overview } = useSelector(state => state.analytics);
+    const { loading, error, overview, categorySales } = useSelector(state => state.analytics);
 
     useEffect(() => {
         // Load initial data with last 30 days
@@ -21,47 +21,14 @@ const SaleDashboard = () => {
             startDate: startDate.toISOString(), 
             endDate: endDate.toISOString() 
         }));
+        
+        dispatch(fetchCategorySales({ 
+            startDate: startDate.toISOString(), 
+            endDate: endDate.toISOString() 
+        }));
     }, [dispatch]);
 
-    // Sales By Category Data (using real data if available)
-    const salesByCategory = {
-        series: overview?.categoryData?.map(item => item.revenue) || [985, 737, 270],
-        options: {
-            chart: {
-                type: 'donut',
-                height: 460,
-            },
-            labels: overview?.categoryData?.map(item => item.categoryName) || ['Apparel', 'Sports', 'Others'],
-            legend: {
-                position: 'bottom',
-            },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '65%',
-                        labels: {
-                            show: true,
-                            name: {
-                                show: true,
-                                fontSize: '29px',
-                                offsetY: -10,
-                            },
-                            value: {
-                                show: true,
-                                fontSize: '26px',
-                                offsetY: 16,
-                            },
-                            total: {
-                                show: true,
-                                label: 'Total',
-                                fontSize: '29px',
-                            },
-                        },
-                    },
-                },
-            },
-        },
-    };
+
 
     if (error) {
         return (
@@ -100,16 +67,67 @@ const SaleDashboard = () => {
                 {/* Sales By Category */}
                 <div className="rounded-lg bg-white p-4 shadow-sm">
                     <div className="mb-5">
-                        <h5 className="text-lg font-semibold">Sales By Category</h5>
+                        <h5 className="text-lg font-semibold">Doanh số theo danh mục</h5>
+                        {categorySales && (
+                            <div className="flex justify-between items-center text-sm text-gray-600">
+                                <span>Tổng doanh thu: {categorySales.totalRevenue?.toLocaleString('vi-VN')}đ</span>
+                                <span>{categorySales.totalOrders} đơn hàng</span>
+                            </div>
+                        )}
                     </div>
-                    <div className="h-[460px] w-full">
-                        <ReactApexChart 
-                            series={salesByCategory.series} 
-                            options={salesByCategory.options} 
-                            type="donut" 
-                            height="100%" 
-                        />
+                    {/* Category Statistics Table */}
+                    <div className="overflow-x-auto">
+                        {loading ? (
+                            <div className="flex justify-center items-center h-32">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                            </div>
+                        ) : categorySales?.categoryData && categorySales.categoryData.length > 0 ? (
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="border-b border-gray-200">
+                                        <th className="text-left p-3 font-medium text-gray-700">Danh mục</th>
+                                        <th className="text-right p-3 font-medium text-gray-700">Doanh thu</th>
+                                        <th className="text-center p-3 font-medium text-gray-700">Đơn hàng</th>
+                                        <th className="text-center p-3 font-medium text-gray-700">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {categorySales.categoryData.map((category, index) => (
+                                        <tr key={category.categoryId} className="border-b border-gray-100 hover:bg-gray-50">
+                                            <td className="p-3">
+                                                <div className="flex items-center gap-2">
+                                                    <div 
+                                                        className="w-3 h-3 rounded-full"
+                                                        style={{ backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'][index] || '#3B82F6' }}
+                                                    ></div>
+                                                    <span className="font-medium">{category.categoryName}</span>
+                                                </div>
+                                            </td>
+                                            <td className="p-3 text-right font-medium">
+                                                {category.revenue?.toLocaleString('vi-VN')}đ
+                                            </td>
+                                            <td className="p-3 text-center text-gray-600">
+                                                {category.orderCount}
+                                            </td>
+                                            <td className="p-3 text-center text-gray-600">
+                                                {category.percentage?.toFixed(1)}%
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <div className="flex justify-center items-center h-32 text-gray-500">
+                                <div className="text-center">
+                                    <div className="text-2xl mb-2">📊</div>
+                                    <div>Không có dữ liệu doanh số theo danh mục</div>
+                                    <div className="text-sm mt-1">Trong khoảng thời gian này</div>
+                                </div>
+                            </div>
+                        )}
                     </div>
+                    
+
                 </div>
 
                 {/* Recent Orders Table */}
