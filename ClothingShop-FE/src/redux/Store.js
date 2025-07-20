@@ -13,8 +13,7 @@ import adminOrderReducer from './slices/admin/OrderSlice';
 import cartReducer from "./slices/CartSlice";
 import orderReducer from "./slices/orderSlice";
 import feedbackReducer from "./slices/feedbackSlice";
-import orderManagementReducer from "./redux/slices/OrderManagementSlice";
-
+import orderManagementSlice from "./slices/OrderManagementSlice";
 import cartAPI from "../services/cartAPI";
 import orderAPI from "../services/orderAPI";
 import paymentAPI from "../services/paymentAPI";
@@ -24,7 +23,7 @@ const store = configureStore({
     auth: authReducer,
     home: homeReducer,
     product: productReducer,
-    productDetail: productDetailReducer,
+    detail: productDetailReducer,
     user: userReducer,
     adminProduct: adminProductReducer,
     adminProductDetail: adminProductDetailReducer,
@@ -34,7 +33,7 @@ const store = configureStore({
     cart: cartReducer,
     order: orderReducer,
     feedback: feedbackReducer,
-    orderManagement: orderManagementReducer,
+    orderManagement: orderManagementSlice,
     [cartAPI.reducerPath]: cartAPI.reducer,
     [orderAPI.reducerPath]: orderAPI.reducer,
     [paymentAPI.reducerPath]: paymentAPI.reducer,
