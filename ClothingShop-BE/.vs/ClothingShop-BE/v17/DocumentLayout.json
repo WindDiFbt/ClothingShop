@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\services\\admin\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\services\\admin\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\controllers\\admin\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\controllers\\admin\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -30,11 +34,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "NotificationService.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Services\\Admin\\NotificationService.cs",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\Services\\Admin\\NotificationService.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Services\\Admin\\NotificationService.cs",
+              "RelativeToolTip": "ClothingShop-BE\\Services\\Admin\\NotificationService.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T08:59:58.643Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "OrderAdminDTO.cs",
               "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ModelsDTO\\Admin\\OrderAdminDTO.cs",
               "RelativeDocumentMoniker": "ClothingShop-BE\\ModelsDTO\\Admin\\OrderAdminDTO.cs",
@@ -63,7 +80,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "OrderAdminService.cs",
               "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Services\\Admin\\Orders\\OrderAdminService.cs",
               "RelativeDocumentMoniker": "ClothingShop-BE\\Services\\Admin\\Orders\\OrderAdminService.cs",
@@ -76,7 +93,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "OrdersController.cs",
               "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\Admin\\OrdersController.cs",
               "RelativeDocumentMoniker": "ClothingShop-BE\\Controllers\\Admin\\OrdersController.cs",
@@ -89,7 +106,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "DashboardOverviewDTO.cs",
               "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
               "RelativeDocumentMoniker": "ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
@@ -101,7 +118,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "AnalyticsService.cs",
               "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Services\\Admin\\Analytics\\AnalyticsService.cs",
               "RelativeDocumentMoniker": "ClothingShop-BE\\Services\\Admin\\Analytics\\AnalyticsService.cs",

@@ -7,6 +7,7 @@ import OverviewCards from '../../components/admin/dashboard/OverviewCards';
 import DateRangeFilter from '../../components/admin/dashboard/DateRangeFilter';
 import RecentOrdersTable from '../../components/admin/dashboard/RecentOrdersTable';
 import PendingItemsTable from '../../components/admin/dashboard/PendingItemsTable';
+import TestNotificationPanel from '../../components/admin/TestNotificationPanel';
 
 const SaleDashboard = () => {
     const dispatch = useDispatch();
@@ -195,6 +196,11 @@ const SaleDashboard = () => {
                     </div>
                 </div>
             )}
+
+            {/* Test Notification Panel */}
+            <div className="mt-6">
+                <TestNotificationPanel />
+            </div>
         </div>
     );
 };

@@ -70,6 +70,7 @@ const AdminLayout = () => {
                         </ContentAnimation>
                         {/* END CONTENT AREA */}
                     </div>
+
                 </MainContainer>
             </div>
         </>
