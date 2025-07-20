@@ -1,8 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const RecentOrdersTable = () => {
     const { overview, loading } = useSelector(state => state.analytics);
+    const navigate = useNavigate();
 
     if (loading) {
         return (
@@ -92,7 +94,10 @@ const RecentOrdersTable = () => {
             </div>
             {overview.recentOrders.length > 0 && (
                 <div className="mt-4 text-center">
-                    <button className="text-primary hover:text-primary-dark text-sm font-medium transition-colors">
+                    <button 
+                        className="text-primary hover:text-primary-dark text-sm font-medium transition-colors"
+                        onClick={() => navigate('/admin/orders')}
+                    >
                         Xem tất cả đơn hàng →
                     </button>
                 </div>

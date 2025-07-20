@@ -15,6 +15,8 @@ import ReviewProductsList from "./pages/admin/reviewProducts/ReviewProductsList"
 import ProductDetailAdmin from "./pages/admin/reviewProducts/ProductDetailAdmin";
 import { ReportList, ReportDetail } from './pages/admin/report';
 import CreateUserInvite from './pages/admin/accounts/CreateUserInvite';
+import OrderList from './pages/admin/orders/OrderList';
+import OrderDetail from './pages/admin/orders/OrderDetail';
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
             <Route path="/admin/accounts/create-invite" element={<CreateUserInvite />} />
             <Route path="/admin/review-products" element={<ReviewProductsList />} />
             <Route path="/admin/review-products/detail/:id" element={<ProductDetailAdmin />} />
+            <Route path="/admin/orders" element={<OrderList />} />
+            <Route path="/admin/orders/:id" element={<OrderDetail />} />
             <Route path="/admin/report" element={<ReportList />} />
             <Route path="/admin/report/:id" element={<ReportDetail />} />
         </Route>
