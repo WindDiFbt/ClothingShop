@@ -303,6 +303,8 @@ const AccountList = () => {
                                                 : 'bg-green-500 hover:bg-green-600 focus:ring-green-500'
                                             }`}
                                             onClick={() => handleStatusChange(user.id, user.status === 1 ? 3 : 1)}
+                                            disabled={user.userRoles && user.userRoles.includes(1)}
+                                            title={user.userRoles && user.userRoles.includes(1) ? 'Không thể khóa tài khoản Admin' : ''}
                                         >
                                             {user.status === 1 ? 'Khóa' : 'Mở khóa'}
                                         </button>

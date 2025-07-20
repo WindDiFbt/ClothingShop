@@ -16,7 +16,9 @@ const validationSchema = Yup.object().shape({
         .matches(/^[0-9]{10}$/, 'Số điện thoại không hợp lệ'),
     address: Yup.string().required('Vui lòng nhập địa chỉ'),
     gender: Yup.string().required('Vui lòng chọn giới tính'),
-    dateOfBirth: Yup.date().required('Vui lòng nhập ngày sinh'),
+    dateOfBirth: Yup.date()
+        .required('Vui lòng nhập ngày sinh')
+        .max(new Date(), 'Ngày sinh không hợp lệ (trong tương lai)'),
     role: Yup.string().required('Vui lòng chọn vai trò'),
     status: Yup.string().required('Vui lòng chọn trạng thái')
 });
