@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../redux/auth/authSlice';
 import SignalRService from '../../../services/admin/SignalRService';
 
 const HeaderAdmin = () => {
@@ -8,6 +10,9 @@ const HeaderAdmin = () => {
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
+    
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // Close dropdowns when clicking outside
     useEffect(() => {
@@ -74,6 +79,20 @@ const HeaderAdmin = () => {
 
     const removeNotification = (id) => {
         setNotifications(prev => prev.filter(notification => notification.id !== id));
+    };
+
+    const handleLogout = () => {
+        // Stop SignalR connection
+        SignalRService.stopConnection();
+        
+        // Dispatch logout action
+        dispatch(logout());
+        
+        // Close profile dropdown
+        setIsProfileOpen(false);
+        
+        // Navigate to login page
+        navigate('/login');
     };
 
     const getNotificationIcon = (category, type) => {
@@ -242,24 +261,12 @@ const HeaderAdmin = () => {
                             {/* Profile dropdown */}
                             {isProfileOpen && (
                                 <div className="absolute right-0 mt-2 w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
-                                    <Link
-                                        to="/profile"
-                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >
-                                        Your Profile
-                                    </Link>
-                                    <Link
-                                        to="/settings"
-                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >
-                                        Settings
-                                    </Link>
-                                    <Link
-                                        to="/logout"
-                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    <button
+                                        onClick={handleLogout}
+                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
                                         Sign out
-                                    </Link>
+                                    </button>
                                 </div>
                             )}
                         </div>
