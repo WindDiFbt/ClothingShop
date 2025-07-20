@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProductDetail } from '../../redux/slices/admin/ProductDetailSlice'
+import { fetchProductDetail } from '../../redux/slices/ProductDetailSlice'
+import { addToCart } from '../../redux/slices/CartSlice'
 import { StarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
+import FeedbackList from '../FeedbackList'
 
 const ProductGallery = ({ images }) => {
     const [startIndex, setStartIndex] = useState(0);
@@ -162,7 +165,23 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <form className="mt-10">
+                        <form
+                            className="mt-10"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                const currentUser = JSON.parse(localStorage.getItem('user'));
+                                if (!currentUser) {
+                                    alert('Please login to add to cart');
+                                    return;
+                                }
+                                const { id: userId } = currentUser;
+                                dispatch(addToCart({
+                                    userId,
+                                    productId: product.id,
+                                    quantity,
+                                }));
+                            }}
+                        >
                             <div className="mt-10">
                                 <div className="flex items-center justify-between">
                                     <h3 className="text-sm font-medium text-gray-900">Size</h3>
@@ -365,6 +384,11 @@ const ProductDetail = () => {
                         ))}
                     </div>
                 </div>
+            </div>
+
+            {/* Feedback Section */}
+            <div className="max-w-7xl mx-auto px-4 py-8">
+                <FeedbackList productId={product?.id} />
             </div>
         </div>
     )

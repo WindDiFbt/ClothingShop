@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./../../redux/auth/authSlice";
-import { Navigate, useNavigate  } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
-  const { token, status, error } = useSelector((state) => state.auth);
+  const { token,user, status, error } = useSelector((state) => state.auth);
   const [form, setForm] = useState({ username: "", password: "" });
 
   const handleChange = (e) =>
@@ -16,7 +16,16 @@ export default function LoginPage() {
     dispatch(login(form));
   };
   const navigate = useNavigate();
-  if (token) return <Navigate to="/home" replace />;
+  console.log("user role after login:", user?.role);
+   useEffect(() => {
+    if (status === "succeeded" && token && user) {
+      if (user.role === "SELLER") {
+        navigate("/seller");
+      } else {
+        navigate("/home");
+      }
+    }
+  }, [status, token, user, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-purple-100 to-white px-4">
@@ -70,6 +79,12 @@ export default function LoginPage() {
             Log In
           </button>
         </form>
+        <p className="text-sm text-center mt-4">
+          Don’t have an account?{" "}
+          <a href="/register" className="text-purple-600 hover:underline">
+            Register here
+          </a>
+        </p>
       </div>
     </div>
   );

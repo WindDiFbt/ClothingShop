@@ -63,5 +63,18 @@ namespace ClothingShop_BE.Repository.Impl
 
         public IQueryable<Product> GetAllProductsApprovedForODATA() =>
             _context.Products.Where(p => p.Status == 1);
+        public async Task CreateProductAsync(Product product)
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateProductAsync(Product product)
+        {
+            product.Status = 1;
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
