@@ -21,19 +21,6 @@
           "SelectedChildIndex": 5,
           "Children": [
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DashboardOverviewDTO.cs",
-              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
-              "RelativeDocumentMoniker": "ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
-              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
-              "RelativeToolTip": "ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAIA9wBAAAAA3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-20T06:09:20.632Z",
-              "EditorCaption": ""
-            },
-            {
               "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
@@ -48,6 +35,18 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{605322a2-17ae-43f4-b60f-766556e46c87}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DashboardOverviewDTO.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
+              "RelativeToolTip": "ClothingShop-BE\\ModelsDTO\\Admin\\Analytics\\DashboardOverviewDTO.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAIA9wBAAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-20T06:09:20.632Z"
             },
             {
               "$type": "Document",
