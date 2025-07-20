@@ -156,23 +156,7 @@ const SaleDashboard = () => {
 
             {/* Charts */}
             <div className="grid gap-6 lg:grid-cols-3">
-                {/* Revenue Chart */}
-                <div className="rounded-lg bg-white p-4 shadow-sm lg:col-span-2">
-                    <div className="mb-5 flex items-center justify-between">
-                        <h5 className="text-lg font-semibold">Revenue</h5>
-                    </div>
-                    <p className="mb-4 text-lg">
-                        Total Profit <span className="ml-2 text-primary">$10,840</span>
-                    </p>
-                    <div className="h-[325px] w-full">
-                        <ReactApexChart 
-                            series={revenueChart.series} 
-                            options={revenueChart.options} 
-                            type="area" 
-                            height="100%" 
-                        />
-                    </div>
-                </div>
+
 
                 {/* Sales By Category */}
                 <div className="rounded-lg bg-white p-4 shadow-sm">

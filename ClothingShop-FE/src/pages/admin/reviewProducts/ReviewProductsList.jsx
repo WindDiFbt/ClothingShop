@@ -168,7 +168,17 @@ const ReviewProductsList = () => {
                                         return (date && !isNaN(date.getTime())) ? date.toLocaleDateString() : '-';
                                     })()
                                 }</td>
-                                <td className="text-center py-3 px-4 border-b border-gray-200">{product.statusName || '-'}</td>
+                                <td className="text-center py-3 px-4 border-b border-gray-200">
+                                    {product.statusName === 'APPROVED' ? (
+                                        <span className="badge badge-outline-success">Approved</span>
+                                    ) : product.statusName === 'REJECTED' ? (
+                                        <span className="badge badge-outline-danger">Rejected</span>
+                                    ) : product.statusName === 'UNAPPROVED' ? (
+                                        <span className="badge badge-outline-warning">Unapproved</span>
+                                    ) : (
+                                        <span className="badge badge-outline-warning">-</span>
+                                    )}
+                                </td>
                                 <td className="text-center py-3 px-4 border-b border-gray-200">
                                     <button
                                         className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
