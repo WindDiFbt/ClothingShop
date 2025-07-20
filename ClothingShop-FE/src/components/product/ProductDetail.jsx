@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchProductDetail } from '../../redux/slices/admin/ProductDetailSlice'
 import { fetchProductDetail } from '../../redux/slices/ProductDetailSlice'
 import { addToCart } from '../../redux/slices/CartSlice'
 import { StarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/20/solid'
