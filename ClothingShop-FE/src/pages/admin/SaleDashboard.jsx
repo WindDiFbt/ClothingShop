@@ -1,67 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactApexChart from 'react-apexcharts';
+import { fetchDashboardOverview } from '../../redux/slices/admin/AnalyticsSlice';
+import OverviewCards from '../../components/admin/dashboard/OverviewCards';
+import DateRangeFilter from '../../components/admin/dashboard/DateRangeFilter';
+import RecentOrdersTable from '../../components/admin/dashboard/RecentOrdersTable';
+import PendingItemsTable from '../../components/admin/dashboard/PendingItemsTable';
 
 const SaleDashboard = () => {
-    // Revenue Chart Data
-    const revenueChart = {
-        series: [
-            {
-                name: 'Income',
-                data: [16800, 16800, 15500, 17800, 15500, 17000, 19000, 16000, 15000, 17000, 14000, 17000],
-            },
-            {
-                name: 'Expenses',
-                data: [16500, 17500, 16200, 17300, 16000, 19500, 16000, 17000, 16000, 19000, 18000, 19000],
-            },
-        ],
-        options: {
-            chart: {
-                height: 325,
-                type: 'area',
-                toolbar: {
-                    show: false,
-                },
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 2,
-            },
-            colors: ['#1B55E2', '#E7515A'],
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            xaxis: {
-                labels: {
-                    style: {
-                        fontSize: '12px',
-                    },
-                },
-            },
-            yaxis: {
-                labels: {
-                    formatter: (value) => {
-                        return value / 1000 + 'K';
-                    },
-                },
-            },
-            legend: {
-                position: 'top',
-                horizontalAlign: 'right',
-            },
-        },
-    };
+    const dispatch = useDispatch();
+    const { loading, error, overview } = useSelector(state => state.analytics);
 
-    // Sales By Category Data
+    useEffect(() => {
+        // Load initial data with last 30 days
+        const endDate = new Date();
+        const startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+        
+        dispatch(fetchDashboardOverview({ 
+            startDate: startDate.toISOString(), 
+            endDate: endDate.toISOString() 
+        }));
+    }, [dispatch]);
+
+    // Sales By Category Data (using real data if available)
     const salesByCategory = {
-        series: [985, 737, 270],
+        series: overview?.categoryData?.map(item => item.revenue) || [985, 737, 270],
         options: {
             chart: {
                 type: 'donut',
                 height: 460,
             },
-            labels: ['Apparel', 'Sports', 'Others'],
+            labels: overview?.categoryData?.map(item => item.categoryName) || ['Apparel', 'Sports', 'Others'],
             legend: {
                 position: 'bottom',
             },
@@ -93,6 +63,16 @@ const SaleDashboard = () => {
         },
     };
 
+    if (error) {
+        return (
+            <div className="p-4">
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <strong>Lỗi:</strong> {error}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="p-4 sm:p-6">
             {/* Breadcrumb */}
@@ -104,60 +84,19 @@ const SaleDashboard = () => {
                         </Link>
                     </li>
                     <li className="before:content-['/'] before:mr-2">
-                        <span>Sales</span>
+                        <span>Sales Analytics</span>
                     </li>
                 </ul>
             </div>
 
-            {/* Summary Cards */}
-            <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <div className="rounded-lg bg-white p-4 shadow-sm">
-                    <div className="flex items-center">
-                        <div className="mr-4 grid h-12 w-12 place-content-center rounded-full bg-primary-light text-primary">
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h6 className="text-lg font-semibold">Income</h6>
-                            <p className="text-2xl font-bold">$92,600</p>
-                        </div>
-                    </div>
-                </div>
+            {/* Date Range Filter */}
+            <DateRangeFilter />
 
-                <div className="rounded-lg bg-white p-4 shadow-sm">
-                    <div className="flex items-center">
-                        <div className="mr-4 grid h-12 w-12 place-content-center rounded-full bg-success-light text-success">
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h6 className="text-lg font-semibold">Profit</h6>
-                            <p className="text-2xl font-bold">$37,515</p>
-                        </div>
-                    </div>
-                </div>
+            {/* Overview Cards */}
+            <OverviewCards />
 
-                <div className="rounded-lg bg-white p-4 shadow-sm">
-                    <div className="flex items-center">
-                        <div className="mr-4 grid h-12 w-12 place-content-center rounded-full bg-warning-light text-warning">
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h6 className="text-lg font-semibold">Expenses</h6>
-                            <p className="text-2xl font-bold">$55,085</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Charts */}
-            <div className="grid gap-6 lg:grid-cols-3">
-
-
+            {/* Charts and Tables */}
+            <div className="grid gap-6 lg:grid-cols-3 mb-6">
                 {/* Sales By Category */}
                 <div className="rounded-lg bg-white p-4 shadow-sm">
                     <div className="mb-5">
@@ -172,7 +111,72 @@ const SaleDashboard = () => {
                         />
                     </div>
                 </div>
+
+                {/* Recent Orders Table */}
+                <div className="lg:col-span-2">
+                    <RecentOrdersTable />
+                </div>
             </div>
+
+            {/* Pending Items Table */}
+            <div className="mb-6">
+                <PendingItemsTable />
+            </div>
+
+            {/* Additional Stats */}
+            {overview && (
+                <div className="grid gap-6 lg:grid-cols-4">
+                    <div className="rounded-lg bg-white p-4 shadow-sm">
+                        <div className="text-center">
+                            <h6 className="text-lg font-semibold text-gray-700">Tỷ lệ hoàn thành</h6>
+                            <p className="text-3xl font-bold text-green-600">
+                                {overview.totalOrders > 0 
+                                    ? Math.round((overview.completedOrders / overview.totalOrders) * 100)
+                                    : 0}%
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                {overview.completedOrders} / {overview.totalOrders} đơn hàng
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="rounded-lg bg-white p-4 shadow-sm">
+                        <div className="text-center">
+                            <h6 className="text-lg font-semibold text-gray-700">Giá trị đơn TB</h6>
+                            <p className="text-3xl font-bold text-blue-600">
+                                {overview.averageOrderValue?.toLocaleString('vi-VN')}đ
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                Trung bình mỗi đơn hàng
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="rounded-lg bg-white p-4 shadow-sm">
+                        <div className="text-center">
+                            <h6 className="text-lg font-semibold text-gray-700">Khách hàng mới</h6>
+                            <p className="text-3xl font-bold text-purple-600">
+                                {overview.newCustomers}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                Trong khoảng thời gian này
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="rounded-lg bg-white p-4 shadow-sm">
+                        <div className="text-center">
+                            <h6 className="text-lg font-semibold text-gray-700">Lợi nhuận</h6>
+                            <p className="text-3xl font-bold text-green-600">
+                                {overview.totalProfit?.toLocaleString('vi-VN')}đ
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                {overview.profitGrowth >= 0 ? '+' : ''}{overview.profitGrowth?.toFixed(1)}% so với kỳ trước
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

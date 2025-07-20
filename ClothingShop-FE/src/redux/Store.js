@@ -1,23 +1,25 @@
-import { configureStore } from "@reduxjs/toolkit";
-import productSlice from "./slices/ProductSlice";
-import homeSlice from "./slices/HomeSlice";
-import productDetailSlice from "./slices/ProductDetailSlice";
-import productDetailAdminSlice from "./slices/admin/ProductDetailSlice";
+import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './auth/authSlice';
-import userSlice from './slices/UserSlice';
-import adminProductSlice from './slices/admin/ProductSlice';
-import adminReport from './slices/admin/ReportSlice';
+import homeReducer from './slices/HomeSlice';
+import productReducer from './slices/ProductSlice';
+import productDetailReducer from './slices/ProductDetailSlice';
+import userReducer from './slices/UserSlice';
+import adminProductReducer from './slices/admin/ProductSlice';
+import adminProductDetailReducer from './slices/admin/ProductDetailSlice';
+import adminReportReducer from './slices/admin/ReportSlice';
+import analyticsReducer from './slices/admin/AnalyticsSlice';
 
 const store = configureStore({
     reducer: {
-        product: productSlice,
-        home: homeSlice,
-        detail: productDetailSlice,
         auth: authReducer,
-        user: userSlice,
-        adminProduct: adminProductSlice,
-        adminProductDetail: productDetailAdminSlice,
-        adminReport: adminReport,
+        home: homeReducer,
+        product: productReducer,
+        productDetail: productDetailReducer,
+        user: userReducer,
+        adminProduct: adminProductReducer,
+        adminProductDetail: adminProductDetailReducer,
+        adminReport: adminReportReducer,
+        analytics: analyticsReducer,
     },
 });
 

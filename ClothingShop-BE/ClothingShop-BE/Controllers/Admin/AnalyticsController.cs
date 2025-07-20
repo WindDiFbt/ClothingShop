@@ -1,26 +1,41 @@
 ﻿using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO.Admin.Analytics;
+using ClothingShop_BE.Services.Admin.Analytics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClothingShop_BE.Controllers.Admin
 {
-    public class AnalyticsController : Controller
+    [Route("api/admin/analytics")]
+    [ApiController]
+    public class AnalyticsController : ControllerBase
     {
         private readonly ClothingShopPrn232G5Context _context;
+        private readonly IAnalyticsService _analyticsService;
 
-        public AnalyticsController(ClothingShopPrn232G5Context context)
+        public AnalyticsController(ClothingShopPrn232G5Context context, IAnalyticsService analyticsService)
         {
             _context = context;
+            _analyticsService = analyticsService;
         }
-        public IActionResult Index()
+
+        [HttpGet("dashboard/overview")]
+        public async Task<ActionResult<DashboardOverviewDTO>> GetDashboardOverview(
+            [FromQuery] DateTime? startDate, 
+            [FromQuery] DateTime? endDate)
         {
-            return View();
+            try
+            {
+                var result = await _analyticsService.GetDashboardOverviewAsync(startDate, endDate);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy dữ liệu dashboard", error = ex.Message });
+            }
         }
 
-
-
-        [HttpGet("analytics/customers/summary")]
+        [HttpGet("customers/summary")]
         public async Task<IActionResult> GetCustomerSummary()
         {
             var result = await _context.Users

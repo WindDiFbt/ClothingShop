@@ -1,6 +1,86 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom color classes for dashboard */
+@layer utilities {
+  .bg-primary-light {
+    background-color: #e3f2fd;
+  }
+  
+  .text-primary {
+    color: #1976d2;
+  }
+  
+  .bg-success-light {
+    background-color: #e8f5e8;
+  }
+  
+  .text-success {
+    color: #2e7d32;
+  }
+  
+  .bg-warning-light {
+    background-color: #fff3e0;
+  }
+  
+  .text-warning {
+    color: #f57c00;
+  }
+  
+  .bg-info-light {
+    background-color: #e1f5fe;
+  }
+  
+  .text-info {
+    color: #0277bd;
+  }
+  
+  .bg-danger-light {
+    background-color: #ffebee;
+  }
+  
+  .text-danger {
+    color: #c62828;
+  }
+  
+  .bg-primary {
+    background-color: #1976d2;
+  }
+  
+  .bg-primary-dark {
+    background-color: #1565c0;
+  }
+  
+  .bg-success {
+    background-color: #2e7d32;
+  }
+  
+  .bg-success-dark {
+    background-color: #1b5e20;
+  }
+  
+  .bg-warning {
+    background-color: #f57c00;
+  }
+  
+  .bg-warning-dark {
+    background-color: #e65100;
+  }
+  
+  .text-primary-dark {
+    color: #1565c0;
+  }
+  
+  .text-success-dark {
+    color: #1b5e20;
+  }
+  
+  .text-warning-dark {
+    color: #e65100;
+  }
+}
+
 @import "tailwindcss";
 
 @import "nprogress/nprogress.css";
