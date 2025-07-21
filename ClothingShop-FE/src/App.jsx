@@ -33,6 +33,7 @@ import OrderManagementPage from "./components/user/OrderManagementPage";
 import AddProductPage from "./components/user/AddProductPage";
 import EditProductPage from "./components/user/EditProductPage";
 import OrderDetailPage from "./components/user/OrderDetailPage";
+import { AdminProtectedRoute } from "./components/share/ProtectedRoute";
 
 import { ToastContainer } from "react-toastify";
 
@@ -75,7 +76,11 @@ function App() {
         </Route>
 
         {/* Admin Routes */}
-        <Route element={<AdminLayout />}>
+        <Route element={
+          <AdminProtectedRoute>
+            <AdminLayout />
+          </AdminProtectedRoute>
+        }>
           <Route path="/admin/sales" element={<SaleDashboard />} />
           <Route path="/admin/accounts" element={<AccountList />} />
           <Route path="/admin/accounts/edit/:id" element={<EditAccount />} />
