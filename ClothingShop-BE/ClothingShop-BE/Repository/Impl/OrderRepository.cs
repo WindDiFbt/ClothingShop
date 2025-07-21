@@ -174,7 +174,7 @@ namespace ClothingShop_BE.Repository.Impl
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product);
         }
-        public async Task<(int totalItems, List<Order>)> GetOrdersPagedBySellerAsync(Guid sellerId, int page, int pageSize)
+        public async Task<(int totalItems, List<Order>)> GetOrdersPagedBySellerAsync( int page, int pageSize)
         {
             var query = _context.Orders
                 .Include(o => o.Customer)
@@ -182,7 +182,6 @@ namespace ClothingShop_BE.Repository.Impl
                     .ThenInclude(od => od.Product)
                 .Include(o => o.StatusNavigation)
                 .Include(o => o.Voucher)
-                .Where(o => o.OrderDetails.Any(od => od.Product != null && od.Product.SellerId == sellerId))
                 .AsQueryable();
 
             var totalItems = await query.CountAsync();
