@@ -114,23 +114,5 @@ namespace ClothingShop_BE.Controllers.Admin
             }
         }
 
-        // GET: api/admin/orders/statistics
-        [HttpGet("statistics")]
-        public async Task<ActionResult<OrderStatisticsDTO>> GetOrderStatistics()
-        {
-            try
-            {
-                var statistics = await _orderService.GetOrderStatisticsAsync();
-                return Ok(statistics);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    message = "An error occurred while retrieving order statistics",
-                    error = ex.Message
-                });
-            }
-        }
     }
 } 

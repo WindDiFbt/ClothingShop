@@ -34,13 +34,7 @@ export const fetchOrderStatuses = createAsyncThunk(
     }
 );
 
-export const fetchOrderStatistics = createAsyncThunk(
-    'adminOrder/fetchOrderStatistics',
-    async () => {
-        const response = await OrderService.getOrderStatistics();
-        return response.data;
-    }
-);
+
 
 const initialState = {
     orders: [],
@@ -140,19 +134,6 @@ const adminOrderSlice = createSlice({
                 state.error = action.error.message;
             })
             
-            // Fetch order statistics
-            .addCase(fetchOrderStatistics.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchOrderStatistics.fulfilled, (state, action) => {
-                state.loading = false;
-                state.statistics = action.payload;
-            })
-            .addCase(fetchOrderStatistics.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message;
-            });
     }
 });
 

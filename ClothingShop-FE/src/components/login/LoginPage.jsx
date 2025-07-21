@@ -19,7 +19,9 @@ export default function LoginPage() {
   console.log("user role after login:", user?.role);
    useEffect(() => {
     if (status === "succeeded" && token && user) {
-      if (user.role === "SELLER") {
+      if (user.role === "ADMIN") {
+        navigate("/admin/sales");
+      } else if (user.role === "SELLER") {
         navigate("/seller");
       } else {
         navigate("/home");

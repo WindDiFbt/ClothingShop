@@ -139,24 +139,5 @@ namespace ClothingShop_BE.Services.Admin.Orders
             return true;
         }
 
-        public async Task<OrderStatisticsDTO> GetOrderStatisticsAsync()
-        {
-            var orders = await _context.Orders.ToListAsync();
-
-            var statistics = new OrderStatisticsDTO
-            {
-                TotalOrders = orders.Count,
-                PendingOrders = orders.Count(o => o.Status == 1),
-                ProcessingOrders = orders.Count(o => o.Status == 2),
-                ShippedOrders = orders.Count(o => o.Status == 3),
-                CompletedOrders = orders.Count(o => o.Status == 4),
-                CancelledOrders = orders.Count(o => o.Status == 5),
-                TotalRevenue = orders.Where(o => o.Status == 4).Sum(o => o.TotalAmount ?? 0),
-                AverageOrderValue = orders.Where(o => o.Status == 4).Any() ? 
-                    orders.Where(o => o.Status == 4).Average(o => o.TotalAmount ?? 0) : 0
-            };
-
-            return statistics;
-        }
     }
 } 

@@ -297,12 +297,16 @@ const AccountList = () => {
                                         </Link>
                                         <button
                                             type="button"
-                                            className={`px-3 py-1.5 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 ${
-                                                user.status === 1 
-                                                ? 'bg-red-500 hover:bg-red-600 focus:ring-red-500' 
-                                                : 'bg-green-500 hover:bg-green-600 focus:ring-green-500'
+                                            className={`px-3 py-1.5 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 ${
+                                                user.userRoles && user.userRoles.includes(1)
+                                                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                                : user.status === 1 
+                                                ? 'bg-red-500 hover:bg-red-600 focus:ring-red-500 text-white' 
+                                                : 'bg-green-500 hover:bg-green-600 focus:ring-green-500 text-white'
                                             }`}
                                             onClick={() => handleStatusChange(user.id, user.status === 1 ? 3 : 1)}
+                                            disabled={user.userRoles && user.userRoles.includes(1)}
+                                            title={user.userRoles && user.userRoles.includes(1) ? 'Không thể khóa tài khoản Admin' : ''}
                                         >
                                             {user.status === 1 ? 'Khóa' : 'Mở khóa'}
                                         </button>
