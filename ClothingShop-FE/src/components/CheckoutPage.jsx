@@ -83,9 +83,20 @@ const CheckoutPage = () => {
         return Object.keys(errors).length === 0;
     };
 
-    const calculateTotal = () => {
+    const calculateSubtotal = () => {
         if (!cartData || !cartData.cartDetails) return 0;
-        return cartData.cartDetails.reduce((total, item) => total + (item.product?.price || 0) * item.quantity, 0);
+        return cartData.cartDetails.reduce((total, item) => {
+            const currentPrice = item.product?.currentPrice || item.product?.price || 0;
+            return total + currentPrice * item.quantity;
+        }, 0);
+    };
+
+    const calculateTax = () => {
+        return Math.round(calculateSubtotal() * 0.1);
+    };
+
+    const calculateTotal = () => {
+        return calculateSubtotal() + calculateTax();
     };
 
     const handleSubmit = async (e) => {
@@ -317,11 +328,11 @@ const CheckoutPage = () => {
                                                 {item.product?.name}
                                             </p>
                                             <p className="text-sm text-gray-500">
-                                                Qty: {item.quantity} × {formatCurrency(item.product?.price)}
+                                                Qty: {item.quantity} × {formatCurrency(item.product?.currentPrice || item.product?.price)}
                                             </p>
                                         </div>
                                         <p className="text-sm font-medium text-gray-900">
-                                            {formatCurrency((item.product?.price || 0) * item.quantity)}
+                                            {formatCurrency((item.product?.currentPrice || item.product?.price || 0) * item.quantity)}
                                         </p>
                                     </div>
                                 ))}
@@ -330,11 +341,15 @@ const CheckoutPage = () => {
                             <div className="border-t pt-4 space-y-2">
                                 <div className="flex justify-between text-base font-medium text-gray-900">
                                     <p>Subtotal</p>
-                                    <p>{formatCurrency(calculateTotal())}</p>
+                                    <p>{formatCurrency(calculateSubtotal())}</p>
                                 </div>
                                 <div className="flex justify-between text-sm text-gray-600">
                                     <p>Shipping</p>
                                     <p>Free</p>
+                                </div>
+                                <div className="flex justify-between text-sm text-gray-600">
+                                    <p>Tax (VAT 10%)</p>
+                                    <p>{formatCurrency(calculateTax())}</p>
                                 </div>
                                 <div className="flex justify-between text-lg font-bold text-gray-900 border-t pt-2">
                                     <p>Total</p>
