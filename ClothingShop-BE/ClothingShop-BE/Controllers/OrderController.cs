@@ -180,9 +180,21 @@ namespace ClothingShop_BE.Controllers
         [HttpGet("pagination")]
         public async Task<IActionResult> GetOrdersPagination(int page = 1, int pageSize = 8)
         {
-            var (orders, currentPage, totalPages) = await _orderService.GetOrdersAsync(page, pageSize);
+            var userIdClaim = User.FindFirst("UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("UserId not found in token.");
+            }
+
+            if (!Guid.TryParse(userIdClaim.Value, out Guid sellerId))
+            {
+                return BadRequest("Invalid UserId format.");
+            }
+
+            var (orders, currentPage, totalPages) = await _orderService.GetOrdersAsync(sellerId, page, pageSize);
             return Ok(new { orders, currentPage, totalPages });
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderDetail(Guid id)
         {
