@@ -114,7 +114,6 @@ const InviteUser = () => {
                             }`}
                         >
                             <option value="">Chọn vai trò</option>
-                            <option value="1">Admin</option>
                             <option value="2">Seller</option>
                             <option value="3">Customer</option>
                         </select>
