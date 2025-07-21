@@ -16,10 +16,7 @@ const OrderService = {
     // Lấy danh sách trạng thái đơn hàng
     getOrderStatuses: () => 
         axios.get('/admin/orders/statuses'),
-    
-    // Lấy thống kê đơn hàng
-    getOrderStatistics: () => 
-        axios.get('/admin/orders/statistics')
+
 };
 
 export default OrderService; 
