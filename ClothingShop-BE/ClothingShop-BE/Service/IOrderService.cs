@@ -12,7 +12,7 @@ namespace ClothingShop_BE.Service
         Task<bool> CancelOrderAsync(Guid orderId, Guid userId);
         Task<bool> ValidateCheckoutAsync(CheckoutRequestDTO request);
         IQueryable<Order> GetAllOrdersODATA();
-        Task<(List<OrderDTO> orders, int currentPage, int totalPages)> GetOrdersAsync(int page, int pageSize);
+        Task<(List<OrderDTO> orders, int currentPage, int totalPages)> GetOrdersAsync(Guid sellerId, int page, int pageSize);
         Task<OrderDTO?> GetOrderDetailByIdAsync(Guid orderId);
         Task<bool> UpdateOrderStatusSellerAsync(Guid orderId, int newStatus);
         IQueryable<Order> GetAllOrdersOData();
