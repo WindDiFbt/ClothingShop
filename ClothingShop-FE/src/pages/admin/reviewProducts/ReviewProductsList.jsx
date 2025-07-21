@@ -170,13 +170,21 @@ const ReviewProductsList = () => {
                                 }</td>
                                 <td className="text-center py-3 px-4 border-b border-gray-200">
                                     {product.statusName === 'APPROVED' ? (
-                                        <span className="badge badge-outline-success">Approved</span>
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-400">
+                                            Approved
+                                        </span>
                                     ) : product.statusName === 'REJECTED' ? (
-                                        <span className="badge badge-outline-danger">Rejected</span>
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-400">
+                                            Rejected
+                                        </span>
                                     ) : product.statusName === 'UNAPPROVED' ? (
-                                        <span className="badge badge-outline-warning">Unapproved</span>
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-400">
+                                            Unapproved
+                                        </span>
                                     ) : (
-                                        <span className="badge badge-outline-warning">-</span>
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-400">
+                                            -
+                                        </span>
                                     )}
                                 </td>
                                 <td className="text-center py-3 px-4 border-b border-gray-200">
