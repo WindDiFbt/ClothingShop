@@ -62,8 +62,15 @@ namespace ClothingShop_BE.Service.Impl
                     }
                 }
 
-                // Calculate total amount
-                int totalAmount = cartItems.Sum(item => (item.Product?.Price ?? 0) * (item.Quantity ?? 0));
+                // Calculate total amount using current price (with discounts)
+                int subtotal = cartItems.Sum(item => {
+                    var price = item.Product?.Price ?? 0;
+                    var discount = item.Product?.Discount ?? 0;
+                    var currentPrice = (int)(price * (1 - discount / 100.0));
+                    return currentPrice * (item.Quantity ?? 0);
+                });
+                int tax = (int)Math.Round(subtotal * 0.1); // 10% VAT
+                int totalAmount = subtotal + tax;
 
                 // Create order
                 var order = new Order
