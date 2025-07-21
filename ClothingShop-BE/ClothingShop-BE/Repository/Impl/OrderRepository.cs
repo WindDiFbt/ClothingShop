@@ -174,7 +174,7 @@ namespace ClothingShop_BE.Repository.Impl
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product);
         }
-        public async Task<(int totalItems, List<Order>)> GetOrdersPagedBySellerAsync( int page, int pageSize)
+        public async Task<(int totalItems, List<Order>)> GetOrdersPagedAsync( int page, int pageSize)
         {
             var query = _context.Orders
                 .Include(o => o.Customer)
@@ -222,5 +222,7 @@ namespace ClothingShop_BE.Repository.Impl
     {
         return _context.Orders.Include(o => o.OrderDetails);
     }
+
+       
     }
 }
