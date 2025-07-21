@@ -213,9 +213,9 @@ namespace ClothingShop_BE.Service.Impl
         {
             return _orderRepository.GetAllOrdersForODATA();
         }
-        public async Task<(List<OrderDTO> orders, int currentPage, int totalPages)> GetOrdersAsync(Guid sellerId,int page, int pageSize)
+        public async Task<(List<OrderDTO> orders, int currentPage, int totalPages)> GetOrdersAsync(int page, int pageSize)
         {
-            var (totalItems, orders) = await _orderRepository.GetOrdersPagedAsync( sellerId, page, pageSize);
+            var (totalItems, orders) = await _orderRepository.GetOrdersPagedAsync(page, pageSize);
 
             var orderDTOs = orders.Select(o => new OrderDTO(o)).ToList();
             var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
