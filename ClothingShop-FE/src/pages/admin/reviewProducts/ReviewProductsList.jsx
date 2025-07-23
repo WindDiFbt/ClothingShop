@@ -44,7 +44,7 @@ const ReviewProductsList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [statusFilter, setStatusFilter] = useState('pending');
+    const [statusFilter, setStatusFilter] = useState('all');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { products = [], loading = false, error = null } = useSelector((state) => state.adminProduct || {});
@@ -93,7 +93,7 @@ const ReviewProductsList = () => {
 
     return (
         <div className="p-6 bg-white rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">Danh sách sản phẩm chờ duyệt</h2>
+            <h2 className="text-xl font-semibold mb-4">Danh sách sản phẩm</h2>
             <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex gap-2 w-full md:w-2/3">
                     <select
@@ -190,7 +190,7 @@ const ReviewProductsList = () => {
                                 <td className="text-center py-3 px-4 border-b border-gray-200">
                                     <button
                                         className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
-                                        onClick={() => navigate(`/admin/review-products/detail/${product.id}`)}
+                                        onClick={() => navigate(`/admin/products/detail/${product.id}`)}
                                     >
                                         Xem chi tiết
                                     </button>
