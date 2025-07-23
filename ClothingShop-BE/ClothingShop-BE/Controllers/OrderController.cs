@@ -177,13 +177,14 @@ namespace ClothingShop_BE.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [Authorize(Roles = "ADMIN,SELLER")]
         [HttpGet("pagination")]
         public async Task<IActionResult> GetOrdersPagination(int page = 1, int pageSize = 8)
         {
             var (orders, currentPage, totalPages) = await _orderService.GetOrdersAsync(page, pageSize);
             return Ok(new { orders, currentPage, totalPages });
         }
-
+        [Authorize(Roles = "ADMIN,SELLER")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderDetail(Guid id)
         {
@@ -191,7 +192,7 @@ namespace ClothingShop_BE.Controllers
             if (order == null) return NotFound();
             return Ok(order);
         }
-
+        [Authorize(Roles = "ADMIN,SELLER")]
         [HttpPut("{id}/status")]
         public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] int newStatus)
         {

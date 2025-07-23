@@ -53,7 +53,7 @@ namespace ClothingShop_BE.Controllers
             var statuses = await _productService.GetProductStatusesAsync();
             return Ok(statuses);
         }
-
+        [Authorize(Roles = "ADMIN,SELLER")]
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] ProductDTO dto)
         {
@@ -66,7 +66,7 @@ namespace ClothingShop_BE.Controllers
             return Ok(product);
         }
 
-
+        [Authorize(Roles = "ADMIN,SELLER")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductDTO dto)
         {
