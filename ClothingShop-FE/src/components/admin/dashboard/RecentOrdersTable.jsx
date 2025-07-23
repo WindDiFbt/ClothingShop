@@ -96,7 +96,7 @@ const RecentOrdersTable = () => {
                 <div className="mt-4 text-center">
                     <button 
                         className="text-primary hover:text-primary-dark text-sm font-medium transition-colors"
-                        onClick={() => navigate('/admin/orders')}
+                        onClick={() => navigate('/admin-business/orders')}
                     >
                         Xem tất cả đơn hàng →
                     </button>

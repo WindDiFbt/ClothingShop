@@ -2,6 +2,7 @@
 using ClothingShop_BE.ModelsDTO;
 using ClothingShop_BE.ModelsDTO.Admin.AuthorizeProduct;
 using ClothingShop_BE.Services.Admin.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace ClothingShop_BE.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "ADMIN, ADMIN_BUSINESS")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductAdminService _productService;

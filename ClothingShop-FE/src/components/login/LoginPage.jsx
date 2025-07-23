@@ -20,10 +20,13 @@ export default function LoginPage() {
    useEffect(() => {
     if (status === "succeeded" && token && user) {
       if (user.role === "ADMIN") {
-        navigate("/admin/sales");
+        navigate("/admin/accounts");
       } else if (user.role === "SELLER") {
         navigate("/seller");
-      } else {
+      } else if (user.role === "ADMIN_BUSINESS") {
+        navigate("/admin-business/sales");
+      }
+      else {
         navigate("/home");
       }
     }

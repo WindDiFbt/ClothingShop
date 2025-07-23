@@ -6,12 +6,12 @@ import { logout } from '../../../redux/auth/authSlice';
 import SignalRService from '../../../services/admin/SignalRService';
 import userImg from '../../../assets/user-profile.png';
 
-const HeaderAdmin = () => {
+const HeaderAdminBusiness = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
-    
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -85,13 +85,13 @@ const HeaderAdmin = () => {
     const handleLogout = () => {
         // Stop SignalR connection
         SignalRService.stopConnection();
-        
+
         // Dispatch logout action
         dispatch(logout());
-        
+
         // Close profile dropdown
         setIsProfileOpen(false);
-        
+
         // Navigate to login page
         navigate('/login');
     };
@@ -160,16 +160,16 @@ const HeaderAdmin = () => {
                                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                                 className="relative rounded-full p-2 text-gray-600 hover:bg-gray-100 transition-colors"
                             >
-                                <svg 
-                                    className="h-6 w-6" 
-                                    fill="none" 
-                                    stroke="currentColor" 
+                                <svg
+                                    className="h-6 w-6"
+                                    fill="none"
+                                    stroke="currentColor"
                                     viewBox="0 0 24 24"
                                 >
-                                    <path 
-                                        strokeLinecap="round" 
-                                        strokeLinejoin="round" 
-                                        strokeWidth="2" 
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
                                         d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                                     />
                                 </svg>
@@ -198,7 +198,7 @@ const HeaderAdmin = () => {
                                             )}
                                         </div>
                                     </div>
-                                    
+
                                     {notifications.length === 0 ? (
                                         <div className="px-4 py-8 text-center text-gray-500">
                                             <div className="text-2xl mb-2">📢</div>
@@ -208,7 +208,7 @@ const HeaderAdmin = () => {
                                     ) : (
                                         <div className="py-1">
                                             {notifications.map((notification) => (
-                                                <div 
+                                                <div
                                                     key={notification.id}
                                                     className={`px-4 py-3 border-l-4 ${getNotificationColor(notification.type)} hover:bg-gray-50 transition-colors cursor-pointer`}
                                                     style={{ borderLeftColor: notification.type === 'success' ? '#10B981' : notification.type === 'warning' ? '#F59E0B' : notification.type === 'error' ? '#EF4444' : '#3B82F6' }}
@@ -240,8 +240,8 @@ const HeaderAdmin = () => {
                                             ))}
                                         </div>
                                     )}
-                                    
-                                   
+
+
                                 </div>
                             )}
                         </div>
@@ -278,4 +278,4 @@ const HeaderAdmin = () => {
     );
 };
 
-export default HeaderAdmin;
+export default HeaderAdminBusiness;

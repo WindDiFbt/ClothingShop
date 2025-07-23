@@ -5,7 +5,6 @@ import AccountList from "./pages/admin/accounts/AccountList";
 import EditAccount from "./pages/admin/accounts/edit";
 import InviteUser from './pages/admin/accounts/Invite';
 import CreateUserInvite from './pages/admin/accounts/CreateUserInvite';
-import SaleDashboard from "./pages/admin/SaleDashboard";
 import ReviewProductsList from "./pages/admin/reviewProducts/ReviewProductsList";
 import ProductDetailAdmin from "./pages/admin/reviewProducts/ProductDetailAdmin";
 import { ReportList, ReportDetail } from './pages/admin/report';
@@ -34,6 +33,9 @@ import AddProductPage from "./components/user/AddProductPage";
 import EditProductPage from "./components/user/EditProductPage";
 import OrderDetailPage from "./components/user/OrderDetailPage";
 import { AdminProtectedRoute } from "./components/share/ProtectedRoute";
+import { AdminBusinessProtectedRoute } from "./components/share/ProtectedRouteAdminBusiness";
+import AdminBusinessLayout from "./layouts/AdminBusinessLayout";
+import SaleDashboard from "./pages/admin_business/SaleDashboard";
 
 import { ToastContainer } from "react-toastify";
 
@@ -81,17 +83,30 @@ function App() {
             <AdminLayout />
           </AdminProtectedRoute>
         }>
-          <Route path="/admin/sales" element={<SaleDashboard />} />
           <Route path="/admin/accounts" element={<AccountList />} />
           <Route path="/admin/accounts/edit/:id" element={<EditAccount />} />
           <Route path="/admin/accounts/invite" element={<InviteUser />} />
           <Route path="/admin/accounts/create-invite" element={<CreateUserInvite />} />
-          <Route path="/admin/review-products" element={<ReviewProductsList />} />
-          <Route path="/admin/review-products/detail/:id" element={<ProductDetailAdmin />} />
+          <Route path="/admin/products" element={<ReviewProductsList />} />
+          <Route path="/admin/products/detail/:id" element={<ProductDetailAdmin />} />
           <Route path="/admin/orders" element={<OrderList />} />
           <Route path="/admin/orders/:id" element={<OrderDetail />} />
           <Route path="/admin/report" element={<ReportList />} />
           <Route path="/admin/report/:id" element={<ReportDetail />} />
+        </Route>
+
+        {/* Admin Business Routes */}
+        <Route
+          path="/admin-business"
+          element={
+            <AdminBusinessProtectedRoute>
+              <AdminBusinessLayout />
+            </AdminBusinessProtectedRoute>
+          }>
+          <Route index element={<SaleDashboard />} />
+          <Route path="sales" element={<SaleDashboard />} />
+          <Route path="orders" element={<OrderList />} />
+          <Route path="orders/:id" element={<OrderDetail />} />
         </Route>
 
         {/* 404 Route */}

@@ -1,5 +1,6 @@
 using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO.Admin.Analytics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClothingShop_BE.Services.Admin.Analytics
@@ -13,6 +14,7 @@ namespace ClothingShop_BE.Services.Admin.Analytics
             _context = context;
         }
 
+        [Authorize]
         public async Task<DashboardOverviewDTO> GetDashboardOverviewAsync(DateTime? startDate, DateTime? endDate)
         {
             // Set default date range if not provided
