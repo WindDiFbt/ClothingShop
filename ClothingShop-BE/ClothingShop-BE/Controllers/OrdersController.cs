@@ -1,4 +1,5 @@
 ﻿using ClothingShop_BE.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -16,7 +17,7 @@ namespace ClothingShop_BE.Controllers
         {
             _orderService = orderService;
         }
-
+        [Authorize(Roles = "ADMIN,SELLER")]
         [EnableQuery]
         [HttpGet]
         public IActionResult Get()
