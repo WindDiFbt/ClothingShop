@@ -81,23 +81,23 @@ namespace ClothingShop_BE.Services.Admin.Orders
         {
             var order = await _context.Orders
                 .Include(o => o.Customer)
-                .ThenInclude(c => c.Userinfo)
+                    .ThenInclude(c => c.Userinfo)
                 .Include(o => o.StatusNavigation)
                 .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.Product)
-                .ThenInclude(p => p.Images)
+                    .ThenInclude(od => od.Product)
+                        .ThenInclude(p => p.Images)
                 .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.StatusNavigation)
+                    .ThenInclude(od => od.StatusNavigation)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
 
             if (order == null)
                 return null;
-
+            
             var orderItems = order.OrderDetails.Select(od => new OrderItemAdminDTO
             {
                 Id = od.Id,
                 ProductId = od.ProductId,
-                ProductName = od.Product?.Name,
+                ProductName = od.Product?.Name ?? "Unknown Product",
                 ProductImage = od.Product?.Images?.FirstOrDefault()?.Url,
                 Quantity = od.Quantity,
                 UnitPrice = od.UnitPrice,
