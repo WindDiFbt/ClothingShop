@@ -11,6 +11,14 @@ import { ReportList, ReportDetail } from './pages/admin/report';
 import OrderList from './pages/admin/orders/OrderList';
 import OrderDetail from './pages/admin/orders/OrderDetail';
 
+// Admin Business components
+import CustomerManagement from './pages/admin_business/customers/CustomerManagement';
+import CustomerDetail from './pages/admin_business/customers/CustomerDetail';
+import CustomerStatistics from './pages/admin_business/customers/CustomerStatistics';
+import OrderManagement from './pages/admin_business/orders/OrderManagement';
+import OrderStatistics from './pages/admin_business/orders/OrderStatistics';
+import OrderDetailAdminBusiness from './pages/admin_business/orders/OrderDetail';
+
 import HomePage from './components/home/Home';
 import Products from './components/product/Products';
 import ProductDetail from './components/product/ProductDetail';
@@ -105,8 +113,12 @@ function App() {
           }>
           <Route index element={<SaleDashboard />} />
           <Route path="sales" element={<SaleDashboard />} />
-          <Route path="orders" element={<OrderList />} />
-          <Route path="orders/:id" element={<OrderDetail />} />
+          <Route path="customers" element={<CustomerManagement />} />
+          <Route path="customers/statistics" element={<CustomerStatistics />} />
+          <Route path="customers/:customerId" element={<CustomerDetail />} />
+          <Route path="orders" element={<OrderManagement />} />
+          <Route path="orders/statistics" element={<OrderStatistics />} />
+          <Route path="orders/:orderId" element={<OrderDetailAdminBusiness />} />
         </Route>
 
         {/* 404 Route */}

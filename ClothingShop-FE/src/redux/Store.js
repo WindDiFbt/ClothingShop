@@ -10,6 +10,10 @@ import adminReportReducer from './slices/admin/ReportSlice';
 import analyticsReducer from './slices/admin/AnalyticsSlice';
 import adminOrderReducer from './slices/admin/OrderSlice';
 
+// Admin Business slices
+import customerReducer from './slices/admin_business/customerSlice';
+import orderBusinessReducer from './slices/admin_business/orderSlice';
+
 import cartReducer from "./slices/CartSlice";
 import orderReducer from "./slices/orderSlice";
 import feedbackReducer from "./slices/feedbackSlice";
@@ -30,6 +34,9 @@ const store = configureStore({
     adminReport: adminReportReducer,
     analytics: analyticsReducer,
     adminOrder: adminOrderReducer,
+    // Admin Business reducers
+    customers: customerReducer,
+    orders: orderBusinessReducer,
     cart: cartReducer,
     order: orderReducer,
     feedback: feedbackReducer,

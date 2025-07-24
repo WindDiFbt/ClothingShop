@@ -1,12 +1,14 @@
 using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO.Admin;
 using ClothingShop_BE.Services.Admin.Orders;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClothingShop_BE.Controllers.Admin
 {
     [Route("api/admin/orders")]
+    [Authorize(Roles = "ADMIN,ADMIN_BUSINESS")]
     [ApiController]
     public class OrdersController : ControllerBase
     {
