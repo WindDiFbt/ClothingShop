@@ -1,4 +1,5 @@
 ﻿using ClothingShop_BE.Configurations;
+using ClothingShop_BE.Helpers;
 using ClothingShop_BE.Models;
 using ClothingShop_BE.Service;
 using ClothingShop_BE.Services.Admin;
@@ -130,7 +131,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 
 });
+var config = new ConfigurationBuilder()
+    .AddJsonFile("product-config.json")
+    .Build();
 
+var productConfig = config.Get<ProductConfig>();
+builder.Services.AddSingleton(productConfig);
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 

@@ -8,13 +8,19 @@ export const fetchProductStock = createAsyncThunk(
   'productStock/fetchProductStock',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(API_URL);
-      return response.data; // Mảng danh sách tồn kho sản phẩm
+      const token = localStorage.getItem("token");
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to fetch');
     }
   }
 );
+
 
 const productStockSlice = createSlice({
   name: 'productStock',

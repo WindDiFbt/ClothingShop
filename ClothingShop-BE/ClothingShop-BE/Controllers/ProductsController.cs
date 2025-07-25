@@ -73,12 +73,40 @@ namespace ClothingShop_BE.Controllers
             var updated = await _productService.UpdateProductAsync(id, dto);
             return Ok(updated);
         }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
         [HttpGet("stock-status")]
         public async Task<IActionResult> GetStockStatus()
         {
             var result = await _productService.GetProductStockStatusAsync();
             return Ok(result);
         }
-
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("best-selling-month")]
+        public async Task<IActionResult> GetBestSellingByMonth(int month, int year)
+        {
+            var result = await _productService.GetBestSellingByMonth(month, year);
+            return Ok(result);
+        }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("best-selling-year")]
+        public async Task<IActionResult> GetBestSellingByYear(int year)
+        {
+            var result = await _productService.GetBestSellingByYear(year);
+            return Ok(result);
+        }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("import-recommendation")]
+        public async Task<IActionResult> GetImportRecommendation()
+        {
+            var result = await _productService.GetImportRecommendation();
+            return Ok(result);
+        }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("limit-recommendation")]
+        public async Task<IActionResult> GetLimitRecommendation()
+        {
+            var result = await _productService.GetLimitRecommendation();
+            return Ok(result);
+        }
     }
 }

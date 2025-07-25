@@ -4,7 +4,7 @@ import {
   fetchProductStock,
   setStockFilter,
   setCurrentPage,
-} from "../../redux/slices/productStockSlice";
+} from "../../../redux/slices/productStockSlice";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,

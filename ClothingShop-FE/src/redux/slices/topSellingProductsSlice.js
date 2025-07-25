@@ -3,9 +3,18 @@ import axios from 'axios';
 
 export const fetchTopSellingProducts = createAsyncThunk(
   'statistics/fetchTopSellingProducts',
-  async () => {
-    const response = await axios.get('http://localhost:5078/api/Order/top-selling-products');
-    return response.data;
+  async (_, thunkAPI) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get('http://localhost:5078/api/Order/top-selling-products', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to fetch');
+    }
   }
 );
 

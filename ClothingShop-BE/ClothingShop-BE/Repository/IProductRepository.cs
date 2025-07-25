@@ -1,5 +1,5 @@
 ﻿using ClothingShop_BE.Models;
-
+using ClothingShop_BE.ModelsDTO;
 namespace ClothingShop_BE.Repository
 {
     public interface IProductRepository
@@ -20,6 +20,10 @@ namespace ClothingShop_BE.Repository
         Task CreateProductAsync(Product product);
         Task UpdateProductAsync(Product product);
         Task<List<Product>> GetAllWithVariantsAsync();
+        Task<List<ProductSuggestionDTO>> GetBestSellingProductsByMonthAsync(int month, int year);
+        Task<List<ProductSuggestionDTO>> GetBestSellingProductsByYearAsync(int year);
+        Task<List<ProductSuggestionDTO>> GetImportRecommendationAsync();
+        Task<List<ProductSuggestionDTO>> GetLimitRecommendationAsync();
 
     }
 }
