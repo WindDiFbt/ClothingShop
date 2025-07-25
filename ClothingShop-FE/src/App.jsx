@@ -36,7 +36,8 @@ import OrderDetailPage from "./components/user/OrderDetailPage";
 import { AdminProtectedRoute } from "./components/share/ProtectedRoute";
 
 import { ToastContainer } from "react-toastify";
-
+import ProductStockPage from "./components/user/ProductStockPage";
+import TopSellingProductsPage from "./components/user/TopSellingProductsPage";
 function App() {
   return (
     <Router>
@@ -96,6 +97,8 @@ function App() {
 
         {/* 404 Route */}
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/product-stock" element={<ProductStockPage />} />
+        <Route path="/product-revenue" element={<TopSellingProductsPage />} />
       </Routes>
       <ToastContainer />
     </Router>
