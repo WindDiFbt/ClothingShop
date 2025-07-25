@@ -108,5 +108,12 @@ namespace ClothingShop_BE.Controllers
             var result = await _productService.GetLimitRecommendation();
             return Ok(result);
         }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateProductStatus(long id, [FromQuery] int newStatusId)
+        {
+            await _productService.UpdateProductStatusAsync(id, newStatusId);
+            return NoContent();
+        }
     }
 }

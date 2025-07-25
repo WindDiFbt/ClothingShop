@@ -2,6 +2,7 @@
 using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO;
 using ClothingShop_BE.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NuGet.Protocol.Core.Types;
 using System.Security.Claims;
@@ -178,7 +179,9 @@ namespace ClothingShop_BE.Service.Impl
 
         public Task<List<ProductSuggestionDTO>> GetLimitRecommendation() =>
             _productRepository.GetLimitRecommendationAsync();
-
+        public async Task UpdateProductStatusAsync(long productId, int newStatusId) =>
+            _productRepository.UpdateProductStatusAsync(productId, newStatusId);
+        
 
     }
 }
