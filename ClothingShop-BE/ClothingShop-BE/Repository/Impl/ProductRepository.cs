@@ -75,6 +75,11 @@ namespace ClothingShop_BE.Repository.Impl
             _context.Products.Update(product);
             await _context.SaveChangesAsync();
         }
-
+        public async Task<List<Product>> GetAllWithVariantsAsync()
+        {
+            return await _context.Products
+                .Include(p => p.ProductVariants)
+                .ToListAsync();
+        }
     }
 }

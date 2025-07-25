@@ -132,6 +132,38 @@ namespace ClothingShop_BE.Service.Impl
 
             return new ProductDTO(existingProduct);
         }
+        public async Task<List<ProductStockDto>> GetProductStockStatusAsync()
+        {
+            const int LOW_STOCK_THRESHOLD = 10;
+            const int HIGH_STOCK_THRESHOLD = 100;
+
+            var products = await _productRepository.GetAllWithVariantsAsync();
+
+            var result = products.Select(p => new ProductStockDto
+            {
+                ProductId = p.Id,
+                ProductName = p.Name,
+                Variants = p.ProductVariants.Select(v => new ProductVariantStockDto
+                {
+                    VariantId = v.Id,
+                    Size = v.Size,
+                    Quantity = v.Quantity ?? 0,
+                    StockStatus = GetStockStatus(v.Quantity ?? 0, LOW_STOCK_THRESHOLD, HIGH_STOCK_THRESHOLD)
+                }).ToList()
+            }).ToList();
+
+            return result;
+        }
+
+        private string GetStockStatus(int quantity, int low, int high)
+        {
+            if (quantity < low)
+                return "Low";
+            if (quantity > high)
+                return "High";
+            return "Normal";
+        }
+
 
 
     }

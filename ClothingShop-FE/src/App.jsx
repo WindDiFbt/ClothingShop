@@ -46,7 +46,8 @@ import AdminBusinessLayout from "./layouts/AdminBusinessLayout";
 import SaleDashboard from "./pages/admin_business/SaleDashboard";
 
 import { ToastContainer } from "react-toastify";
-
+import ProductStockPage from "./components/user/ProductStockPage";
+import TopSellingProductsPage from "./components/user/TopSellingProductsPage";
 function App() {
   return (
     <Router>
@@ -123,6 +124,8 @@ function App() {
 
         {/* 404 Route */}
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/product-stock" element={<ProductStockPage />} />
+        <Route path="/product-revenue" element={<TopSellingProductsPage />} />
       </Routes>
       <ToastContainer />
     </Router>

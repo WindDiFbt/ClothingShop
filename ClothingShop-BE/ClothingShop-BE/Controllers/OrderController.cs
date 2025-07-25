@@ -200,7 +200,13 @@ namespace ClothingShop_BE.Controllers
             if (!updated) return NotFound();
             return NoContent();
         }
-
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("top-selling-products")]
+        public async Task<IActionResult> GetTopSellingProducts()
+        {
+            var result = await _orderService.GetTopSellingProductsAsync();
+            return Ok(result);
+        }
 
     }
 

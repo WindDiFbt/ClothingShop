@@ -21,7 +21,8 @@ import orderManagementSlice from "./slices/OrderManagementSlice";
 import cartAPI from "../services/cartAPI";
 import orderAPI from "../services/orderAPI";
 import paymentAPI from "../services/paymentAPI";
-
+import productStockReducer from './slices/productStockSlice';
+import topSellingProductsReducer from './slices/topSellingProductsSlice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -44,6 +45,8 @@ const store = configureStore({
     [cartAPI.reducerPath]: cartAPI.reducer,
     [orderAPI.reducerPath]: orderAPI.reducer,
     [paymentAPI.reducerPath]: paymentAPI.reducer,
+    productStock: productStockReducer,
+    topSellingProducts: topSellingProductsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
