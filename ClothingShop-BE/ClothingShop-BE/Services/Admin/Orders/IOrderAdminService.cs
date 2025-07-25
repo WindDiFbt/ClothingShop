@@ -7,7 +7,6 @@ namespace ClothingShop_BE.Services.Admin.Orders
         Task<OrderListResultDTO> GetAllOrdersAsync(string? searchTerm, string? statusFilter, int page, int pageSize);
         Task<OrderDetailAdminDTO?> GetOrderDetailAsync(Guid orderId);
         Task<bool> UpdateOrderStatusAsync(Guid orderId, int newStatus);
-
     }
 
     public class OrderListResultDTO

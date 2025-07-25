@@ -1,4 +1,5 @@
 ﻿using ClothingShop_BE.Configurations;
+using ClothingShop_BE.Helpers;
 using ClothingShop_BE.Models;
 using ClothingShop_BE.Service;
 using ClothingShop_BE.Services.Admin;
@@ -13,23 +14,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Thêm SignalR
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
-// Đăng ký NotificationService
-builder.Services.AddScoped<INotificationService, NotificationService>();
-
-
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddScoped<IReportAdminService, ReportAdminService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IProductAdminService, ProductAdminService>();
-builder.Services.AddScoped<ClothingShop_BE.Services.Admin.Invite.IInviteUserService, ClothingShop_BE.Services.Admin.Invite.InviteUserService>();
-builder.Services.AddScoped<ClothingShop_BE.Services.Admin.Analytics.IAnalyticsService, ClothingShop_BE.Services.Admin.Analytics.AnalyticsService>();
-builder.Services.AddScoped<ClothingShop_BE.Services.Admin.Orders.IOrderAdminService, ClothingShop_BE.Services.Admin.Orders.OrderAdminService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,14 +33,17 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;  // Ensures cookies are essential for the app
 });
 builder.Services.AddMemoryCache();
-builder.Services.AddControllers().AddOData(o =>
+builder.Services.AddControllers(options =>
+{
+    options.OutputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.XmlSerializerOutputFormatter>();
+})
+.AddOData(o =>
 {
     o.EnableNoDollarQueryOptions = true;
     o.EnableQueryFeatures(null).AddRouteComponents(
         routePrefix: "api/odata",
         OdataConfig.GetEdmModel()).Filter().OrderBy().Count().Expand().SetMaxTop(100);
 });
-
 // Add CORS policy
 builder.Services.AddCors(options =>
 {
@@ -70,6 +62,9 @@ builder.Services.Scan(scan => scan
     .AddClasses(classes => classes.Where(t => t.Name.EndsWith("Service") || t.Name.EndsWith("Repository")))
     .AsMatchingInterface()
     .WithScopedLifetime());
+
+// Add HttpClient for PayOS
+builder.Services.AddHttpClient<ClothingShop_BE.Service.IPayOSService, ClothingShop_BE.Service.Impl.PayOSService>();
 // Cấu hình Swagger với JWT
 builder.Services.AddSwaggerGen(c =>
 {
@@ -136,7 +131,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 
 });
+var config = new ConfigurationBuilder()
+    .AddJsonFile("product-config.json")
+    .Build();
 
+var productConfig = config.Get<ProductConfig>();
+builder.Services.AddSingleton(productConfig);
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 
@@ -170,3 +170,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Make the implicit Program class public so test projects can access it
+public partial class Program { }

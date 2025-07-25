@@ -1,7 +1,11 @@
-﻿using ClothingShop_BE.Models;
+﻿using ClothingShop_BE.Helpers;
+using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO;
 using ClothingShop_BE.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using NuGet.Protocol.Core.Types;
+using System.Security.Claims;
 
 namespace ClothingShop_BE.Service.Impl
 {
@@ -12,16 +16,19 @@ namespace ClothingShop_BE.Service.Impl
         private readonly ICategoryRepository _categoryRepository;
         private readonly IProductStatusRepository _productStatusRepository;
         private readonly IMemoryCache _cache;
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ProductConfig _config;
         public ProductService(IProductRepository productRepository, IFeedbackRepository feedbackRepository,
             ICategoryRepository categoryRepository, IProductStatusRepository productStatusRepository,
-            IMemoryCache cache)
+            IMemoryCache cache, IHttpContextAccessor httpContextAccessor, ProductConfig config)
         {
             _productRepository = productRepository;
             _feedbackRepository = feedbackRepository;
             _categoryRepository = categoryRepository;
             _productStatusRepository = productStatusRepository;
             _cache = cache;
+            _httpContextAccessor = httpContextAccessor;
+            _config = config;
         }
 
         public IQueryable<Product> GetAllProductsODATA()
@@ -84,5 +91,97 @@ namespace ClothingShop_BE.Service.Impl
             List<ProductDTO> saleProducts = (await _productRepository.Get5SaleProducts()).Select(x => new ProductDTO(x)).ToList();
             return (hotproducts, saleProducts);
         }
+        public async Task<ProductDTO> CreateProductAsync(ProductDTO dto)
+        {
+            var product = dto.ToProduct();
+            var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdStr) || !Guid.TryParse(userIdStr, out Guid userId))
+            {
+                throw new UnauthorizedAccessException("Invalid or missing user ID in token.");
+            }
+
+            product.SellerId = userId;
+            product.Status = 1;
+            await _productRepository.CreateProductAsync(product);
+            return new ProductDTO(product);
+        }
+        public async Task<ProductDTO> UpdateProductAsync(long id, ProductDTO dto)
+        {
+            var existingProduct = await _productRepository.GetDetailProductAsync(id);
+            if (existingProduct == null)
+            {
+                throw new KeyNotFoundException($"Product does not exist ID: {id}");
+            }
+
+            existingProduct.Name = dto.Name;
+            existingProduct.Description = dto.Description;
+            existingProduct.Price = dto.Price;
+            existingProduct.Discount = dto.Discount;
+            existingProduct.Status = dto.Status ?? 1;
+            existingProduct.CategoryId = dto.CategoryId;
+            existingProduct.ThumbnailUrl = dto.ThumbnailUrl;
+
+            existingProduct.Images = dto.Images.Select(url => new Image
+            {
+                Url = url
+            }).ToList();
+
+            existingProduct.ProductVariants = dto.ProductVariants.Select(v => new ProductVariant
+            {
+                Size = v.Size,
+                Quantity = v.Quantity
+            }).ToList();
+
+            await _productRepository.UpdateProductAsync(existingProduct);
+
+            return new ProductDTO(existingProduct);
+        }
+        public async Task<List<ProductStockDto>> GetProductStockStatusAsync()
+        {
+             int LOW_STOCK_THRESHOLD = _config.StockStatus.LowThreshold;
+             int HIGH_STOCK_THRESHOLD = _config.StockStatus.HighThreshold;
+
+            var products = await _productRepository.GetAllWithVariantsAsync();
+
+            var result = products.Select(p => new ProductStockDto
+            {
+                ProductId = p.Id,
+                ProductName = p.Name,
+                Variants = p.ProductVariants.Select(v => new ProductVariantStockDto
+                {
+                    VariantId = v.Id,
+                    Size = v.Size,
+                    Quantity = v.Quantity ?? 0,
+                    StockStatus = GetStockStatus(v.Quantity ?? 0, LOW_STOCK_THRESHOLD, HIGH_STOCK_THRESHOLD)
+                }).ToList()
+            }).ToList();
+
+            return result;
+        }
+
+        private string GetStockStatus(int quantity, int low, int high)
+        {
+            if (quantity < low)
+                return _config.StockStatus.LowLabel;
+            if (quantity > high)
+                return _config.StockStatus.HighLabel;
+            return _config.StockStatus.NormalLabel;
+        }
+        public Task<List<ProductSuggestionDTO>> GetBestSellingByMonth(int month, int year) =>
+       _productRepository.GetBestSellingProductsByMonthAsync(month, year);
+
+        public Task<List<ProductSuggestionDTO>> GetBestSellingByYear(int year) =>
+            _productRepository.GetBestSellingProductsByYearAsync(year);
+
+        public Task<List<ProductSuggestionDTO>> GetImportRecommendation() =>
+            _productRepository.GetImportRecommendationAsync();
+
+        public Task<List<ProductSuggestionDTO>> GetLimitRecommendation() =>
+            _productRepository.GetLimitRecommendationAsync();
+        public async Task UpdateProductStatusAsync(long productId, int newStatusId) =>
+            _productRepository.UpdateProductStatusAsync(productId, newStatusId);
+        
+
     }
 }

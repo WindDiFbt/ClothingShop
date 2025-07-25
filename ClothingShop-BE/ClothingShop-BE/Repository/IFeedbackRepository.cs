@@ -10,6 +10,8 @@ namespace ClothingShop_BE.Repository
 
         Task<bool> HasFeedbackExistAsync(long productId, Guid orderId);
 
+        Task<Feedback?> GetFeedbackByOrderAndProductAsync(Guid orderId, long productId);
+
         Task<Feedback> SaveFeedback(Feedback feedback);
     }
 }

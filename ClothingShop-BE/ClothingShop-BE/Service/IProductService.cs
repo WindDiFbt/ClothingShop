@@ -16,5 +16,14 @@ namespace ClothingShop_BE.Service
         Task<IEnumerable<ProductStatusDTO>> GetProductStatusesAsync();
 
         Task<(IEnumerable<ProductDTO> hotproducts, IEnumerable<ProductDTO> saleProducts)> GetProductsHomePageAsync();
+
+        Task<ProductDTO> CreateProductAsync(ProductDTO dto);
+        Task<ProductDTO> UpdateProductAsync(long id, ProductDTO dto);
+        Task<List<ProductStockDto>> GetProductStockStatusAsync();
+        Task<List<ProductSuggestionDTO>> GetBestSellingByMonth(int month, int year);
+        Task<List<ProductSuggestionDTO>> GetBestSellingByYear(int year);
+        Task<List<ProductSuggestionDTO>> GetImportRecommendation();
+        Task<List<ProductSuggestionDTO>> GetLimitRecommendation();
+        Task UpdateProductStatusAsync(long productId, int newStatusId);
     }
 }

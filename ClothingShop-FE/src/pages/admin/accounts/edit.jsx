@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     gender: Yup.string().required('Vui lòng chọn giới tính'),
     dateOfBirth: Yup.date()
         .required('Vui lòng nhập ngày sinh')
-        .max(new Date(), 'Ngày sinh không hợp lệ (trong tương lai)'),
+        .max(new Date(), 'Ngày sinh không hợp lệ '),
     role: Yup.string().required('Vui lòng chọn vai trò'),
     status: Yup.string().required('Vui lòng chọn trạng thái')
 });

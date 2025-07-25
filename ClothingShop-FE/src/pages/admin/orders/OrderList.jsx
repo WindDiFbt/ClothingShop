@@ -11,7 +11,8 @@ const OrderList = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    
+    const currently_role = JSON.parse(localStorage.getItem('user'))?.role;
+
     const { orders, orderStatuses, loading, error, pagination } = useSelector(state => state.adminOrder);
 
     const statusOptions = [
@@ -39,7 +40,7 @@ const OrderList = () => {
 
 
     const getStatusColor = (status) => {
-        switch(status) {
+        switch (status) {
             case '4': // Completed
                 return 'bg-green-100 text-green-800';
             case '1': // Pending
@@ -172,7 +173,14 @@ const OrderList = () => {
                                 <td className="text-center py-3 px-4 border-b border-gray-200">
                                     <button
                                         className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                                        onClick={() => navigate(`/admin/orders/${order.id}`)}
+                                        onClick={() => {
+                                            if (currently_role === 'ADMIN') {
+                                                navigate(`/admin/orders/${order.id}`);
+                                            }
+                                            if (currently_role === 'ADMIN_BUSINESS') {
+                                                navigate(`/admin-business/orders/${order.id}`);
+                                            }
+                                        }}
                                     >
                                         Xem chi tiết
                                     </button>
@@ -197,9 +205,8 @@ const OrderList = () => {
                         <button
                             key={i + 1}
                             onClick={() => setCurrentPage(i + 1)}
-                            className={`w-8 h-8 rounded-full flex items-center justify-center transition ${
-                                currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-300'
-                            }`}
+                            className={`w-8 h-8 rounded-full flex items-center justify-center transition ${currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-300'
+                                }`}
                         >
                             {i + 1}
                         </button>

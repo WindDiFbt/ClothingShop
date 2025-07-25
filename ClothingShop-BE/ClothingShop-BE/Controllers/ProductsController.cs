@@ -53,20 +53,67 @@ namespace ClothingShop_BE.Controllers
             var statuses = await _productService.GetProductStatusesAsync();
             return Ok(statuses);
         }
-
-        [HttpGet("admin-only")]
-        [Authorize(Roles = "Admin")] // Chỉ Admin mới access được
-        public IActionResult GetAdminData()
+        [Authorize(Roles = "ADMIN,SELLER")]
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDTO dto)
         {
-            return Ok(new { message = "This is admin-only data" });
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var product = await _productService.CreateProductAsync(dto);
+            return Ok(product);
         }
 
-        [HttpGet("public")]
-        [AllowAnonymous] // Không cần JWT token
-        public IActionResult GetPublicData()
+        [Authorize(Roles = "ADMIN,SELLER")]
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateProduct(long id, [FromBody] ProductDTO dto)
         {
-            return Ok(new { message = "This is public data" });
+            var updated = await _productService.UpdateProductAsync(id, dto);
+            return Ok(updated);
         }
-
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("stock-status")]
+        public async Task<IActionResult> GetStockStatus()
+        {
+            var result = await _productService.GetProductStockStatusAsync();
+            return Ok(result);
+        }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("best-selling-month")]
+        public async Task<IActionResult> GetBestSellingByMonth(int month, int year)
+        {
+            var result = await _productService.GetBestSellingByMonth(month, year);
+            return Ok(result);
+        }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("best-selling-year")]
+        public async Task<IActionResult> GetBestSellingByYear(int year)
+        {
+            var result = await _productService.GetBestSellingByYear(year);
+            return Ok(result);
+        }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("import-recommendation")]
+        public async Task<IActionResult> GetImportRecommendation()
+        {
+            var result = await _productService.GetImportRecommendation();
+            return Ok(result);
+        }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpGet("limit-recommendation")]
+        public async Task<IActionResult> GetLimitRecommendation()
+        {
+            var result = await _productService.GetLimitRecommendation();
+            return Ok(result);
+        }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateProductStatus(long id, [FromQuery] int newStatusId)
+        {
+            await _productService.UpdateProductStatusAsync(id, newStatusId);
+            return NoContent();
+        }
     }
 }

@@ -13,10 +13,15 @@ namespace ClothingShop_BE.ModelsDTO
         public string? Note { get; set; }
         public DateTime? OrderDate { get; set; }
         public int? Status { get; set; }
+        public string? StatusName { get; set; }
         public string? PaymentLink { get; set; }
         public int? TotalAmount { get; set; }
         public DateTime? CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
+
+        // Navigation properties
+        public List<OrderDetailDTO> OrderDetails { get; set; } = new();
+        public string? CustomerName { get; set; }
 
         public OrderDTO() { }
 
@@ -31,10 +36,20 @@ namespace ClothingShop_BE.ModelsDTO
             Note = order.Note;
             OrderDate = order.OrderDate;
             Status = order.Status;
+            StatusName = GetStatusName(order.Status);
             PaymentLink = order.PaymentLink;
             TotalAmount = order.TotalAmount;
             CreateAt = order.CreateAt;
             UpdateAt = order.UpdateAt;
+
+            // Include order details if available
+            if (order.OrderDetails != null)
+            {
+                OrderDetails = order.OrderDetails.Select(od => new OrderDetailDTO(od)).ToList();
+            }
+
+            // Include customer info if available
+            CustomerName = order.Customer?.UserName ?? order.FullName;
         }
 
         public Order ToOrder()
@@ -54,6 +69,20 @@ namespace ClothingShop_BE.ModelsDTO
                 TotalAmount = this.TotalAmount,
                 CreateAt = this.CreateAt,
                 UpdateAt = this.UpdateAt
+            };
+        }
+
+        private string GetStatusName(int? status)
+        {
+            return status switch
+            {
+                1 => "Pending",
+                2 => "Confirmed",
+                3 => "Processing",
+                4 => "Shipped",
+                5 => "Delivered",
+                6 => "Cancelled",
+                _ => "Unknown"
             };
         }
     }

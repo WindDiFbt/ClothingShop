@@ -9,7 +9,8 @@ const OrderDetail = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [selectedStatus, setSelectedStatus] = useState('');
-    
+    const currently_role = JSON.parse(localStorage.getItem('user'))?.role;
+
     const { orderDetail, orderStatuses, loading, error } = useSelector(state => state.adminOrder);
 
     useEffect(() => {
@@ -45,7 +46,7 @@ const OrderDetail = () => {
     };
 
     const getStatusColor = (status) => {
-        switch(status) {
+        switch (status) {
             case 4: // Completed
                 return 'bg-green-100 text-green-800';
             case 1: // Pending
@@ -86,7 +87,14 @@ const OrderDetail = () => {
                     <p className="text-gray-600">Mã đơn hàng: #{orderDetail.id}</p>
                 </div>
                 <button
-                    onClick={() => navigate('/admin/orders')}
+                    onClick={() => {
+                        if (currently_role === 'ADMIN') {
+                            navigate(`/admin/orders`);
+                        }
+                        if (currently_role === 'ADMIN_BUSINESS') {
+                            navigate(`/admin-business/orders`);
+                        }
+                    }}
                     className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
                 >
                     Quay lại
@@ -97,7 +105,7 @@ const OrderDetail = () => {
                 {/* Thông tin đơn hàng */}
                 <div className="space-y-4">
                     <h3 className="text-lg font-semibold">Thông tin đơn hàng</h3>
-                    
+
                     <div className="bg-gray-50 p-4 rounded-lg space-y-3">
                         <div className="flex justify-between">
                             <span className="font-medium">Trạng thái:</span>
@@ -105,17 +113,17 @@ const OrderDetail = () => {
                                 {orderDetail.statusName}
                             </span>
                         </div>
-                        
+
                         <div className="flex justify-between">
                             <span className="font-medium">Ngày đặt:</span>
                             <span>{new Date(orderDetail.orderDate).toLocaleDateString('vi-VN')}</span>
                         </div>
-                        
+
                         <div className="flex justify-between">
                             <span className="font-medium">Tổng tiền:</span>
                             <span className="font-semibold">{orderDetail.totalAmount?.toLocaleString('vi-VN')}đ</span>
                         </div>
-                        
+
                         <div className="flex justify-between">
                             <span className="font-medium">Số lượng sản phẩm:</span>
                             <span>{orderDetail.orderItems?.length || 0}</span>
@@ -151,23 +159,23 @@ const OrderDetail = () => {
                 {/* Thông tin khách hàng */}
                 <div className="space-y-4">
                     <h3 className="text-lg font-semibold">Thông tin khách hàng</h3>
-                    
+
                     <div className="bg-gray-50 p-4 rounded-lg space-y-3">
                         <div className="flex justify-between">
                             <span className="font-medium">Tên khách hàng:</span>
                             <span>{orderDetail.customerName}</span>
                         </div>
-                        
+
                         <div className="flex justify-between">
                             <span className="font-medium">Số điện thoại:</span>
                             <span>{orderDetail.phoneNumber}</span>
                         </div>
-                        
+
                         <div className="flex justify-between">
                             <span className="font-medium">Địa chỉ:</span>
                             <span className="text-right max-w-xs">{orderDetail.address}</span>
                         </div>
-                        
+
                         {orderDetail.note && (
                             <div className="flex justify-between">
                                 <span className="font-medium">Ghi chú:</span>
@@ -181,7 +189,7 @@ const OrderDetail = () => {
             {/* Danh sách sản phẩm */}
             <div className="mt-8">
                 <h3 className="text-lg font-semibold mb-4">Danh sách sản phẩm</h3>
-                
+
                 <div className="overflow-x-auto">
                     <table className="w-full border-collapse">
                         <thead>
@@ -199,8 +207,8 @@ const OrderDetail = () => {
                                     <td className="p-3">
                                         <div className="flex items-center space-x-3">
                                             {item.productImage && (
-                                                <img 
-                                                    src={item.productImage} 
+                                                <img
+                                                    src={item.productImage}
                                                     alt={item.productName}
                                                     className="w-12 h-12 object-cover rounded"
                                                 />

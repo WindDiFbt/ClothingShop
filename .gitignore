@@ -73,3 +73,6 @@ Thumbs.db
 # Optional: Tailwind CSS build output (if any)
 *.css.map
 *.style.css
+
+.vs
+ClothingShop-BE/.vs
