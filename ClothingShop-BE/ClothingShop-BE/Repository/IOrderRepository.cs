@@ -1,5 +1,6 @@
 ﻿
 using ClothingShop_BE.Models;
+using ClothingShop_BE.ModelsDTO;
 
 namespace ClothingShop_BE.Repository
 {
@@ -25,5 +26,7 @@ namespace ClothingShop_BE.Repository
         Task<Order?> GetOrderDetailWithIncludesAsync(Guid orderId);
         Task UpdateAsync(Order order);
         IQueryable<Order> GetAllOrders();
+        Task<List<ProductRevenueDTO>> GetTopSellingProductsAsync();
+
     }
 }

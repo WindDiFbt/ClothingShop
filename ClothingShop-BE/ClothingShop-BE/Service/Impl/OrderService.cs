@@ -252,5 +252,10 @@ namespace ClothingShop_BE.Service.Impl
         {
             return _orderRepository.GetAllOrders();
         }
+        public async Task<List<ProductRevenueDTO>> GetTopSellingProductsAsync()
+        {
+            return await _orderRepository.GetTopSellingProductsAsync();
+        }
+
     }
 }

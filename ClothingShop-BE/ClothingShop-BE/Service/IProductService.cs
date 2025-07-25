@@ -19,6 +19,6 @@ namespace ClothingShop_BE.Service
 
         Task<ProductDTO> CreateProductAsync(ProductDTO dto);
         Task<ProductDTO> UpdateProductAsync(long id, ProductDTO dto);
-
+        Task<List<ProductStockDto>> GetProductStockStatusAsync();
     }
 }

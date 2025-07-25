@@ -16,5 +16,7 @@ namespace ClothingShop_BE.Service
         Task<OrderDTO?> GetOrderDetailByIdAsync(Guid orderId);
         Task<bool> UpdateOrderStatusSellerAsync(Guid orderId, int newStatus);
         IQueryable<Order> GetAllOrdersOData();
+        Task<List<ProductRevenueDTO>> GetTopSellingProductsAsync();
+
     }
 }

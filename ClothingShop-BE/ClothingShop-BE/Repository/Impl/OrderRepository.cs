@@ -1,4 +1,5 @@
 ﻿using ClothingShop_BE.Models;
+using ClothingShop_BE.ModelsDTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClothingShop_BE.Repository.Impl
@@ -221,8 +222,47 @@ namespace ClothingShop_BE.Repository.Impl
         public IQueryable<Order> GetAllOrders()
     {
         return _context.Orders.Include(o => o.OrderDetails);
-    }
+        }
 
-       
+        public async Task<List<ProductRevenueDTO>> GetTopSellingProductsAsync()
+        {
+            var deliveredOrderDetails = await _context.OrderDetails
+                .Include(od => od.Product)
+                .Include(od => od.Order)
+                    .ThenInclude(o => o.StatusNavigation)
+                .Where(od => od.Order.StatusNavigation.Name == "DELIVERED")
+                .ToListAsync();
+
+            var productVariants = await _context.ProductVariants.ToListAsync();
+
+            var query = deliveredOrderDetails
+                .Where(od => od.Product != null)
+                .GroupBy(od => new { od.ProductId, od.Product.Name })
+                .Select(g => new ProductRevenueDTO
+                {
+                    ProductId = g.Key.ProductId ?? 0,
+                    ProductName = g.Key.Name,
+                    TotalSold = g.Sum(x => x.Quantity ?? 0),
+                    TotalRevenue = g.Sum(x => x.TotalPrice ?? 0),
+                    Sizes = g.GroupBy(x =>
+                    {
+                        var variant = productVariants.FirstOrDefault(pv => pv.ProductId == x.ProductId && pv.Size != null);
+                        return variant?.Size ?? "Unknown";
+                    })
+                    .Select(sg => new SizeRevenueDTO
+                    {
+                        Size = sg.Key,
+                        Quantity = sg.Sum(x => x.Quantity ?? 0),
+                        Revenue = sg.Sum(x => x.TotalPrice ?? 0)
+                    })
+                    .ToList()
+                })
+                .OrderByDescending(x => x.TotalSold)
+                .ToList();
+
+            return query;
+        }
+
+
     }
 }

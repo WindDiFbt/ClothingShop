@@ -73,7 +73,12 @@ namespace ClothingShop_BE.Controllers
             var updated = await _productService.UpdateProductAsync(id, dto);
             return Ok(updated);
         }
-
+        [HttpGet("stock-status")]
+        public async Task<IActionResult> GetStockStatus()
+        {
+            var result = await _productService.GetProductStockStatusAsync();
+            return Ok(result);
+        }
 
     }
 }
