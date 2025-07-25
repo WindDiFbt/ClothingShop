@@ -24,5 +24,6 @@ namespace ClothingShop_BE.Service
         Task<List<ProductSuggestionDTO>> GetBestSellingByYear(int year);
         Task<List<ProductSuggestionDTO>> GetImportRecommendation();
         Task<List<ProductSuggestionDTO>> GetLimitRecommendation();
+        Task UpdateProductStatusAsync(long productId, int newStatusId);
     }
 }

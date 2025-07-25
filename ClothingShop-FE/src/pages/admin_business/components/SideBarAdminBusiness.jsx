@@ -43,7 +43,8 @@ const SidebarAdminBusiness = ({ isOpen, onToggle }) => {
                 { title: 'Product stock', path: '/admin-business/product-stock' },
                 { title: 'Product revenue', path: '/admin-business/product-revenue' },
                 { title: 'Product Suggest', path: '/admin-business/product-recommend' },
-                { title: 'Product Best Selling', path: '/admin-business/best-selling-products' }
+                { title: 'Product Best Selling', path: '/admin-business/best-selling-products' },
+                { title: 'Product Status', path: '/admin-business/product-status' }
             ]
         },
         {
