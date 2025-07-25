@@ -1,6 +1,7 @@
 ﻿using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO.Admin.Analytics;
 using ClothingShop_BE.Services.Admin.Analytics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace ClothingShop_BE.Controllers.Admin
 {
     [Route("api/admin/analytics")]
     [ApiController]
+    [Authorize(Roles ="ADMIN_BUSINESS")]
     public class AnalyticsController : ControllerBase
     {
         private readonly ClothingShopPrn232G5Context _context;
