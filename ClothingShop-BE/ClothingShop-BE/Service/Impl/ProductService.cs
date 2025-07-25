@@ -1,7 +1,9 @@
-﻿using ClothingShop_BE.Models;
+﻿using ClothingShop_BE.Helpers;
+using ClothingShop_BE.Models;
 using ClothingShop_BE.ModelsDTO;
 using ClothingShop_BE.Repository;
 using Microsoft.Extensions.Caching.Memory;
+using NuGet.Protocol.Core.Types;
 using System.Security.Claims;
 
 namespace ClothingShop_BE.Service.Impl
@@ -14,9 +16,10 @@ namespace ClothingShop_BE.Service.Impl
         private readonly IProductStatusRepository _productStatusRepository;
         private readonly IMemoryCache _cache;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ProductConfig _config;
         public ProductService(IProductRepository productRepository, IFeedbackRepository feedbackRepository,
             ICategoryRepository categoryRepository, IProductStatusRepository productStatusRepository,
-            IMemoryCache cache, IHttpContextAccessor httpContextAccessor)
+            IMemoryCache cache, IHttpContextAccessor httpContextAccessor, ProductConfig config)
         {
             _productRepository = productRepository;
             _feedbackRepository = feedbackRepository;
@@ -24,6 +27,7 @@ namespace ClothingShop_BE.Service.Impl
             _productStatusRepository = productStatusRepository;
             _cache = cache;
             _httpContextAccessor = httpContextAccessor;
+            _config = config;
         }
 
         public IQueryable<Product> GetAllProductsODATA()
@@ -134,8 +138,8 @@ namespace ClothingShop_BE.Service.Impl
         }
         public async Task<List<ProductStockDto>> GetProductStockStatusAsync()
         {
-            const int LOW_STOCK_THRESHOLD = 10;
-            const int HIGH_STOCK_THRESHOLD = 100;
+             int LOW_STOCK_THRESHOLD = _config.StockStatus.LowThreshold;
+             int HIGH_STOCK_THRESHOLD = _config.StockStatus.HighThreshold;
 
             var products = await _productRepository.GetAllWithVariantsAsync();
 
@@ -158,12 +162,22 @@ namespace ClothingShop_BE.Service.Impl
         private string GetStockStatus(int quantity, int low, int high)
         {
             if (quantity < low)
-                return "Low";
+                return _config.StockStatus.LowLabel;
             if (quantity > high)
-                return "High";
-            return "Normal";
+                return _config.StockStatus.HighLabel;
+            return _config.StockStatus.NormalLabel;
         }
+        public Task<List<ProductSuggestionDTO>> GetBestSellingByMonth(int month, int year) =>
+       _productRepository.GetBestSellingProductsByMonthAsync(month, year);
 
+        public Task<List<ProductSuggestionDTO>> GetBestSellingByYear(int year) =>
+            _productRepository.GetBestSellingProductsByYearAsync(year);
+
+        public Task<List<ProductSuggestionDTO>> GetImportRecommendation() =>
+            _productRepository.GetImportRecommendationAsync();
+
+        public Task<List<ProductSuggestionDTO>> GetLimitRecommendation() =>
+            _productRepository.GetLimitRecommendationAsync();
 
 
     }

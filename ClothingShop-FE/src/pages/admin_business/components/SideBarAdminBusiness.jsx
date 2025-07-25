@@ -40,7 +40,10 @@ const SidebarAdminBusiness = ({ isOpen, onToggle }) => {
                 </svg>
             ),
             subItems: [
-                { title: 'Product statistics', path: '#' }
+                { title: 'Product stock', path: '/admin-business/product-stock' },
+                { title: 'Product revenue', path: '/admin-business/product-revenue' },
+                { title: 'Product Suggest', path: '/admin-business/product-recommend' },
+                { title: 'Product Best Selling', path: '/admin-business/best-selling-products' }
             ]
         },
         {

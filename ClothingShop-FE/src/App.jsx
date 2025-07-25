@@ -1,29 +1,34 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Layout from "./Layout";
 import AdminLayout from "./layouts/AdminLayout";
 import AccountList from "./pages/admin/accounts/AccountList";
 import EditAccount from "./pages/admin/accounts/edit";
-import InviteUser from './pages/admin/accounts/Invite';
-import CreateUserInvite from './pages/admin/accounts/CreateUserInvite';
+import InviteUser from "./pages/admin/accounts/Invite";
+import CreateUserInvite from "./pages/admin/accounts/CreateUserInvite";
 import ReviewProductsList from "./pages/admin/reviewProducts/ReviewProductsList";
 import ProductDetailAdmin from "./pages/admin/reviewProducts/ProductDetailAdmin";
-import { ReportList, ReportDetail } from './pages/admin/report';
-import OrderList from './pages/admin/orders/OrderList';
-import OrderDetail from './pages/admin/orders/OrderDetail';
+import { ReportList, ReportDetail } from "./pages/admin/report";
+import OrderList from "./pages/admin/orders/OrderList";
+import OrderDetail from "./pages/admin/orders/OrderDetail";
 
 // Admin Business components
-import CustomerManagement from './pages/admin_business/customers/CustomerManagement';
-import CustomerDetail from './pages/admin_business/customers/CustomerDetail';
-import CustomerStatistics from './pages/admin_business/customers/CustomerStatistics';
-import OrderManagement from './pages/admin_business/orders/OrderManagement';
-import OrderStatistics from './pages/admin_business/orders/OrderStatistics';
-import OrderDetailAdminBusiness from './pages/admin_business/orders/OrderDetail';
+import CustomerManagement from "./pages/admin_business/customers/CustomerManagement";
+import CustomerDetail from "./pages/admin_business/customers/CustomerDetail";
+import CustomerStatistics from "./pages/admin_business/customers/CustomerStatistics";
+import OrderManagement from "./pages/admin_business/orders/OrderManagement";
+import OrderStatistics from "./pages/admin_business/orders/OrderStatistics";
+import OrderDetailAdminBusiness from "./pages/admin_business/orders/OrderDetail";
 
-import HomePage from './components/home/Home';
-import Products from './components/product/Products';
-import ProductDetail from './components/product/ProductDetail';
-import PageNotFound from './components/share/PageNotFound';
-import LoginPage from './components/login/LoginPage';
+import HomePage from "./components/home/Home";
+import Products from "./components/product/Products";
+import ProductDetail from "./components/product/ProductDetail";
+import PageNotFound from "./components/share/PageNotFound";
+import LoginPage from "./components/login/LoginPage";
 import RegisterPage from "./components/login/RegisterPage";
 import CartPage from "./components/cart/CartPage";
 import CheckoutPage from "./components/CheckoutPage";
@@ -46,8 +51,10 @@ import AdminBusinessLayout from "./layouts/AdminBusinessLayout";
 import SaleDashboard from "./pages/admin_business/SaleDashboard";
 
 import { ToastContainer } from "react-toastify";
-import ProductStockPage from "./components/user/ProductStockPage";
-import TopSellingProductsPage from "./components/user/TopSellingProductsPage";
+import ProductStockPage from "./pages/admin_business/products/ProductStockPage";
+import TopSellingProductsPage from "./pages/admin_business/products/TopSellingProductsPage";
+import ProductSuggestionPage from "./pages/admin_business/products/ProductSuggestionPage";
+import BestSellingProductPage from "./pages/admin_business/products/BestSellingProductPage";
 function App() {
   return (
     <Router>
@@ -83,21 +90,32 @@ function App() {
           </Route>
           <Route path="/seller/products/add" element={<AddProductPage />} />
           <Route path="orders/:id" element={<OrderDetailPage />} />
-          <Route path="/seller/products/edit/:id" element={<EditProductPage />} />
+          <Route
+            path="/seller/products/edit/:id"
+            element={<EditProductPage />}
+          />
         </Route>
 
         {/* Admin Routes */}
-        <Route element={
-          <AdminProtectedRoute>
-            <AdminLayout />
-          </AdminProtectedRoute>
-        }>
+        <Route
+          element={
+            <AdminProtectedRoute>
+              <AdminLayout />
+            </AdminProtectedRoute>
+          }
+        >
           <Route path="/admin/accounts" element={<AccountList />} />
           <Route path="/admin/accounts/edit/:id" element={<EditAccount />} />
           <Route path="/admin/accounts/invite" element={<InviteUser />} />
-          <Route path="/admin/accounts/create-invite" element={<CreateUserInvite />} />
+          <Route
+            path="/admin/accounts/create-invite"
+            element={<CreateUserInvite />}
+          />
           <Route path="/admin/products" element={<ReviewProductsList />} />
-          <Route path="/admin/products/detail/:id" element={<ProductDetailAdmin />} />
+          <Route
+            path="/admin/products/detail/:id"
+            element={<ProductDetailAdmin />}
+          />
           <Route path="/admin/orders" element={<OrderList />} />
           <Route path="/admin/orders/:id" element={<OrderDetail />} />
           <Route path="/admin/report" element={<ReportList />} />
@@ -111,7 +129,8 @@ function App() {
             <AdminBusinessProtectedRoute>
               <AdminBusinessLayout />
             </AdminBusinessProtectedRoute>
-          }>
+          }
+        >
           <Route index element={<SaleDashboard />} />
           <Route path="sales" element={<SaleDashboard />} />
           <Route path="customers" element={<CustomerManagement />} />
@@ -119,13 +138,18 @@ function App() {
           <Route path="customers/:customerId" element={<CustomerDetail />} />
           <Route path="orders" element={<OrderManagement />} />
           <Route path="orders/statistics" element={<OrderStatistics />} />
-          <Route path="orders/:orderId" element={<OrderDetailAdminBusiness />} />
+          <Route
+            path="orders/:orderId"
+            element={<OrderDetailAdminBusiness />}
+          />
+          <Route path="product-stock" element={<ProductStockPage />} />
+          <Route path="product-revenue" element={<TopSellingProductsPage />} />
+          <Route path="product-recommend" element={<ProductSuggestionPage />} />
+          <Route path="best-selling-products" element={<BestSellingProductPage />} />
         </Route>
 
         {/* 404 Route */}
         <Route path="*" element={<PageNotFound />} />
-        <Route path="/product-stock" element={<ProductStockPage />} />
-        <Route path="/product-revenue" element={<TopSellingProductsPage />} />
       </Routes>
       <ToastContainer />
     </Router>

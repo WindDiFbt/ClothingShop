@@ -1,4 +1,6 @@
-﻿using ClothingShop_BE.Models;
+﻿using ClothingShop_BE.Helpers;
+using ClothingShop_BE.Models;
+using ClothingShop_BE.ModelsDTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClothingShop_BE.Repository.Impl
@@ -6,10 +8,11 @@ namespace ClothingShop_BE.Repository.Impl
     public class ProductRepository : IProductRepository
     {
         private readonly ClothingShopPrn232G5Context _context;
-
-        public ProductRepository(ClothingShopPrn232G5Context context)
+        private readonly ProductConfig _config;
+        public ProductRepository(ClothingShopPrn232G5Context context, ProductConfig config)
         {
             _context = context;
+            _config = config;
         }
 
         public async Task<List<Product>> GetAllProductsAsyncApprovedWithPagination(int page = 1, int pageSize = 8) =>
@@ -81,5 +84,88 @@ namespace ClothingShop_BE.Repository.Impl
                 .Include(p => p.ProductVariants)
                 .ToListAsync();
         }
+        public async Task<List<ProductSuggestionDTO>> GetBestSellingProductsByMonthAsync(int month, int year)
+        {
+            return await _context.OrderDetails
+                .Where(od => od.Order.StatusNavigation.Name == _config.OrderStatus.Delivered && od.Order.CreateAt.HasValue &&
+                             od.Order.CreateAt.Value.Month == month && od.Order.CreateAt.Value.Year == year)
+                .GroupBy(od => new { od.ProductId, od.Product.Name, od.Product.ThumbnailUrl })
+                .Select(g => new ProductSuggestionDTO
+                {
+                    ProductId = g.Key.ProductId ?? 0,
+                    ProductName = g.Key.Name,
+                    ThumbnailUrl = g.Key.ThumbnailUrl,
+                    TotalSold = g.Sum(x => x.Quantity ?? 0)
+                })
+                .OrderByDescending(x => x.TotalSold)
+                .Take(_config.SuggestionThreshold.TopCount)
+                .ToListAsync();
+        }
+
+        public async Task<List<ProductSuggestionDTO>> GetBestSellingProductsByYearAsync(int year)
+        {
+            return await _context.OrderDetails
+                .Where(od => od.Order.StatusNavigation.Name == _config.OrderStatus.Delivered
+                && od.Order.CreateAt.HasValue && od.Order.CreateAt.Value.Year == year)
+                .GroupBy(od => new { od.ProductId, od.Product.Name, od.Product.ThumbnailUrl })
+                .Select(g => new ProductSuggestionDTO
+                {
+                    ProductId = g.Key.ProductId ?? 0,
+                    ProductName = g.Key.Name,
+                    ThumbnailUrl = g.Key.ThumbnailUrl,
+                    TotalSold = g.Sum(x => x.Quantity ?? 0)
+                })
+                .OrderByDescending(x => x.TotalSold)
+                .Take(_config.SuggestionThreshold.TopCount)
+                .ToListAsync();
+        }
+
+        public async Task<List<ProductSuggestionDTO>> GetImportRecommendationAsync()
+        {
+            var now = DateTime.Now;
+            var targetStartDate = now.AddYears(_config.SuggestionTimeRange.YearsBack).AddMonths(_config.SuggestionTimeRange.MonthsBefore);
+            var targetEndDate = now.AddYears(_config.SuggestionTimeRange.YearsBack).AddMonths(_config.SuggestionTimeRange.MonthsAfter);
+
+            return await _context.OrderDetails
+                .Where(od => od.Order.StatusNavigation.Name == _config.OrderStatus.Delivered
+                    && od.Order.CreateAt.HasValue
+                    && od.Order.CreateAt.Value >= targetStartDate
+                    && od.Order.CreateAt.Value <= targetEndDate)
+                .GroupBy(od => new { od.ProductId, od.Product.Name, od.Product.ThumbnailUrl })
+                .Select(g => new ProductSuggestionDTO
+                {
+                    ProductId = g.Key.ProductId ?? 0,
+                    ProductName = g.Key.Name,
+                    ThumbnailUrl = g.Key.ThumbnailUrl,
+                    TotalSold = g.Sum(x => x.Quantity ?? 0)
+                })
+                .Where(x => x.TotalSold > _config.SuggestionThreshold.Import)
+                .ToListAsync();
+        }
+
+
+        public async Task<List<ProductSuggestionDTO>> GetLimitRecommendationAsync()
+        {
+            var now = DateTime.Now;
+            var targetStartDate = now.AddYears(-1).AddMonths(-2);
+            var targetEndDate = now.AddYears(-1).AddMonths(2);
+
+            return await _context.OrderDetails
+                .Where(od => od.Order.StatusNavigation.Name == _config.OrderStatus.Delivered
+                    && od.Order.CreateAt.HasValue
+                    && od.Order.CreateAt.Value >= targetStartDate
+                    && od.Order.CreateAt.Value <= targetEndDate)
+                .GroupBy(od => new { od.ProductId, od.Product.Name, od.Product.ThumbnailUrl })
+                .Select(g => new ProductSuggestionDTO
+                {
+                    ProductId = g.Key.ProductId ?? 0,
+                    ProductName = g.Key.Name,
+                    ThumbnailUrl = g.Key.ThumbnailUrl,
+                    TotalSold = g.Sum(x => x.Quantity ?? 0)
+                })
+                .Where(x => x.TotalSold < _config.SuggestionThreshold.Limit)
+                .ToListAsync();
+        }
+
     }
 }

@@ -1,0 +1,22 @@
+{
+  "OrderStatus": {
+    "Delivered": "DELIVERED"
+  },
+  "SuggestionThreshold": {
+    "Import": 100,
+    "Limit": 10,
+    "TopCount": 10
+  },
+  "StockStatus": {
+    "LowThreshold": 10,
+    "HighThreshold": 100,
+    "LowLabel": "Low",
+    "NormalLabel": "Normal",
+    "HighLabel": "High"
+  },
+  "SuggestionTimeRange": {
+    "MonthsBefore": -2,
+    "MonthsAfter": 2,
+    "YearsBack": -1
+  }
+}
