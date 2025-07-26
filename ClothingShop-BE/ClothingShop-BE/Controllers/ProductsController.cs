@@ -94,12 +94,14 @@ namespace ClothingShop_BE.Controllers
             var result = await _productService.GetBestSellingByYear(year);
             return Ok(result);
         }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
         [HttpGet("import-recommendation")]
         public async Task<IActionResult> GetImportRecommendation()
         {
             var result = await _productService.GetImportRecommendation();
             return Ok(result);
         }
+        [Authorize(Roles = "ADMIN_BUSINESS")]
         [HttpGet("limit-recommendation")]
         public async Task<IActionResult> GetLimitRecommendation()
         {
