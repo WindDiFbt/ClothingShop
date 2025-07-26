@@ -250,7 +250,7 @@ namespace ClothingShop_BE.Services.Admin.Analytics
                 EndDate = endDate
             };
 
-            // Get all sellers (users with SELLER role)
+            // Get all sellers 
             var sellers = await _context.Users
                 .Include(u => u.UserRoles)
                 .Include(u => u.Userinfo)
@@ -259,11 +259,12 @@ namespace ClothingShop_BE.Services.Admin.Analytics
                 .ThenInclude(od => od.Order)
                 .Include(u => u.Products)
                 .ThenInclude(p => p.Category)
-                .Where(u => u.UserRoles.Any(ur => ur.RoleId == 2)) // SELLER role
+                .Where(u => u.UserRoles.Any(ur => ur.RoleId == 2)) 
                 .ToListAsync();
 
             // Basic Seller Statistics
-            result.TotalActiveSellers = sellers.Count(s => s.Status == 1); // Active status
+            result.TotalActiveSellers = sellers.Count(s => s.Status == 1); 
+
             result.NewSellersThisMonth = sellers.Count(s => s.CreatedAt.HasValue && 
                 s.CreatedAt.Value.Year == DateTime.Now.Year && 
                 s.CreatedAt.Value.Month == DateTime.Now.Month);
