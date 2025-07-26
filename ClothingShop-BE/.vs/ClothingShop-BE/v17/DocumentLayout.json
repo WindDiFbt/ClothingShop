@@ -1,0 +1,131 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\services\\admin\\analytics\\analyticsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\services\\admin\\analytics\\analyticsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\controllers\\admin\\analyticscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\controllers\\admin\\analyticscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\services\\admin\\invite\\inviteuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\services\\admin\\invite\\inviteuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|d:\\fpt\\sem9_summer2025\\prn-232\\clothingshop\\clothingshop-be\\clothingshop-be\\controllers\\admin\\invitecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4FD1FC66-0201-41E7-B36C-46AFE58F49FD}|ClothingShop-BE\\ClothingShop-BE.csproj|solutionrelative:clothingshop-be\\controllers\\admin\\invitecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 987,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AnalyticsService.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Services\\Admin\\Analytics\\AnalyticsService.cs",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\Services\\Admin\\Analytics\\AnalyticsService.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Services\\Admin\\Analytics\\AnalyticsService.cs",
+              "RelativeToolTip": "ClothingShop-BE\\Services\\Admin\\Analytics\\AnalyticsService.cs",
+              "ViewState": "AgIAAF8BAAAAAAAAAAAuwGsBAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-26T00:02:48.832Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\appsettings.json",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\appsettings.json",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\appsettings.json",
+              "RelativeToolTip": "ClothingShop-BE\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-25T23:41:34.825Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "InviteUserService.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Services\\Admin\\Invite\\InviteUserService.cs",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\Services\\Admin\\Invite\\InviteUserService.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Services\\Admin\\Invite\\InviteUserService.cs",
+              "RelativeToolTip": "ClothingShop-BE\\Services\\Admin\\Invite\\InviteUserService.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T23:41:13.657Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "InviteController.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\Admin\\InviteController.cs",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\Controllers\\Admin\\InviteController.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\Admin\\InviteController.cs",
+              "RelativeToolTip": "ClothingShop-BE\\Controllers\\Admin\\InviteController.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T23:40:50.264Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AnalyticsController.cs",
+              "DocumentMoniker": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\Admin\\AnalyticsController.cs",
+              "RelativeDocumentMoniker": "ClothingShop-BE\\Controllers\\Admin\\AnalyticsController.cs",
+              "ToolTip": "D:\\FPT\\sem9_summer2025\\PRN-232\\ClothingShop\\ClothingShop-BE\\ClothingShop-BE\\Controllers\\Admin\\AnalyticsController.cs",
+              "RelativeToolTip": "ClothingShop-BE\\Controllers\\Admin\\AnalyticsController.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAzwBsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T23:40:43.754Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

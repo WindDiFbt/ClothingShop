@@ -56,6 +56,7 @@ import TopSellingProductsPage from "./pages/admin_business/products/TopSellingPr
 import ProductSuggestionPage from "./pages/admin_business/products/ProductSuggestionPage";
 import BestSellingProductPage from "./pages/admin_business/products/BestSellingProductPage";
 import ImportProductManagementPage from "./pages/admin_business/products/ImportProductManagementPage";
+import SellerAnalytics from "./pages/admin_business/sellers/SellerAnalytics";
 function App() {
   return (
     <Router>
@@ -148,6 +149,7 @@ function App() {
           <Route path="product-recommend" element={<ProductSuggestionPage />} />
           <Route path="best-selling-products" element={<BestSellingProductPage />} />
           <Route path="product-status" element={<ImportProductManagementPage />} />
+          <Route path="seller-analytics" element={<SellerAnalytics />} />
         </Route>
 
         {/* 404 Route */}

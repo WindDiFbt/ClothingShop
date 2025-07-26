@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Services\Admin\Analytics\" />
-    <Folder Include="Services\Admin\Dashboard\" />
   </ItemGroup>
 
 </Project>

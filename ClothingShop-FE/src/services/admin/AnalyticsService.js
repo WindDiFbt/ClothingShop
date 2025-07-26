@@ -6,11 +6,13 @@ const AnalyticsService = {
             params: { startDate, endDate }
         }),
     
-    getCustomerSummary: () => 
-        axios.get('/admin/analytics/customers/summary'),
-    
     getCategorySales: (startDate, endDate) => 
         axios.get('/admin/analytics/category-sales', {
+            params: { startDate, endDate }
+        }),
+    
+    getSellerAnalytics: (startDate, endDate) => 
+        axios.get('/admin/analytics/seller-analytics', {
             params: { startDate, endDate }
         })
 };
