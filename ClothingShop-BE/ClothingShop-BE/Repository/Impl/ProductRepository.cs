@@ -144,7 +144,6 @@ namespace ClothingShop_BE.Repository.Impl
                 .ToListAsync();
 
             var productList = await _context.Products
-                .Where(p => p.UpdateAt.HasValue)
                 .ToListAsync();
 
             var productIdSet = productList.Select(p => p.Id).ToHashSet();
@@ -156,22 +155,29 @@ namespace ClothingShop_BE.Repository.Impl
                     && productIdSet.Contains(od.ProductId.Value))
                 .ToListAsync();
 
-            var recent = orderDetails
-                .Where(od =>
+            var recent = productList
+                .Select(p =>
                 {
-                    var product = productList.FirstOrDefault(p => p.Id == od.ProductId);
-                    return product != null &&
-                           od.Order.CreateAt.Value >= product.UpdateAt.Value &&
-                           od.Order.CreateAt.Value <= product.UpdateAt.Value.AddMonths(_config.SuggestionTimeRange.MonthsAfter);
-                })
-                .GroupBy(od => od.ProductId)
-                .Select(g => new
-                {
-                    ProductId = g.Key ?? 0,
-                    TotalSold = g.Sum(x => x.Quantity ?? 0)
+                    var totalSold = orderDetails
+                        .Where(od =>
+                            od.ProductId == p.Id &&
+                            od.Order != null &&
+                            od.Order.CreateAt.HasValue &&
+                            p.UpdateAt.HasValue &&
+                            od.Order.CreateAt.Value >= p.UpdateAt.Value &&
+                            od.Order.CreateAt.Value <= p.UpdateAt.Value.AddMonths(_config.SuggestionTimeRange.MonthsAfter)
+                        )
+                        .Sum(od => od.Quantity ?? 0);
+
+                    return new
+                    {
+                        ProductId = p.Id,
+                        TotalSold = totalSold
+                    };
                 })
                 .Where(x => x.TotalSold > _config.SuggestionThreshold.Import)
                 .ToList();
+
 
             var suggestedProductIds = historical.Select(h => h.ProductId)
                 .Intersect(recent.Select(r => r.ProductId))
@@ -208,7 +214,6 @@ namespace ClothingShop_BE.Repository.Impl
             var now = DateTime.Now;
 
             var productList = await _context.Products
-                .Where(p => p.UpdateAt.HasValue)
                 .ToListAsync();
 
             var filteredProducts = productList
@@ -224,22 +229,29 @@ namespace ClothingShop_BE.Repository.Impl
                     && productIdSet.Contains(od.ProductId.Value))
                 .ToListAsync();
 
-            var recentSales = orderDetails
-                .Where(od =>
+            var recentSales = filteredProducts
+                .Select(p =>
                 {
-                    var product = filteredProducts.FirstOrDefault(p => p.Id == od.ProductId);
-                    return product != null &&
-                           od.Order.CreateAt.Value >= product.UpdateAt.Value &&
-                           od.Order.CreateAt.Value <= product.UpdateAt.Value.AddMonths(_config.SuggestionTimeRange.MonthsAfter);
-                })
-                .GroupBy(od => od.ProductId)
-                .Select(g => new
-                {
-                    ProductId = g.Key ?? 0,
-                    TotalSold = g.Sum(x => x.Quantity ?? 0)
+                    var totalSold = orderDetails
+                        .Where(od =>
+                            od.ProductId == p.Id &&
+                            od.Order != null &&
+                            od.Order.CreateAt.HasValue &&
+                            p.UpdateAt.HasValue &&
+                            od.Order.CreateAt.Value >= p.UpdateAt.Value &&
+                            od.Order.CreateAt.Value <= p.UpdateAt.Value.AddMonths(_config.SuggestionTimeRange.MonthsAfter)
+                        )
+                        .Sum(od => od.Quantity ?? 0);
+
+                    return new
+                    {
+                        ProductId = p.Id,
+                        TotalSold = totalSold
+                    };
                 })
                 .Where(x => x.TotalSold < _config.SuggestionThreshold.Limit)
                 .ToList();
+
 
             var recentDict = recentSales.ToDictionary(r => r.ProductId, r => r.TotalSold);
 
