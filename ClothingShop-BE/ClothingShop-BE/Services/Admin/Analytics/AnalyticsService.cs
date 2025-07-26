@@ -231,5 +231,237 @@ namespace ClothingShop_BE.Services.Admin.Analytics
 
             return result;
         }
+
+        public async Task<SellerAnalyticsDTO> GetSellerAnalyticsAsync(DateTime? startDate, DateTime? endDate)
+        {
+            // Set default date range if not provided
+            if (!startDate.HasValue)
+                startDate = DateTime.Now.AddDays(-30);
+            if (!endDate.HasValue)
+                endDate = DateTime.Now;
+
+            // Previous period for growth calculation
+            var previousStartDate = startDate.Value.AddDays(-(endDate.Value - startDate.Value).Days);
+            var previousEndDate = startDate.Value;
+
+            var result = new SellerAnalyticsDTO
+            {
+                StartDate = startDate,
+                EndDate = endDate
+            };
+
+            // Get all sellers (users with SELLER role)
+            var sellers = await _context.Users
+                .Include(u => u.UserRoles)
+                .Include(u => u.Userinfo)
+                .Include(u => u.Products)
+                .ThenInclude(p => p.OrderDetails)
+                .ThenInclude(od => od.Order)
+                .Include(u => u.Products)
+                .ThenInclude(p => p.Category)
+                .Where(u => u.UserRoles.Any(ur => ur.RoleId == 2)) // SELLER role
+                .ToListAsync();
+
+            // Basic Seller Statistics
+            result.TotalActiveSellers = sellers.Count(s => s.Status == 1); // Active status
+            result.NewSellersThisMonth = sellers.Count(s => s.CreatedAt.HasValue && 
+                s.CreatedAt.Value.Year == DateTime.Now.Year && 
+                s.CreatedAt.Value.Month == DateTime.Now.Month);
+            result.NewSellersThisYear = sellers.Count(s => s.CreatedAt.HasValue && 
+                s.CreatedAt.Value.Year == DateTime.Now.Year);
+
+            // Calculate growth rate
+            var previousPeriodSellers = sellers.Count(s => s.CreatedAt.HasValue && 
+                s.CreatedAt.Value >= previousStartDate && s.CreatedAt.Value <= previousEndDate);
+            var currentPeriodSellers = sellers.Count(s => s.CreatedAt.HasValue && 
+                s.CreatedAt.Value >= startDate && s.CreatedAt.Value <= endDate);
+            result.SellerGrowthRate = previousPeriodSellers > 0 ? 
+                ((currentPeriodSellers - previousPeriodSellers) / (double)previousPeriodSellers) * 100 : 0;
+
+            // Top Sellers by Revenue
+            var topSellers = sellers
+                .Select(s => new TopSellerDTO
+                {
+                    SellerId = s.Id,
+                    SellerName = s.Userinfo?.FullName ?? s.UserName,
+                    Email = s.Email,
+                    TotalRevenue = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate && 
+                                   od.Order.Status == 4)
+                        .Sum(od => od.TotalPrice ?? 0),
+                    TotalOrders = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate)
+                        .Select(od => od.OrderId)
+                        .Distinct()
+                        .Count(),
+                    TotalProducts = s.Products.Count,
+                    CompletionRate = CalculateCompletionRate(s.Products, startDate.Value, endDate.Value),
+                    LastActiveDate = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate)
+                        .Max(od => od.Order.OrderDate)
+                })
+                .Where(s => s.TotalRevenue > 0)
+                .OrderByDescending(s => s.TotalRevenue)
+                .Take(10)
+                .ToList();
+
+            result.TopSellersByRevenue = topSellers;
+
+            // Revenue Distribution
+            var totalRevenue = sellers
+                .SelectMany(s => s.Products)
+                .SelectMany(p => p.OrderDetails)
+                .Where(od => od.Order.OrderDate >= startDate && 
+                           od.Order.OrderDate <= endDate && 
+                           od.Order.Status == 4)
+                .Sum(od => od.TotalPrice ?? 0);
+
+            var revenueDistribution = sellers
+                .Select(s => new SellerRevenueDTO
+                {
+                    SellerId = s.Id,
+                    SellerName = s.Userinfo?.FullName ?? s.UserName,
+                    Revenue = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate && 
+                                   od.Order.Status == 4)
+                        .Sum(od => od.TotalPrice ?? 0),
+                    OrderCount = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate)
+                        .Select(od => od.OrderId)
+                        .Distinct()
+                        .Count(),
+                    ProductCount = s.Products.Count
+                })
+                .Where(s => s.Revenue > 0)
+                .OrderByDescending(s => s.Revenue)
+                .ToList();
+
+            // Calculate percentages
+            foreach (var seller in revenueDistribution)
+            {
+                seller.Percentage = totalRevenue > 0 ? (double)((seller.Revenue / totalRevenue) * 100) : 0;
+            }
+
+            result.SellerRevenueDistribution = revenueDistribution;
+
+            // Top Products by Seller
+            var sellerTopProducts = sellers
+                .Select(s => new SellerTopProductsDTO
+                {
+                    SellerId = s.Id,
+                    SellerName = s.Userinfo?.FullName ?? s.UserName,
+                    TopProducts = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate && 
+                                   od.Order.Status == 4)
+                        .GroupBy(od => new { od.ProductId, od.Product.Name, od.Product.Category })
+                        .Select(g => new ProductSalesDTO
+                        {
+                            ProductId = g.Key.ProductId ?? 0,
+                            ProductName = g.Key.Name,
+                            TotalSold = g.Sum(od => od.Quantity ?? 0),
+                            TotalRevenue = g.Sum(od => od.TotalPrice ?? 0),
+                            CategoryName = g.Key.Name
+                        })
+                        .OrderByDescending(p => p.TotalSold)
+                        .Take(5)
+                        .ToList()
+                })
+                .Where(s => s.TopProducts.Any())
+                .ToList();
+
+            result.SellerTopProducts = sellerTopProducts;
+
+            // Order Completion Rates
+            var orderStats = sellers
+                .Select(s => new SellerOrderStatsDTO
+                {
+                    SellerId = s.Id,
+                    SellerName = s.Userinfo?.FullName ?? s.UserName,
+                    TotalOrders = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate)
+                        .Select(od => od.OrderId)
+                        .Distinct()
+                        .Count(),
+                    CompletedOrders = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate && 
+                                   od.Order.Status == 4)
+                        .Select(od => od.OrderId)
+                        .Distinct()
+                        .Count(),
+                    PendingOrders = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate && 
+                                   od.Order.Status == 1)
+                        .Select(od => od.OrderId)
+                        .Distinct()
+                        .Count(),
+                    CancelledOrders = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate && 
+                                   od.Order.Status == 5)
+                        .Select(od => od.OrderId)
+                        .Distinct()
+                        .Count(),
+                    TotalRevenue = s.Products
+                        .SelectMany(p => p.OrderDetails)
+                        .Where(od => od.Order.OrderDate >= startDate && 
+                                   od.Order.OrderDate <= endDate && 
+                                   od.Order.Status == 4)
+                        .Sum(od => od.TotalPrice ?? 0)
+                })
+                .Where(s => s.TotalOrders > 0)
+                .ToList();
+
+            // Calculate completion rates and average order values
+            foreach (var stat in orderStats)
+            {
+                stat.CompletionRate = stat.TotalOrders > 0 ? (double)stat.CompletedOrders / stat.TotalOrders * 100 : 0;
+                stat.AverageOrderValue = stat.CompletedOrders > 0 ? stat.TotalRevenue / stat.CompletedOrders : 0;
+            }
+
+            result.SellerOrderStats = orderStats.OrderByDescending(s => s.TotalRevenue).ToList();
+
+            return result;
+        }
+
+        private double CalculateCompletionRate(ICollection<Product> products, DateTime startDate, DateTime endDate)
+        {
+            var totalOrders = products
+                .SelectMany(p => p.OrderDetails)
+                .Where(od => od.Order.OrderDate >= startDate && 
+                           od.Order.OrderDate <= endDate)
+                .Select(od => od.OrderId)
+                .Distinct()
+                .Count();
+
+            var completedOrders = products
+                .SelectMany(p => p.OrderDetails)
+                .Where(od => od.Order.OrderDate >= startDate && 
+                           od.Order.OrderDate <= endDate && 
+                           od.Order.Status == 4)
+                .Select(od => od.OrderId)
+                .Distinct()
+                .Count();
+
+            return totalOrders > 0 ? (double)completedOrders / totalOrders * 100 : 0;
+        }
     }
 } 

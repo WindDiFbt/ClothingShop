@@ -8,6 +8,7 @@ import adminProductReducer from './slices/admin/ProductSlice';
 import adminProductDetailReducer from './slices/admin/ProductDetailSlice';
 import adminReportReducer from './slices/admin/ReportSlice';
 import analyticsReducer from './slices/admin/AnalyticsSlice';
+import sellerAnalyticsReducer from './slices/admin/SellerAnalyticsSlice';
 import adminOrderReducer from './slices/admin/OrderSlice';
 
 // Admin Business slices
@@ -37,6 +38,7 @@ const store = configureStore({
     adminProductDetail: adminProductDetailReducer,
     adminReport: adminReportReducer,
     analytics: analyticsReducer,
+    sellerAnalytics: sellerAnalyticsReducer,
     adminOrder: adminOrderReducer,
     // Admin Business reducers
     customers: customerReducer,

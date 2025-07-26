@@ -28,7 +28,7 @@ const SidebarAdminBusiness = ({ isOpen, onToggle }) => {
                 </svg>
             ),
             subItems: [
-                { title: 'Seller statistics', path: '#' }
+                { title: 'Seller Analytics', path: '/admin-business/seller-analytics' }
             ]
         },
         {

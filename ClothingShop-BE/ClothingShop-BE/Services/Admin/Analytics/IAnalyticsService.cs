@@ -6,5 +6,6 @@ namespace ClothingShop_BE.Services.Admin.Analytics
     {
         Task<DashboardOverviewDTO> GetDashboardOverviewAsync(DateTime? startDate, DateTime? endDate);
         Task<CategorySalesResponseDTO> GetCategorySalesAsync(DateTime? startDate, DateTime? endDate);
+        Task<SellerAnalyticsDTO> GetSellerAnalyticsAsync(DateTime? startDate, DateTime? endDate);
     }
 } 
